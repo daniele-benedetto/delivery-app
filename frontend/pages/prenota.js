@@ -1,24 +1,20 @@
 import { useState } from 'react';
 
-import { reservations } from './api/local';
+import { reservations, time } from './api/local';
 
+import { addMonths } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { format, addMonths } from 'date-fns';
 
 import Seo from '../components/seo/Seo';
-
-let chosenDate= '';
-let placesAvailable= 46;
+import Form from '../components/form/Form';
+import Select from '../components/form/select/Select';
+import Button from '../components/form/button/Button';
 
 //TODO FORM DI PRENOTAZIONE
 /*
-    -Verifica del pasto
     -Strutturazione del form di verifica
-    -messaggio che comunica esito (si/no, quanti posti)
-    -bottone che indica a eseguire la prenotazione
-    -Form di prenotazione solo se c'è bisponibilità
-    -Oggetto che salvi i dati dei due form
+    -messaggio che comunica esito (si/no, quanti posti, messaggi)
     -Salvare i dati in un db
     -Sistema invio email
     -Sistema di iscrizione e Login
@@ -26,24 +22,72 @@ let placesAvailable= 46;
 
 export default function Prenota() {
 
-    const [startDate, setStartDate] = useState(new Date());
+    const today = new Date();
     const [available, setAvailable] = useState(false);
 
+    const [form, setForm] = useState({
+        date: "",
+        time: "",
+        name: "",
+        surname: "",
+        email: "",
+        phone: "",
+        newsletter: false,
+        privacy: false,
+    });
+
+    const [formError, setFormError] = useState({
+        date: false,
+        time: false,
+        name: false,
+        surname: false,
+        email: false,
+        phone: false,
+        newsletter: false,
+        privacy: false,
+    });
+
     const onChangeDatePicker = (date) => {
-        setStartDate(date);
-        chosenDate = format(new Date(date), 'yyyy-MM-dd');
+        setForm({ ...form, date: date.toLocaleDateString('sv-SE') });
     };
 
     const checkAvailability = () => {
         let reservedSeats= 0;
-        reservations.map((reservation) => {
-            if(reservation.giorno == chosenDate) {
-                reservedSeats = reservedSeats + reservation.posti;
-            }
-        });
+        let placesAvailable= 8;
+        if(form.time && form.date) {
 
-        placesAvailable = placesAvailable - reservedSeats;
-        (placesAvailable > 0) ? setAvailable(true) : setAvailable(false);
+            reservations.map((reservation) => {
+                if(
+                    reservation.giorno == form.date &&
+                    reservation.pasto == form.time
+                ) {
+                    reservedSeats = reservedSeats + reservation.posti;
+                }
+            });
+
+
+            placesAvailable = placesAvailable - reservedSeats;
+            (placesAvailable > 0) ? setAvailable(true) : setAvailable(false);
+        }
+    };
+
+    const onSubmit = (event) => {
+        event.preventDefault();
+        console.log(form);
+    }
+
+    const handleValidForm = () => {
+        setFormError({
+            ...formError,
+            date: form.date === "",
+            time: form.time === "",
+            name: form.name === "",
+            surname: form.surname === "",
+            email: form.email === "",
+            phone: form.phone === "",
+            newsletter: form.newsletter === "",
+            privacy: form.privacy === "",
+        });
     };
 
     return (
@@ -57,26 +101,43 @@ export default function Prenota() {
             <main className={`container-fluid`}>
                 <div className={`row`}>
                     <section className={`border col-12 vh-100 d-flex flex-wrap justify-content-center align-items-center p-0`}>
-                        <div className={`container text-center d-flex flex-column justify-content-center align-items-center has-bg-image`}>
+                        <div className={`container`}>
                             <h1>Prenota</h1>
 
                             <DatePicker
-                                selected={startDate}
                                 onChange={onChangeDatePicker}
-                                minDate={new Date()}
-                                maxDate={addMonths(new Date(), 12)}
+                                minDate={today}
+                                maxDate={addMonths(today, 12)}
                                 inline
                             />
 
-                            {available && <div>è disponibile</div>}
+                            <Select 
+                                id='time'
+                                label='Scegli il pasto'
+                                values={time}
+                                onChange={(event) => {
+                                    const val = event.target.value;
+                                    setForm({ ...form, time: val });
+                                }}
+                            />
 
-                            <button className='btn btn-primary' onClick={checkAvailability}>Verifica</button>
+                            <Button 
+                                onClick={checkAvailability}
+                                text='Verifica disponibilità'
+                            />
+                            
+                            {available && <Form handleValidForm={handleValidForm} form={form} setForm={setForm} />}
 
                         </div>
                     </section>
                 </div>
             </main>
             
+            <div>
+                <pre>
+                    <code>{JSON.stringify(form, undefined, 2)}</code>
+                </pre>
+            </div>
         </div>
     );
 }

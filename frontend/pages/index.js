@@ -15,9 +15,9 @@ export default function Home() {
                         <div className={`container text-center d-flex flex-column justify-content-center align-items-center has-bg-image`}>
                             <h1>RistorApp</h1>
                             <h4>La tua app per ordinare su RistorApp</h4>
-                            <div class={`d-grid gap-2 col-4 mx-auto`}>
-                                <a href='./ordina' class="btn btn-primary" type="button">Ordina Online</a>
-                                <a href='./prenota' class="btn btn-link" type="button">Prenota un tavolo</a>
+                            <div className={`d-grid gap-2 col-4 mx-auto`}>
+                                <a href='./ordina' className="btn btn-primary" type="button">Ordina Online</a>
+                                <a href='./prenota' className="btn btn-link" type="button">Prenota un tavolo</a>
                             </div>
                         </div>
                     </section>
