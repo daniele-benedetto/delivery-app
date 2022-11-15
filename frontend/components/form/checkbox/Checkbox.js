@@ -3,10 +3,11 @@ export default function Checkbox({
     value, 
     description, 
     onChange,
+    error
 }) {
     return (
-        <div className="form-check">
-            <label className="form-check-label" htmlFor={id}>
+        <div className={`form-check mt-3`}>
+            <label className={`form-check-label col-12`} htmlFor={id}>
                 {description}
             </label>
             <input
@@ -15,8 +16,9 @@ export default function Checkbox({
                 type="checkbox"
                 value={value}
                 onChange={onChange}
-                className="form-check-input"
+                className={`form-check-input`}
             />
+            { error && <small className={`text-danger`}>il campo {id} è obbligatorio</small> }
         </div>
     );
 };

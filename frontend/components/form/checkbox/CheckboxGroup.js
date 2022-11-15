@@ -4,6 +4,7 @@ import Checkbox from "./Checkbox";
 export default function CheckboxGroup({ 
     values, 
     onChange, 
+    error
 }) {
 
     const [selected, setSelected] = useState([]);
@@ -27,7 +28,7 @@ export default function CheckboxGroup({
     };
 
     return (
-        <div className="col-12">
+        <div className={`col-12`}>
             {values.map((checkbox, idx) => {
                 return (
                     <Checkbox
@@ -36,6 +37,7 @@ export default function CheckboxGroup({
                         description={checkbox.description}
                         value={checkbox.value}
                         onChange={handleChange}
+                        error={error}
                     />
                 );
             })}

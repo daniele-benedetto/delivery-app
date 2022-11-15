@@ -1,33 +1,40 @@
 import { useState } from 'react';
 
-import { reservations, time } from './api/local';
+import { restaurantOption, reservations, time, place, newsletter, privacy } from './api/local';
 
 import { addMonths } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
 import Seo from '../components/seo/Seo';
-import Form from '../components/form/Form';
 import Select from '../components/form/select/Select';
 import Button from '../components/form/button/Button';
+import Input from '../components/form/input/Input';
+import CheckboxGroup from '../components/form/checkbox/CheckboxGroup';
 
 //TODO FORM DI PRENOTAZIONE
 /*
-    -Strutturazione del form di verifica
-    -messaggio che comunica esito (si/no, quanti posti, messaggi)
+    -REFACTORY CODICE!!!
     -Salvare i dati in un db
     -Sistema invio email
     -Sistema di iscrizione e Login
+    -UX della form
+    -UI della form
 */
 
 export default function Prenota() {
 
     const today = new Date();
-    const [available, setAvailable] = useState(false);
 
+    //Bool disponibilità e messaggio
+    const [available, setAvailable] = useState(false);
+    const [message, setMessage] = useState('');
+
+    //Dati del form
     const [form, setForm] = useState({
-        date: "",
-        time: "",
+        date: today.toLocaleDateString('sv-SE'),
+        time: "", //0 => pranzo, 1 => cena
+        place: "", //0 => interno, 1 => esterno
         name: "",
         surname: "",
         email: "",
@@ -36,9 +43,11 @@ export default function Prenota() {
         privacy: false,
     });
 
+    //Presenza di errori compilazione form
     const [formError, setFormError] = useState({
         date: false,
         time: false,
+        place: false,
         name: false,
         surname: false,
         email: false,
@@ -47,48 +56,77 @@ export default function Prenota() {
         privacy: false,
     });
 
+    //Al cambio di data imposto su formato corretto il valore del form
     const onChangeDatePicker = (date) => {
         setForm({ ...form, date: date.toLocaleDateString('sv-SE') });
     };
 
+    //Controlla disponibilità
     const checkAvailability = () => {
-        let reservedSeats= 0;
-        let placesAvailable= 8;
-        if(form.time && form.date) {
 
+        //Quando parte una ricerca setto a 0 i posti riservati e i disponibili
+        let reservedSeats= 0;
+        let placesAvailable= 0;
+
+        if(form.time && form.date && form.place) {
+            //Ciclo tutte le prenotazioni
+            //Se sono uguali al giorno, pasto e luogo scelti dall'utente
+            //Dichiaro quanti sono i posti già occupati
             reservations.map((reservation) => {
                 if(
                     reservation.giorno == form.date &&
-                    reservation.pasto == form.time
+                    reservation.pasto == form.time &&
+                    reservation.luogo == form.place
                 ) {
                     reservedSeats = reservedSeats + reservation.posti;
                 }
             });
 
+            //Dichiaro che i posti disponibili sono == ai posti disponibili per la locazione interna
+            (form.place == 0) 
+            ? placesAvailable = restaurantOption.placesAvailableInside 
+            : placesAvailable = restaurantOption.placesAvailableOutside;
 
             placesAvailable = placesAvailable - reservedSeats;
-            (placesAvailable > 0) ? setAvailable(true) : setAvailable(false);
+            
+            //Se ci sono posti disponibili allora dichiaro vero la disponibilità e setto il messaggio
+            if (placesAvailable > 0) {
+                setAvailable(true);
+                setMessage(`Per questa giornata sono disponibili ${placesAvailable} posti`);
+            } else {
+                setAvailable(false);
+                setMessage(`Non ci sono posti disponibili per questa giornata`);
+            }
+            console.log(placesAvailable)
         }
-    };
 
-    const onSubmit = (event) => {
-        event.preventDefault();
-        console.log(form);
-    }
-
-    const handleValidForm = () => {
+        //Verifica se ci sono errori nella compilazione di questi campi
         setFormError({
             ...formError,
             date: form.date === "",
             time: form.time === "",
+            place: form.place === "",
+        });
+        
+    };
+
+    //Verifico che i campi non siano vuoti, se lo sono verranno dichiarati su true
+    const handleFormError = () => {
+        setFormError({
+            ...formError,
+            date: form.date === "",
+            time: form.time === "",
+            place: form.place === "",
             name: form.name === "",
             surname: form.surname === "",
             email: form.email === "",
             phone: form.phone === "",
-            newsletter: form.newsletter === "",
-            privacy: form.privacy === "",
+            newsletter: form.newsletter === "" || [],
+            privacy: form.privacy === "" || [],
         });
-    };
+
+        console.log(form);
+    }
 
     return (
         <div className={`container-fluid p-0`}>
@@ -110,6 +148,18 @@ export default function Prenota() {
                                 maxDate={addMonths(today, 12)}
                                 inline
                             />
+                            { formError.date && <small className={`text-danger`}>Imposta una data</small> }
+
+                            <Select 
+                                id='time'
+                                label='Scegli il luogo'
+                                values={place}
+                                onChange={(event) => {
+                                    const val = event.target.value;
+                                    setForm({ ...form, place: val });
+                                }}
+                                error={formError.place}
+                            />
 
                             <Select 
                                 id='time'
@@ -119,25 +169,92 @@ export default function Prenota() {
                                     const val = event.target.value;
                                     setForm({ ...form, time: val });
                                 }}
+                                error={formError.time}
                             />
 
-                            <Button 
+                            <Button
                                 onClick={checkAvailability}
                                 text='Verifica disponibilità'
                             />
+
+                            <p>{message}</p>
                             
-                            {available && <Form handleValidForm={handleValidForm} form={form} setForm={setForm} />}
+                            { available && <>
+
+                                <Input
+                                    id='name'
+                                    label='Name'
+                                    type='text'
+                                    value={form.name}
+                                    onChange={(event) => {
+                                        const val = event.target.value;
+                                        setForm({ ...form, name: val });
+                                    }}
+                                    error={formError.name}
+                                />
+        
+                                <Input 
+                                    id='surname'
+                                    label='Surname'
+                                    type='text'
+                                    value={form.surname}
+                                    onChange={(event) => {
+                                        const val = event.target.value;
+                                        setForm({ ...form, surname: val });
+                                    }}
+                                    error={formError.surname}
+                                />
+        
+                                <Input 
+                                    id='email'
+                                    label='Email'
+                                    type='text'
+                                    value={form.email}
+                                    onChange={(event) => {
+                                        const val = event.target.value;
+                                        setForm({ ...form, email: val });
+                                    }}
+                                    error={formError.email}
+                                />
+                
+                                <Input 
+                                    id='phone'
+                                    label='Phone'
+                                    type='tel'
+                                    value={form.phone}
+                                    onChange={(event) => {
+                                        const val = event.target.value;
+                                        setForm({ ...form, phone: val });
+                                    }}
+                                    error={formError.phone}
+                                />
+                
+                                <CheckboxGroup 
+                                    values={newsletter}
+                                    onChange={(selected) => {
+                                        setForm({ ...form, newsletter: selected });
+                                    }}
+                                />
+                
+                                <CheckboxGroup 
+                                    values={privacy}
+                                    onChange={(selected) => {
+                                        setForm({ ...form, privacy: selected });
+                                    }}
+                                    error={formError.privacy}
+                                />
+                
+                                <Button
+                                    onClick={handleFormError}
+                                    text='Prenota'
+                                />
+
+                            </> }
 
                         </div>
                     </section>
                 </div>
             </main>
-            
-            <div>
-                <pre>
-                    <code>{JSON.stringify(form, undefined, 2)}</code>
-                </pre>
-            </div>
         </div>
     );
 }

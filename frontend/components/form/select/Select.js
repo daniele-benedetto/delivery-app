@@ -2,17 +2,19 @@ export default function Select({
   id, 
   label, 
   values, 
-  onChange
+  onChange,
+  error
 }) {
     return (
-        <div className="col-12">
-        <label htmlFor={id} className="form-label">{label}</label>
+        <div className={"col-12"}>
+        <label htmlFor={id} className={`form-label`}>{label}</label>
             <select
                 id={id}
                 name={id}
                 onChange={onChange}
-                className="form-select"
+                className={`form-select`}
             >
+                <option></option>
                 {values.map((val, idx) => {
                     return (
                         <option key={idx} value={val.id}>
@@ -21,6 +23,7 @@ export default function Select({
                     );
                 })}
             </select>
+            { error && <small className={`text-danger`}>Scegli un'opzione</small> }
         </div>
     );
 }

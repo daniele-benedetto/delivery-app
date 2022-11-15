@@ -3,9 +3,9 @@ export default function Button({
   onClick,
 }) {
     return (
-        <div className="col-12 mt-3">
+        <div className={`col-12 mt-3`}>
             <button
-                className="btn btn-primary"  
+                className={`btn btn-primary`}  
                 onClick={onClick}
                 type='submit'
             >
