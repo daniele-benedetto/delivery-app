@@ -1,8 +1,58 @@
 export const restaurantOption = {
     placesAvailableInside: 12, //Posti disponibili all'interno
     placesAvailableOutside: 8, //Posti disponibili all'esterno
+    openTime: [
+        {
+            hour: 12,
+            minute: 30,
+            meal: 1
+        },
+        {
+            hour: 13,
+            minute: 0
+        },
+        {
+            hour: 13,
+            minute: 30
+        },        
+        {
+            hour: 14,
+            minute: 0
+        },
+        {
+            hour: 14,
+            minute: 30
+        },
+        {
+            hour: 19,
+            minute: 0
+        },
+        {
+            hour: 19,
+            minute: 30
+        },
+        {
+            hour: 20,
+            minute: 0
+        },
+        {
+            hour: 20,
+            minute: 30
+        },
+        {
+            hour: 21,
+            minute: 0
+        },
+        {
+            hour: 21,
+            minute: 30
+        },
+        {
+            hour: 22,
+            minute: 0
+        },
+    ]
 }
-
 
 export const reservations = [
     {
@@ -19,7 +69,7 @@ export const reservations = [
     }
 ];
 
-export const time = [
+export const meal = [
     {
         id: 0,
         time: "Pranzo",

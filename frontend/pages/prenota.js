@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-import { restaurantOption, reservations, time, place, newsletter, privacy } from './api/local';
+import { restaurantOption, reservations, place, meal, newsletter, privacy } from './api/local';
 
-import { addMonths } from 'date-fns';
+import { addMonths, setHours, setMinutes, format } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -14,6 +14,8 @@ import CheckboxGroup from '../components/form/checkbox/CheckboxGroup';
 
 //TODO FORM DI PRENOTAZIONE
 /*
+    -Dividere meglio la gestione dei dati => stabilire ora inizio e ora fine pranzo/cena 
+    e generare le fasce in maniera dinamica
     -REFACTORY CODICE!!!
     -Salvare i dati in un db
     -Sistema invio email
@@ -24,16 +26,15 @@ import CheckboxGroup from '../components/form/checkbox/CheckboxGroup';
 
 export default function Prenota() {
 
-    const today = new Date();
-
     //Bool disponibilità e messaggio
     const [available, setAvailable] = useState(false);
     const [message, setMessage] = useState('');
 
     //Dati del form
     const [form, setForm] = useState({
-        date: today.toLocaleDateString('sv-SE'),
-        time: "", //0 => pranzo, 1 => cena
+        date: "",
+        time: "",
+        meal: "", //0 => pranzo, 1 => cena
         place: "", //0 => interno, 1 => esterno
         name: "",
         surname: "",
@@ -47,6 +48,7 @@ export default function Prenota() {
     const [formError, setFormError] = useState({
         date: false,
         time: false,
+        meal: false,
         place: false,
         name: false,
         surname: false,
@@ -56,10 +58,34 @@ export default function Prenota() {
         privacy: false,
     });
 
-    //Al cambio di data imposto su formato corretto il valore del form
-    const onChangeDatePicker = (date) => {
-        setForm({ ...form, date: date.toLocaleDateString('sv-SE') });
+
+    ////////  INIZIO    DATE PICKER ////////
+    const today = new Date();
+
+    //Al cambio di data e dell'ora imposto su formato corretto il valore del form
+    const onChangeDate = (date) => {
+        setForm({ ...form, date: format(date, "yyyy-MM-dd")});
     };
+    
+    const onChangeTime = (date) => {
+        setForm({ ...form, time: format(date, "hh:mm"), meal: 1});
+    };
+
+    //Genero gli orari sulla base dei dati del ristorante
+    const generateTimetables = () => {
+
+        let timetables = [];
+
+        restaurantOption.openTime.map(time => {
+            timetables.push(setHours(setMinutes(new Date(), time.minute), time.hour));
+        });
+
+        return timetables;
+    }
+
+    ////////  FINE    DATE PICKER ////////
+
+
 
     //Controlla disponibilità
     const checkAvailability = () => {
@@ -68,14 +94,14 @@ export default function Prenota() {
         let reservedSeats= 0;
         let placesAvailable= 0;
 
-        if(form.time && form.date && form.place) {
+        if(form.meal && form.date && form.place) {
             //Ciclo tutte le prenotazioni
             //Se sono uguali al giorno, pasto e luogo scelti dall'utente
             //Dichiaro quanti sono i posti già occupati
             reservations.map((reservation) => {
                 if(
                     reservation.giorno == form.date &&
-                    reservation.pasto == form.time &&
+                    reservation.pasto == form.meal &&
                     reservation.luogo == form.place
                 ) {
                     reservedSeats = reservedSeats + reservation.posti;
@@ -97,7 +123,6 @@ export default function Prenota() {
                 setAvailable(false);
                 setMessage(`Non ci sono posti disponibili per questa giornata`);
             }
-            console.log(placesAvailable)
         }
 
         //Verifica se ci sono errori nella compilazione di questi campi
@@ -105,6 +130,7 @@ export default function Prenota() {
             ...formError,
             date: form.date === "",
             time: form.time === "",
+            meal: form.meal === "",
             place: form.place === "",
         });
         
@@ -116,6 +142,7 @@ export default function Prenota() {
             ...formError,
             date: form.date === "",
             time: form.time === "",
+            meal: form.meal === "",
             place: form.place === "",
             name: form.name === "",
             surname: form.surname === "",
@@ -124,8 +151,6 @@ export default function Prenota() {
             newsletter: form.newsletter === "" || [],
             privacy: form.privacy === "" || [],
         });
-
-        console.log(form);
     }
 
     return (
@@ -143,15 +168,31 @@ export default function Prenota() {
                             <h1>Prenota</h1>
 
                             <DatePicker
-                                onChange={onChangeDatePicker}
+                                onChange={onChangeDate}
                                 minDate={today}
                                 maxDate={addMonths(today, 12)}
                                 inline
                             />
                             { formError.date && <small className={`text-danger`}>Imposta una data</small> }
 
+                            <DatePicker
+                                onChange={onChangeTime}
+                                showTimeSelect
+                                showTimeSelectOnly
+                                inline
+                                filterTime={(time) => {
+                                    const currentDate = new Date();
+                                    const selectedDate = new Date(time);
+                                    return currentDate.getTime() < selectedDate.getTime();
+                                }}
+                                includeTimes={generateTimetables()}
+                                timeCaption="Time"
+                                dateFormat="h:mm"
+                            />
+                            { formError.time && <small className={`text-danger`}>Imposta un orario</small> }
+
                             <Select 
-                                id='time'
+                                id='place'
                                 label='Scegli il luogo'
                                 values={place}
                                 onChange={(event) => {
@@ -162,14 +203,14 @@ export default function Prenota() {
                             />
 
                             <Select 
-                                id='time'
+                                id='meal'
                                 label='Scegli il pasto'
-                                values={time}
+                                values={meal}
                                 onChange={(event) => {
                                     const val = event.target.value;
-                                    setForm({ ...form, time: val });
+                                    setForm({ ...form, meal: val });
                                 }}
-                                error={formError.time}
+                                error={formError.meal}
                             />
 
                             <Button
@@ -255,6 +296,12 @@ export default function Prenota() {
                     </section>
                 </div>
             </main>
+            <div>
+                <pre>
+                    <code>{JSON.stringify(form, undefined, 2)}</code>
+                </pre>
+            </div>
         </div>
+        
     );
 }
