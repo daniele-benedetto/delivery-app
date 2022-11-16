@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Validation } from "../validation/Validation";
 import Checkbox from "./Checkbox";
 
 export default function CheckboxGroup({ 
@@ -25,9 +26,11 @@ export default function CheckboxGroup({
             } else {
                 setSelected([...selected, parseVal]);
             }
+
     };
 
     return (
+
         <div className={`col-12`}>
             {values.map((checkbox, idx) => {
                 return (
@@ -41,6 +44,8 @@ export default function CheckboxGroup({
                     />
                 );
             })}
+            { error && <Validation errorText='Devi accettare i termini' /> }
         </div>
+        
     );
 };

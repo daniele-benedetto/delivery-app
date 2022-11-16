@@ -1,3 +1,5 @@
+import { Validation } from "../validation/Validation";
+
 export default function Input({ 
     id, 
     label, 
@@ -8,6 +10,7 @@ export default function Input({
 }) {
 
     return (
+
         <div className={`col-12 mt-3`}>
             <label htmlFor={id} className={`block text-sm font-medium text-gray-700`}>{label}</label>
             <input
@@ -19,8 +22,9 @@ export default function Input({
                 onChange={onChange}
                 required
             />
-            { error && <small className={`text-danger`}>il campo {label} è obbligatorio</small> }
+            { error && <Validation errorText={`Il campo ${label} è obbligatorio`} /> }
         </div>
+        
     );
 }
 

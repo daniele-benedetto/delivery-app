@@ -1,3 +1,5 @@
+import { Validation } from "../validation/Validation";
+
 export default function Select({ 
   id, 
   label, 
@@ -7,7 +9,7 @@ export default function Select({
 }) {
     return (
         <div className={"col-12"}>
-        <label htmlFor={id} className={`form-label`}>{label}</label>
+            <label htmlFor={id} className={`form-label`}>{label}</label>
             <select
                 id={id}
                 name={id}
@@ -23,7 +25,7 @@ export default function Select({
                     );
                 })}
             </select>
-            { error && <small className={`text-danger`}>Scegli un'opzione</small> }
+            { error && <Validation errorText="Seleziona un'opzione" /> }
         </div>
     );
 }

@@ -2,8 +2,7 @@ export default function Checkbox({
     id, 
     value, 
     description, 
-    onChange,
-    error
+    onChange
 }) {
     return (
         <div className={`form-check mt-3`}>
@@ -18,7 +17,6 @@ export default function Checkbox({
                 onChange={onChange}
                 className={`form-check-input`}
             />
-            { error && <small className={`text-danger`}>il campo {id} è obbligatorio</small> }
         </div>
     );
 };

@@ -54,7 +54,7 @@ export const restaurantOption = {
     ]
 }
 
-export const reservations = [
+export const reservationsData = [
     {
         giorno: '2022-11-16',
         pasto: 0,
@@ -69,7 +69,7 @@ export const reservations = [
     }
 ];
 
-export const meal = [
+export const mealData = [
     {
         id: 0,
         time: "Pranzo",
@@ -80,7 +80,7 @@ export const meal = [
     }
 ];
 
-export const place = [
+export const placeData = [
     {
         id: 0,
         time: "Interno",
@@ -91,7 +91,7 @@ export const place = [
     }
 ];
 
-export const newsletter = [
+export const newsletterData = [
     {
         id: "newsletter",
         label: "Newsletter",
@@ -100,7 +100,7 @@ export const newsletter = [
     }
 ];
 
-export const privacy = [
+export const privacyData = [
     {
         id: "privacy",
         label: "Privacy",
