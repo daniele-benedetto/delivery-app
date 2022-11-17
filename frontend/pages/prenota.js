@@ -8,7 +8,6 @@ import ReservationFormStepTwo from '../components/form/reservationForm/Reservati
 
 //TODO FORM DI PRENOTAZIONE
 /*
-    -Correggere formato am pm del tempo calendario
     -Salvare il pasto in base alla scelta dell'orario
     -Salvare i dati in un db
     -Sistema invio email

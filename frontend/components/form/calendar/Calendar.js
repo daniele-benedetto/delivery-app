@@ -55,11 +55,11 @@ export default function Calendar({
 
         for (let i = 0; i < array.length; i++) {
 
-            let hour = format(array[i], 'hh');
+            let hour = format(array[i], 'H');
             let minute = format(array[i], 'mm');
 
             timetables.push(setHours(setMinutes(new Date(), minute), hour));
-            
+
         }
 
         return timetables;
