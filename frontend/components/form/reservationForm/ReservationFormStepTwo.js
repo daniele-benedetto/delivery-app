@@ -26,10 +26,12 @@ export default function ReservationFormStepTwo({
             surname: form.surname === "",
             email: form.email === "",
             phone: form.phone === "",
-            newsletter: form.newsletter === "" || [],
-            privacy: form.privacy === "" || [],
+            newsletter: !form.newsletter.length === 0,
+            privacy: form.privacy.length === 0,
         });
     }
+
+    console.log(form.privacy.length)
 
     return(
         

@@ -3,13 +3,13 @@ import { useState } from 'react';
 import { restaurantOption, reservationsData, placeData, mealData, newsletterData, privacyData } from './api/local';
 
 import Seo from '../components/seo/Seo';
-import ReservationFormStepOne from '../components/form/reservationForm/reservationFormStepOne';
+import ReservationFormStepOne from '../components/form/reservationForm/ReservationFormStepOne';
 import ReservationFormStepTwo from '../components/form/reservationForm/ReservationFormStepTwo';
 
 //TODO FORM DI PRENOTAZIONE
 /*
+    -Correggere formato am pm del tempo calendario
     -Salvare il pasto in base alla scelta dell'orario
-    -Correggere problema checkbox
     -Salvare i dati in un db
     -Sistema invio email
     -Sistema di iscrizione e Login
@@ -33,8 +33,8 @@ export default function Prenota() {
         surname: "",
         email: "",
         phone: "",
-        newsletter: false,
-        privacy: false,
+        newsletter: [],
+        privacy: [],
     });
 
     //Presenza di errori compilazione form

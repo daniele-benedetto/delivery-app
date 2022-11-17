@@ -40,7 +40,6 @@ export default function CheckboxGroup({
                         description={checkbox.description}
                         value={checkbox.value}
                         onChange={handleChange}
-                        error={error}
                     />
                 );
             })}

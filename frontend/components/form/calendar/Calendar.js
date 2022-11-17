@@ -1,5 +1,5 @@
 import DatePicker from 'react-datepicker';
-import {  setHours, setMinutes, format, addDays, addMonths } from 'date-fns';
+import {  setHours, setMinutes, format, addDays, addMonths, addMinutes } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
 import { useEffect, useState } from 'react';
 
@@ -10,6 +10,32 @@ export default function Calendar({
 }) {
 
     const [selectDate, setSelectDate] = useState(addDays(new Date(), 1));
+
+    const today = format(new Date(), "yyyy-MM-dd");
+
+    let startLunch = restaurantOption.openTimeTest.lunch.start;
+    let formatStartLunch  = new Date([today, startLunch]);
+
+    let finishLunch = restaurantOption.openTimeTest.lunch.finish;
+    let formatFinishLunch  = new Date([today, finishLunch]);
+
+    let startDinner = restaurantOption.openTimeTest.dinner.start;
+    let formatStartDinner  = new Date([today, startDinner]);
+
+    let finishDinner = restaurantOption.openTimeTest.dinner.finish;
+    let formatFinishDinner  = new Date([today, finishDinner]);
+
+    let array = [];
+
+    while (formatStartLunch<=formatFinishLunch){
+        array.push(formatStartLunch);
+        formatStartLunch = addMinutes(formatStartLunch, 30);
+    }
+
+    while (formatStartDinner<=formatFinishDinner){
+        array.push(formatStartDinner);
+        formatStartDinner = addMinutes(formatStartDinner, 30);
+    }
 
     //Al cambio della data aggiorno il valore dell'oggetto form
     useEffect(() => {
@@ -24,13 +50,18 @@ export default function Calendar({
     
     //Genero gli orari sulla base dei dati del ristorante
     const generateTimetables = () => {
-    
+
         let timetables = [];
-    
-        restaurantOption.openTime.map(time => {
-            timetables.push(setHours(setMinutes(new Date(), time.minute), time.hour));
-        });
-    
+
+        for (let i = 0; i < array.length; i++) {
+
+            let hour = format(array[i], 'hh');
+            let minute = format(array[i], 'mm');
+
+            timetables.push(setHours(setMinutes(new Date(), minute), hour));
+            
+        }
+
         return timetables;
 
     }
