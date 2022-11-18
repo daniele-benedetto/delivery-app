@@ -1,6 +1,7 @@
 import Calendar from '../calendar/Calendar';
 import Select from '../select/Select';
 import Button from '../button/Button';
+import { format } from 'date-fns';
 
 export default function ReservationFormStepOne({
     form,
@@ -9,7 +10,6 @@ export default function ReservationFormStepOne({
     setFormError,
     restaurantOption,
     placeData,
-    mealData, 
     message,
     setMessage,
     reservationsData,
@@ -21,11 +21,28 @@ export default function ReservationFormStepOne({
 
         e.preventDefault();
 
+        const today = format(new Date(), "yyyy-MM-dd");
+        let dateSelect  = new Date([today, form.time]);
+
         //Quando parte una ricerca setto a 0 i posti riservati e i disponibili
         let reservedSeats= 0;
         let placesAvailable= 0;
     
-        if(form.meal && form.date && form.place) {
+        if(form.date && form.time && form.place) {
+
+            //Verifico la fascia oraria scelta e se è pranzo o cena
+            if(
+                format(dateSelect, 'H:mm') >= restaurantOption.openTimeTest.lunch.start && 
+                format(dateSelect, 'H:mm') <= restaurantOption.openTimeTest.lunch.finish
+            ) {
+                setForm({ ...form, meal: 0});
+            } else if(
+                form.time >= restaurantOption.openTimeTest.dinner.start && 
+                form.time <= restaurantOption.openTimeTest.dinner.finish
+            ) {
+                setForm({ ...form, meal: 1});
+            }
+
             //Ciclo tutte le prenotazioni
             //Se sono uguali al giorno, pasto e luogo scelti dall'utente
             //Dichiaro quanti sono i posti già occupati
@@ -49,7 +66,7 @@ export default function ReservationFormStepOne({
             //Se ci sono posti disponibili allora dichiaro vero la disponibilità e setto il messaggio
             if (placesAvailable > 0) {
                 setAvailable(true);
-                setMessage(`Per questa giornata sono disponibili ${placesAvailable} posti`);
+                setMessage(`Per il giorno ${form.date} alle sono disponibili ${placesAvailable} posti`);
             } else {
                 setAvailable(false);
                 setMessage(`Non ci sono posti disponibili per questa giornata`);
@@ -60,8 +77,6 @@ export default function ReservationFormStepOne({
         setFormError({
             ...formError,
             date: form.date === "",
-            time: form.time === "",
-            meal: form.meal === "",
             place: form.place === "",
         });    
     };
@@ -74,6 +89,7 @@ export default function ReservationFormStepOne({
                 setForm={setForm}
                 formError={formError}
                 restaurantOption={restaurantOption}
+                error={formError.date}
             />
 
             <Select
@@ -87,23 +103,10 @@ export default function ReservationFormStepOne({
                 error={formError.place}
             />
 
-            <Select 
-                id='meal'
-                label='Scegli il pasto'
-                values={mealData}
-                onChange={(event) => {
-                    const val = event.target.value;
-                        setForm({ ...form, meal: val });
-                    }}
-                error={formError.meal}
-            />
-
             <Button
                 onClick={checkAvailability}
                 text='Verifica disponibilità'
             />
-
-            <p>{message}</p>
             
         </form>
     );

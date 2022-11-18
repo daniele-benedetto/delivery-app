@@ -8,7 +8,8 @@ export default function ReservationFormStepTwo({
     formError,
     newsletterData,
     privacyData,
-    setFormError
+    setFormError,
+    setAvailable
 }) { 
 
     //Verifico che i campi non siano vuoti, se lo sono verranno dichiarati su true
@@ -29,13 +30,39 @@ export default function ReservationFormStepTwo({
             newsletter: !form.newsletter.length === 0,
             privacy: form.privacy.length === 0,
         });
+
     }
 
-    console.log(form.privacy.length)
+    const reset = (e) => {
+
+        e.preventDefault();
+
+        setForm({
+            ...form,
+            date: "",
+            time: "",
+            meal: "", //0 => pranzo, 1 => cena
+            place: "", //0 => interno, 1 => esterno
+            name: "",
+            surname: "",
+            email: "",
+            phone: "",
+            newsletter: [],
+            privacy: [],
+        });
+
+        setAvailable(false);
+        
+    }
 
     return(
         
         <form>
+
+            <Button
+                onClick={reset}
+                text='Reset'
+            />  
 
             <Input
                 id='name'

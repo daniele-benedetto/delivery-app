@@ -1,6 +1,6 @@
 export const restaurantOption = {
-    placesAvailableInside: 12, //Posti disponibili all'interno
-    placesAvailableOutside: 8, //Posti disponibili all'esterno
+    placesAvailableInside: 12, 
+    placesAvailableOutside: 8,
     openTimeTest: {
         lunch: {
             start: '12:30',
@@ -11,68 +11,17 @@ export const restaurantOption = {
             finish: '22:00'
         },
     },
-    openTime: [
-        {
-            hour: 12,
-            minute: 30,
-            meal: 1
-        },
-        {
-            hour: 13,
-            minute: 0
-        },
-        {
-            hour: 13,
-            minute: 30
-        },        
-        {
-            hour: 14,
-            minute: 0
-        },
-        {
-            hour: 14,
-            minute: 30
-        },
-        {
-            hour: 19,
-            minute: 0
-        },
-        {
-            hour: 19,
-            minute: 30
-        },
-        {
-            hour: 20,
-            minute: 0
-        },
-        {
-            hour: 20,
-            minute: 30
-        },
-        {
-            hour: 21,
-            minute: 0
-        },
-        {
-            hour: 21,
-            minute: 30
-        },
-        {
-            hour: 22,
-            minute: 0
-        },
-    ]
 }
 
 export const reservationsData = [
     {
-        giorno: '2022-11-16',
+        giorno: '2022-11-19',
         pasto: 0,
         posti: 2,
         luogo: 1,
     },
     {
-        giorno: '2022-11-16',
+        giorno: '2022-11-19',
         pasto: 0,
         posti: 6,
         luogo: 1,

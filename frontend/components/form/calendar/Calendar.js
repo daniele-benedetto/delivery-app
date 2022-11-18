@@ -2,64 +2,62 @@ import DatePicker from 'react-datepicker';
 import {  setHours, setMinutes, format, addDays, addMonths, addMinutes } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
 import { useEffect, useState } from 'react';
+import { Validation } from '../validation/Validation';
 
 export default function Calendar({
     form,
     setForm,
-    restaurantOption
+    restaurantOption,
+    error
 }) {
 
-    const [selectDate, setSelectDate] = useState(addDays(new Date(), 1));
-
+    const [selectDate, setSelectDate] = useState('');
+    
     const today = format(new Date(), "yyyy-MM-dd");
 
-    let startLunch = restaurantOption.openTimeTest.lunch.start;
-    let formatStartLunch  = new Date([today, startLunch]);
+    let startLunch  = new Date([today, restaurantOption.openTimeTest.lunch.start]);
+    let finishLunch  = new Date([today, restaurantOption.openTimeTest.lunch.finish]);
 
-    let finishLunch = restaurantOption.openTimeTest.lunch.finish;
-    let formatFinishLunch  = new Date([today, finishLunch]);
+    let startDinner  = new Date([today, restaurantOption.openTimeTest.dinner.start]);
+    let finishDinner  = new Date([today, restaurantOption.openTimeTest.dinner.finish]);
 
-    let startDinner = restaurantOption.openTimeTest.dinner.start;
-    let formatStartDinner  = new Date([today, startDinner]);
+    let slots = [];
 
-    let finishDinner = restaurantOption.openTimeTest.dinner.finish;
-    let formatFinishDinner  = new Date([today, finishDinner]);
-
-    let array = [];
-
-    while (formatStartLunch<=formatFinishLunch){
-        array.push(formatStartLunch);
-        formatStartLunch = addMinutes(formatStartLunch, 30);
-    }
-
-    while (formatStartDinner<=formatFinishDinner){
-        array.push(formatStartDinner);
-        formatStartDinner = addMinutes(formatStartDinner, 30);
-    }
-
-    //Al cambio della data aggiorno il valore dell'oggetto form
     useEffect(() => {
-
-        setForm({ 
-            ...form, 
-            date: format(selectDate, 'yyyy-MM-dd'),
-            time: format(selectDate, 'hh:mm')
-        });
-        
+        if(selectDate != '') {
+            setForm({ 
+                ...form, 
+                date: format(selectDate, 'yyyy-MM-dd'),
+                time: format(selectDate, 'H:mm'),
+            });
+        }
     }, [selectDate]);
-    
+
     //Genero gli orari sulla base dei dati del ristorante
     const generateTimetables = () => {
 
         let timetables = [];
 
-        for (let i = 0; i < array.length; i++) {
+        //Ciclo orario di inizio e fine per generare le date
+        //Salvo i valori all'interno di un array
+        while (startLunch<=finishLunch){
+            slots.push(startLunch);
+            startLunch = addMinutes(startLunch, 30);
+        }
+    
+        while (startDinner<=finishDinner){
+            slots.push(startDinner);
+            startDinner = addMinutes(startDinner, 30);
+        }
 
-            let hour = format(array[i], 'H');
-            let minute = format(array[i], 'mm');
+        //Ciclo il nuovo array e ottengo un array
+        //di funzioni che generano gli slot del calendario
+        for (let i = 0; i < slots.length; i++) {
+
+            let hour = parseInt(format(slots[i], 'H'));
+            let minute = parseInt(format(slots[i], 'mm'));
 
             timetables.push(setHours(setMinutes(new Date(), minute), hour));
-
         }
 
         return timetables;
@@ -81,6 +79,7 @@ export default function Calendar({
                 minDate={new Date()}
                 maxDate={addMonths(new Date(), 6)}
             />
+            { error && <Validation errorText="Seleziona la data e l'ora" /> }
         </>
     );
 }
