@@ -1,6 +1,7 @@
 import Button from '../button/Button';
 import CheckboxGroup from '../checkbox/CheckboxGroup';
 import Input from '../input/Input';
+import Select from '../select/Select';
 
 export default function ReservationFormStepTwo({
     form,
@@ -9,8 +10,17 @@ export default function ReservationFormStepTwo({
     newsletterData,
     privacyData,
     setFormError,
-    setAvailable
+    setAvailable,
+    placesNumber,
+    setMessage
 }) { 
+
+    let values = form;
+
+    console.log(form)
+
+    let placesSelect = new Object();
+    let placesArray = [];
 
     //Verifico che i campi non siano vuoti, se lo sono verranno dichiarati su true
     const handleFormError = (e) => {
@@ -27,7 +37,7 @@ export default function ReservationFormStepTwo({
             surname: form.surname === "",
             email: form.email === "",
             phone: form.phone === "",
-            newsletter: !form.newsletter.length === 0,
+            reservation: form.reservation === "",
             privacy: form.privacy.length === 0,
         });
 
@@ -47,13 +57,58 @@ export default function ReservationFormStepTwo({
             surname: "",
             email: "",
             phone: "",
+            reservation: "",
             newsletter: [],
             privacy: [],
         });
 
         setAvailable(false);
+        setMessage('');
         
     }
+
+    const handleSubmit = async values => {
+
+        const request = await fetch('/api/reservation/reservation', {
+            method: "POST",
+            body: JSON.stringify(values)
+        });
+
+        const result = await request.json();
+
+        if(result.data != 'ok') {
+            console.log('errore')
+            return;
+        }
+
+        console.log('yeeee')
+    }
+
+    const generatePlacesNumberSelect = () => {
+
+        let index = 0;
+        let i = 0;
+        let number = [];
+
+        //Genero un array contentente il singoli posti disponili
+        while (index<placesNumber){
+            index++
+            number.push(index);
+        }
+        
+        //Ciclo i singoli posti per generare un array di oggetti
+        //L'array di oggetti sarà la variabile che passerò al select
+        //per generare le singole opzioni
+        for (i=1; i<=number.length; i++){
+            placesSelect = new Object();
+            placesSelect['id'] = i;
+            placesSelect['time'] = i;
+            placesArray.push(placesSelect);
+        }
+
+    }
+
+    generatePlacesNumberSelect();
 
     return(
         
@@ -111,6 +166,17 @@ export default function ReservationFormStepTwo({
                 }}
                 error={formError.phone}
             />
+
+            <Select
+                id='reservation'
+                label='Per quante persone vuoi prenotare?'
+                values={placesArray}
+                onChange={(event) => {
+                    const val = event.target.value;
+                    setForm({ ...form, reservation: val });
+                }}
+                error={formError.reservation}
+            />
                 
             <CheckboxGroup
                 values={newsletterData}
@@ -129,7 +195,7 @@ export default function ReservationFormStepTwo({
             />
                 
             <Button
-                onClick={handleFormError}
+                onClick={handleSubmit(values)}
                 text='Prenota'
             />
             

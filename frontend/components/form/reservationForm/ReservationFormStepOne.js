@@ -10,10 +10,10 @@ export default function ReservationFormStepOne({
     setFormError,
     restaurantOption,
     placeData,
-    message,
     setMessage,
     reservationsData,
-    setAvailable
+    setAvailable,
+    setPlacesNumber
 }) { 
 
     //Controlla disponibilità
@@ -66,10 +66,12 @@ export default function ReservationFormStepOne({
             //Se ci sono posti disponibili allora dichiaro vero la disponibilità e setto il messaggio
             if (placesAvailable > 0) {
                 setAvailable(true);
-                setMessage(`Per il giorno ${form.date} alle sono disponibili ${placesAvailable} posti`);
+                setMessage(`Per il giorno ${form.date} alle ${form.time} sono disponibili ${placesAvailable} posti`);
+                setPlacesNumber(placesAvailable);
             } else {
                 setAvailable(false);
                 setMessage(`Non ci sono posti disponibili per questa giornata`);
+                setPlacesNumber(0);
             }
         }
     
@@ -84,6 +86,7 @@ export default function ReservationFormStepOne({
     return(
         
         <form>
+            
             <Calendar
                 form={form}
                 setForm={setForm}

@@ -13,16 +13,17 @@ export default function Form() {
 
     //Dati del form
     const [form, setForm] = useState({
-        date: "",
-        time: "",
-        meal: "", //0 => pranzo, 1 => cena
-        place: "", //0 => interno, 1 => esterno
-        name: "",
-        surname: "",
-        email: "",
-        phone: "",
-        newsletter: [],
-        privacy: [],
+        name: "", 
+        surname: "", 
+        email: "", 
+        phone: "", 
+        date: "", 
+        time: "", 
+        reservation: "", 
+        meal: "", 
+        place: "", 
+        privacy: "",
+        newsletter: ""
     });
 
     //Presenza di errori compilazione form
@@ -33,6 +34,7 @@ export default function Form() {
         surname: false,
         email: false,
         phone: false,
+        reservation: false,
         newsletter: false,
         privacy: false,
     });

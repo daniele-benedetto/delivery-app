@@ -6,7 +6,9 @@ export default function Input({
     type,
     value, 
     onChange,
-    error
+    error,
+    min,
+    max
 }) {
 
     return (
@@ -21,6 +23,8 @@ export default function Input({
                 value={value} 
                 onChange={onChange}
                 required
+                min={min}
+                max={max}
             />
             { error && <Validation errorText={`Il campo ${label} è obbligatorio`} /> }
         </div>
