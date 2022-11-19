@@ -1,51 +1,44 @@
-export default async function handler(req, res) {
-    
-    const { name, surname, email, phone, date, time, reservation, meal, place, privacy, newsletter } = JSON.parse(req.body);
+import { table, getMinifiedItem } from "../../utils/Airtable";
 
-    if(
-        !name ||
-        !surname ||
-        !email ||
-        !phone ||
-        !date ||
-        !time ||
-        !meal ||
-        !place ||
-        !reservation ||
-        !privacy
-    ) {
-        return res.status(400).json({error: "Tentativo fallito"})
-    }
+export default async (req, res) => {
 
-    if(req.method != "POST") {
-        return res.status(405).json({error: "Metodo non consentito"})
-    }
+  const { 
+    name, 
+    surname, 
+    email, 
+    phone, 
+    date, 
+    time, 
+    reservation, 
+    meal, 
+    place, 
+    privacy, 
+    newsletter 
+   } = req.body;
 
-    const request = await fetch('https://api.airtable.com/v0/appMbmvCneRCat1Cs/reservation', {
-        method: 'POST',
-        headers: {
-            Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`,
-            'Content-Type' : "application/json"
-        },
-        body: JSON.stringify({fields: {
+    try {
+
+        const newRecords = await table.create([{ fields: { 
             name, 
             surname, 
             email, 
             phone, 
             date, 
             time, 
+            reservation, 
             meal, 
             place, 
-            reservation, 
-            newsletter, 
-            privacy
-        }})
-    });
+            privacy, 
+            newsletter 
+        }}]);
+            
+        res.status(200).json(getMinifiedItem(newRecords[0]));
 
-    if(request.ok) {
-        return res.status(200).json({data: "ok"});
+    } catch (error) {
+
+        console.log(error);
+        res.status(500).json({ msg: "ko" });
+        
     }
-    
-    return res.status(400).json({error: "ko"});
 
-}
+};

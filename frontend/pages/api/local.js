@@ -28,17 +28,6 @@ export const reservationsData = [
     }
 ];
 
-export const mealData = [
-    {
-        id: 0,
-        time: "Pranzo",
-    },
-    {
-        id: 1,
-        time: "Cena",
-    }
-];
-
 export const placeData = [
     {
         id: 0,
