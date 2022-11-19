@@ -3,9 +3,7 @@ import FormReservation from '../components/form/FormReservation';
 
 //TODO FORM DI PRENOTAZIONE
 /*
-    -Sistema invio email
-    -Sistema di iscrizione e Login
-    -REFACTORY E OTTIMIZZAZIONE
+    -Dinamicizzare dati locale
     -UX della form
     -UI della form
 */

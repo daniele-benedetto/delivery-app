@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 import { format } from 'date-fns';
+
+import emailjs from '@emailjs/browser';
 
 import Input from './input/Input';
 import Calendar from './calendar/Calendar';
@@ -43,6 +46,8 @@ export default function FormReservation() {
     const [message, setMessage] = useState('');
     const [available, setAvailable] = useState(false);
     const [placesNumber, setPlacesNumber] = useState(0);
+
+    const router = useRouter();
 
     let placesSelect = new Object();
     let placesArray = [];
@@ -87,7 +92,7 @@ export default function FormReservation() {
                 }
             });
     
-            //Dichiaro che i posti disponibili sono == ai posti disponibili per la locazione interna
+            //Dichiaro che i posti disponibili sono == ai posti disponibili per la locazione scelta
             (form.place == 0) 
             ? placesAvailable = restaurantOption.placesAvailableInside 
             : placesAvailable = restaurantOption.placesAvailableOutside;
@@ -166,26 +171,9 @@ export default function FormReservation() {
         
     }
 
-    //Verifico che i campi non siano vuoti, se lo sono verranno dichiarati su true
-    const handleFormError = (e) => {
-
-        e.preventDefault();
-
-        setFormError({
-            ...formError,
-            date: form.date === "",
-            time: form.time === "",
-            meal: form.meal === "",
-            place: form.place === "",
-            name: form.name === "",
-            surname: form.surname === "",
-            email: form.email === "",
-            phone: form.phone === "",
-            reservation: form.reservation === "",
-            privacy: form.privacy.length === 0,
-        });
-    }
-
+    //Verifico che i campi obbligatori del form siano compilati
+    //Se lo sono salvo i dati su airtable
+    //e invio email all'utente
     const addReservation = async (e) => {
 
         e.preventDefault();
@@ -236,8 +224,31 @@ export default function FormReservation() {
                 });
                     
                 const result = await res.json();
+
+                const emailjsParams = {
+                    name: form.name,
+                    surname: form.surname,
+                    email: form.email,
+                    reservation: form.reservation,
+                    date: form.date,
+                    time: form.time,
+                    place: (form.place == 1) ? 'esterno' : 'interno',
+                }
+
+                //Invio email di feedback
+                emailjs.send('service_rpt99vg', 'template_9ves2kg', emailjsParams, 'xxpN9Yk8U7hQRY0uZ')
+                .then((result) => {
+                    //console.log(result.text);
+                }, (error) => {
+                    //console.log(error.text);
+                });
+
+                //Reindirizzo alla pagina di conferma
+                router.push("/prenotazione/conferma");
         
             } catch (error) {
+                //Reindirizzo alla pgina di errore
+                router.push("/prenotazione/errore");
                 console.error(error);
             }
         }
