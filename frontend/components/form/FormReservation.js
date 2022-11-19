@@ -244,11 +244,11 @@ export default function FormReservation() {
                 });
 
                 //Reindirizzo alla pagina di conferma
-                router.push("/prenotazione/conferma");
+                router.push("/prenota/conferma");
         
             } catch (error) {
                 //Reindirizzo alla pgina di errore
-                router.push("/prenotazione/errore");
+                router.push("/prenota/errore");
                 console.error(error);
             }
         }

@@ -5,7 +5,7 @@ export default function Conferma() {
         <div className={`container-fluid p-0`}>
 
             <Seo 
-                title='Conferma prenotazione | RistorApp'
+                title='Errore | RistorApp'
                 description='La tua app per ordinare su RistorApp'
             />
 
