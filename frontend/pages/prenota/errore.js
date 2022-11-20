@@ -6,7 +6,7 @@ export default function Conferma() {
 
             <Seo 
                 title='Errore | RistorApp'
-                description='La tua app per ordinare su RistorApp'
+                description='...Qualcosa è andato storto, riprovare a prenotare più tardi'
             />
 
             <main className={`container-fluid`}>

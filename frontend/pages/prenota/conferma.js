@@ -6,7 +6,7 @@ export default function Conferma() {
 
             <Seo 
                 title='Conferma prenotazione | RistorApp'
-                description='La tua app per ordinare su RistorApp'
+                description='Grazie per aver prenotato, ti abbiamo inviato una email con il riepilogo dei dati'
             />
 
             <main className={`container-fluid`}>

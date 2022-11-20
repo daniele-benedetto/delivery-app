@@ -18,4 +18,7 @@ const getMinifiedItem = (record) => {
     };
 };
 
-export { table, getMinifiedItem };
+const minifyItems = (records) =>
+  records.map((record) => getMinifiedItem(record));
+
+export { table, getMinifiedItem, minifyItems };

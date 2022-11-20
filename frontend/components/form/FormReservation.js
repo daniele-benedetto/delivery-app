@@ -11,9 +11,9 @@ import Select from './select/Select';
 import Button from './button/Button';
 import CheckboxGroup from './checkbox/CheckboxGroup';
 
-import { restaurantOption, reservationsData, placeData, newsletterData, privacyData } from '../../pages/api/local';
+import { restaurantOption, placeData, newsletterData, privacyData } from '../../pages/api/local';
 
-export default function FormReservation() {
+export default function FormReservation({atReservation}) {
     
     //Dati del form
     const [form, setForm] = useState({
@@ -68,13 +68,13 @@ export default function FormReservation() {
 
             //Verifico la fascia oraria scelta e se è pranzo o cena
             if(
-                format(dateSelect, 'H:mm') >= restaurantOption.openTimeTest.lunch.start && 
-                format(dateSelect, 'H:mm') <= restaurantOption.openTimeTest.lunch.finish
+                format(dateSelect, 'H:mm') >= restaurantOption.openTime.lunch.start && 
+                format(dateSelect, 'H:mm') <= restaurantOption.openTime.lunch.finish
             ) {
                 setForm({ ...form, meal: 0});
             } else if(
-                form.time >= restaurantOption.openTimeTest.dinner.start && 
-                form.time <= restaurantOption.openTimeTest.dinner.finish
+                form.time >= restaurantOption.openTime.dinner.start && 
+                form.time <= restaurantOption.openTime.dinner.finish
             ) {
                 setForm({ ...form, meal: 1});
             }
@@ -82,13 +82,14 @@ export default function FormReservation() {
             //Ciclo tutte le prenotazioni
             //Se sono uguali al giorno, pasto e luogo scelti dall'utente
             //Dichiaro quanti sono i posti già occupati
-            reservationsData.map((reservation) => {
+            atReservation.map((reservation) => {
                 if(
-                    reservation.giorno == form.date &&
-                    reservation.pasto == form.meal &&
-                    reservation.luogo == form.place
+                    reservation.date == form.date &&
+                    reservation.meal == form.meal &&
+                    reservation.place == form.place
                 ) {
-                    reservedSeats = reservedSeats + reservation.posti;
+                    console.log(reservation)
+                    reservedSeats = reservedSeats + reservation.reservation;
                 }
             });
     
@@ -200,12 +201,14 @@ export default function FormReservation() {
             form.date &&
             form.time &&
             form.reservation &&
-            form.meal &&
+            form.meal == 0 || 1 &&
             form.place &&
-            form.privacy
+            form.privacy.length == 1
         ) {
+            console.log(form)
+
             try {         
-                const res = await fetch("/api/reservation", {
+                const res = await fetch("/api/airtable/createReservation", {
                     method: "POST",
                     body: JSON.stringify({
                         name: form.name, 
@@ -238,9 +241,9 @@ export default function FormReservation() {
                 //Invio email di feedback
                 emailjs.send('service_rpt99vg', 'template_9ves2kg', emailjsParams, 'xxpN9Yk8U7hQRY0uZ')
                 .then((result) => {
-                    //console.log(result.text);
+                    console.log(result.text);
                 }, (error) => {
-                    //console.log(error.text);
+                    console.log(error.text);
                 });
 
                 //Reindirizzo alla pagina di conferma
