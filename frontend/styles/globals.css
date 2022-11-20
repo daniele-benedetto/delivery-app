@@ -1,15 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+
+/* ! Var color and font */
+
+:root {
+
+    --white: #ffffff;
+    --black: #1b1b1b;
+    --color-primary: #EF705C;
+
+    --font-big: 32px;
+    --font-normal: 20px;
+    --font-small: 16px;
+
+    --font-bold: 700;
+    --font-semibold: 600;
+    --font-light:400;
+
+}
+
 html,
 body {
     padding: 0;
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    font-family: 'Inter', sans-serif;
+    color: var(--black);
+    background-color: var(--white);
+    font-size: var(--font-small);
 }
 
 a {
-    color: inherit;
     text-decoration: none;
+}
+
+a:hover {
+    color: inherit;
 }
 
 * {
     box-sizing: border-box;
+}
+
+/* ! Typography */
+
+.font-big {
+    font-size: var(--font-big);
+}
+
+.font-normal {
+    font-size: var(--font-normal);
+}
+
+.font-small {
+    font-size: var(--font-small);
+}
+
+.color-primary {
+    color: var(--color-primary);
+}
+
+.font-bold {
+    font-weight: var(--font-bold);
+}
+
+.font-semibold {
+    font-weight: var(--font-semibold);
+}
+
+.font-light {
+    font-weight: var(--font-light);
+}
+
+/* ! Layouts */
+
+.h-100 {
+    min-height: 100vh;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+/* ! Columns */
+
+.column-center-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* ! Row */
+
+.row-between-center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ! Buttons */
+
+.button-primary {
+    font-size: var(--font-normal);
+    background-color: var(--color-primary);
+    color: var(--white);
+    font-weight: 400;
+    padding: 10px 40px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.button-outline {
+    text-decoration: underline;
+    font-weight: 600;
+    color: var(--black);
+}
+
+/* ! utils */
+
+.p-20 {
+    padding: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
 }

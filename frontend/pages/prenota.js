@@ -1,6 +1,7 @@
 import Seo from '../components/seo/Seo';
 import FormReservation from '../components/form/FormReservation';
 import { table } from '../utils/Airtable';
+
 //TODO FORM DI PRENOTAZIONE
 /*
     -Dinamicizzare dati locale
@@ -8,32 +9,30 @@ import { table } from '../utils/Airtable';
     -UI della form
 */
 
-import Airtable from 'airtable';
 
 export async function getStaticProps() {
     const results = await table.select({
-        view: "FilterReservation",
+        view: "ViewGrid",
     }).all();
   
     const data = {
       props: {
-        data: results.map(result => {
-          return {
-            id: result.id,
-            ...result.fields,
-          }
-        })
-      }
+            data: results.map(result => {
+                return {
+                    id: result.id,
+                    ...result.fields,
+                }
+            })
+        }
     }
   
     return data;
-  }
+}
 
 export default function Prenota({data}) {
-
-    console.log(data)
     
     return (
+
         <div className={`container-fluid p-0`}>
 
             <Seo 
