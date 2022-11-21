@@ -24,21 +24,3 @@ export const placeData = [
         time: "Esterno",
     }
 ];
-
-export const newsletterData = [
-    {
-        id: "newsletter",
-        label: "Newsletter",
-        value: 1,
-        description: "Iscriviti alla newsletter"
-    }
-];
-
-export const privacyData = [
-    {
-        id: "privacy",
-        label: "Privacy",
-        value: 1,
-        description: "Accetta la privacy policy"
-    }
-];

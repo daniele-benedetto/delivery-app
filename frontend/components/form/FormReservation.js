@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { format } from 'date-fns';
@@ -9,11 +9,10 @@ import Input from './input/Input';
 import Calendar from './calendar/Calendar';
 import Select from './select/Select';
 import Button from './button/Button';
-import CheckboxGroup from './checkbox/CheckboxGroup';
 
-import { restaurantOption, placeData, newsletterData, privacyData } from '../../pages/api/local';
+import { restaurantOption, placeData } from '../../pages/api/local';
 
-export default function FormReservation({atReservation}) {
+export default function FormReservation({atReservation, user}) {
     
     //Dati del form
     const [form, setForm] = useState({
@@ -21,13 +20,9 @@ export default function FormReservation({atReservation}) {
         time: "",
         meal: "", //0 => pranzo, 1 => cena
         place: "", //0 => interno, 1 => esterno
-        name: "",
-        surname: "",
-        email: "",
-        phone: "",
+        name: `${user.name}`,
+        email: `${user.email}`,
         reservation: "",
-        newsletter: [],
-        privacy: [],
     });
     
     //Presenza di errori compilazione form
@@ -35,17 +30,12 @@ export default function FormReservation({atReservation}) {
         date: false,
         place: false,
         name: false,
-        surname: false,
         email: false,
-        phone: false,
         reservation: false,
-        newsletter: false,
-        privacy: false,
     });   
 
     const [message, setMessage] = useState('');
     const [available, setAvailable] = useState(false);
-    const [placesNumber, setPlacesNumber] = useState(0);
 
     const router = useRouter();
 
@@ -64,7 +54,7 @@ export default function FormReservation({atReservation}) {
         let reservedSeats= 0;
         let placesAvailable= 0;
     
-        if(form.date && form.time && form.place) {
+        if(form.date && form.time && form.place && form.reservation) {
 
             //Verifico la fascia oraria scelta e se è pranzo o cena
             if(
@@ -101,14 +91,12 @@ export default function FormReservation({atReservation}) {
             placesAvailable = placesAvailable - reservedSeats;
                 
             //Se ci sono posti disponibili allora dichiaro vero la disponibilità e setto il messaggio
-            if (placesAvailable > 0) {
+            if (placesAvailable > 0 && placesAvailable >= form.reservation) {
                 setAvailable(true);
-                setMessage(`Per il giorno ${form.date} alle ${form.time} sono disponibili ${placesAvailable} posti`);
-                setPlacesNumber(placesAvailable);
+                setMessage('');
             } else {
                 setAvailable(false);
                 setMessage(`Non ci sono posti disponibili per questa giornata`);
-                setPlacesNumber(0);
             }
         }
     
@@ -117,6 +105,7 @@ export default function FormReservation({atReservation}) {
             ...formError,
             date: form.date === "",
             place: form.place === "",
+            reservation: form.reservation === "",
         });    
     };
 
@@ -128,7 +117,7 @@ export default function FormReservation({atReservation}) {
         let number = [];
 
         //Genero un array contentente il singoli posti disponili
-        while (index<placesNumber){
+        while (index<12){
             index++
             number.push(index);
         }
@@ -144,7 +133,7 @@ export default function FormReservation({atReservation}) {
         }
 
     }
-
+    
     generatePlacesNumberSelect();
 
     //Pulisco tutti i campi del form
@@ -158,13 +147,7 @@ export default function FormReservation({atReservation}) {
             time: "",
             meal: "", //0 => pranzo, 1 => cena
             place: "", //0 => interno, 1 => esterno
-            name: "",
-            surname: "",
-            email: "",
-            phone: "",
             reservation: "",
-            newsletter: [],
-            privacy: [],
         });
 
         setAvailable(false);
@@ -185,43 +168,29 @@ export default function FormReservation({atReservation}) {
             time: form.time === "",
             meal: form.meal === "",
             place: form.place === "",
-            name: form.name === "",
-            surname: form.surname === "",
-            email: form.email === "",
-            phone: form.phone === "",
             reservation: form.reservation === "",
-            privacy: form.privacy.length === 0,
         });
 
         if(
             form.name &&
-            form.surname &&
             form.email &&
-            form.phone &&
             form.date &&
             form.time &&
             form.reservation &&
             form.meal == 0 || 1 &&
-            form.place &&
-            form.privacy.length == 1
+            form.place
         ) {
-            console.log(form)
-
             try {         
                 const res = await fetch("/api/airtable/createReservation", {
                     method: "POST",
                     body: JSON.stringify({
                         name: form.name, 
-                        surname: form.surname, 
                         email: form.email, 
-                        phone: form.phone, 
                         date: form.date, 
                         time: form.time, 
                         reservation: parseInt(form.reservation), 
                         meal: form.meal,
                         place: parseInt(form.place),
-                        privacy: form.privacy.toString(),
-                        newsletter: form.newsletter.toString() || '0'
                     }),
                     headers: { "Content-Type": "application/json" },
                 });
@@ -230,7 +199,6 @@ export default function FormReservation({atReservation}) {
 
                 const emailjsParams = {
                     name: form.name,
-                    surname: form.surname,
                     email: form.email,
                     reservation: form.reservation,
                     date: form.date,
@@ -250,7 +218,7 @@ export default function FormReservation({atReservation}) {
                 router.push("/prenota/conferma");
         
             } catch (error) {
-                //Reindirizzo alla pgina di errore
+                //Reindirizzo alla pagina di errore
                 router.push("/prenota/errore");
                 console.error(error);
             }
@@ -281,69 +249,6 @@ export default function FormReservation({atReservation}) {
                 error={formError.place}
                 />
 
-                <Button
-                onClick={checkAvailability}
-                text='Verifica disponibilità'
-                />
-
-            </> }
-
-            <p>{message}</p>
-
-            { available && <>
-                <Button
-                onClick={reset}
-                text='Reset'
-            />  
-
-                <Input
-                    id='name'
-                    label='Name'
-                    type='text'
-                    value={form.name}
-                    onChange={(event) => {
-                        const val = event.target.value;
-                        setForm({ ...form, name: val });
-                    }}
-                    error={formError.name}
-                />
-            
-                <Input 
-                    id='surname'
-                    label='Surname'
-                    type='text'
-                    value={form.surname}
-                    onChange={(event) => {
-                        const val = event.target.value;
-                        setForm({ ...form, surname: val });
-                    }}
-                    error={formError.surname}
-                />
-        
-                <Input 
-                    id='email'
-                    label='Email'
-                    type='text'
-                    value={form.email}
-                    onChange={(event) => {
-                        const val = event.target.value;
-                        setForm({ ...form, email: val });
-                    }}
-                    error={formError.email}
-                />
-                    
-                <Input 
-                    id='phone'
-                    label='Phone'
-                    type='tel'
-                    value={form.phone}
-                    onChange={(event) => {
-                        const val = event.target.value;
-                        setForm({ ...form, phone: val });
-                    }}
-                    error={formError.phone}
-                />
-
                 <Select
                     id='reservation'
                     label='Per quante persone vuoi prenotare?'
@@ -354,30 +259,40 @@ export default function FormReservation({atReservation}) {
                     }}
                     error={formError.reservation}
                 />
-                    
-                <CheckboxGroup
-                    values={newsletterData}
-                    onChange={(selected) => {
-                        setForm({ ...form, newsletter: selected });
-                    }}
-                    error={formError.newsletter}
+
+                <Button
+                onClick={checkAvailability}
+                text='Verifica disponibilità'
                 />
-                    
-                <CheckboxGroup 
-                    values={privacyData}
-                    onChange={(selected) => {
-                        setForm({ ...form, privacy: selected });
-                    }}
-                    error={formError.privacy}
+
+            </> }
+
+            <p>{message}</p>
+
+            { available && <>
+            
+                <Button
+                    onClick={reset}
+                    text='Reset'
                 />
-                    
+
+                <div className='my-5'>
+                    <h3>Riepilogo</h3>
+                    <p>Nome: {form.name}</p>
+                    <p>Email: {form.email}</p>
+                    <p>Quando: il {form.date} alle {form.time}</p>
+                    <p>Per: {form.reservation} persone</p>
+                    <p>Dove: all'{(form.place == 0) ? 'interno' : 'esterno'}</p>
+                </div>
+               
                 <Button
                     onClick={addReservation}
-                    text='Prenota'
+                    text='Conferma'
                 />
 
             </> }
 
         </form>
+        
     );
 }

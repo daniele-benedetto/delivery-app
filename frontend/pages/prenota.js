@@ -1,8 +1,10 @@
-import { useSession, signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useUser } from '@auth0/nextjs-auth0' 
+import { table } from '../utils/Airtable';
 
 import Seo from '../components/seo/Seo';
 import FormReservation from '../components/form/FormReservation';
-import { table } from '../utils/Airtable';
+import { useEffect } from "react";
 
 //TODO FORM DI PRENOTAZIONE
 /*
@@ -34,50 +36,41 @@ export async function getStaticProps() {
 
 export default function Prenota({data}) {
 
-    const {data: session} = useSession(); 
+    const route = useRouter(); 
+    const { user } = useUser();
 
-    if(session) {
+    useEffect(() => {
+        if(!user) {
+            route.push('/api/auth/login'); 
+        }
+    });
+
+    if(user) {
         return (
+
             <div className={`container-fluid p-0`}>
-        
+            
                 <Seo 
                     title='Prenota | RistorApp'
                     description='La tua app per ordinare su RistorApp'
                 />
-        
+
+                <button onClick={() => route.push("/api/auth/logout")}>ESCI</button>
+            
                 <main className={`container-fluid`}>
                     <div className={`row`}>
                         <section className={`border col-12 vh-100 d-flex flex-wrap justify-content-center align-items-center p-0`}>
                             <div className={`container`}>
-                                <h1>Ciao {session.user.name}, prenota adesso</h1>
-                                <FormReservation atReservation={data} />                                     
+                                <FormReservation atReservation={data} user={user}/>                             
                             </div>
                         </section>
                     </div>
                 </main>
-            </div>      
-        );
-    } else {
-        return (
-            <div className={`container-fluid p-0`}>
-        
-                <Seo 
-                    title='Prenota | RistorApp'
-                    description='La tua app per ordinare su RistorApp'
-                />
-        
-                <main className={`container-fluid`}>
-                    <div className={`row`}>
-                        <section className={`border col-12 vh-100 d-flex flex-wrap justify-content-center align-items-center p-0`}>
-                            <div className={`container`}>
-                                <h1>Non hai effettualo l'accesso</h1>
-                                <button className="button-primary" onClick={() => signIn()}>Accedi</button>
-                            </div>
-                        </section>
-                    </div>
-                </main>
-            </div>      
+            </div>         
         );
     }
 }
+
+
+
     

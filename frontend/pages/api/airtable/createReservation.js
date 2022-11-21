@@ -4,32 +4,24 @@ export default async (req, res) => {
 
   const { 
     name, 
-    surname, 
     email, 
-    phone, 
     date, 
     time, 
     reservation, 
     meal, 
-    place, 
-    privacy, 
-    newsletter 
+    place,  
    } = req.body;
 
     try {
 
         const newRecords = await table.create([{ fields: { 
             name, 
-            surname, 
             email, 
-            phone, 
             date, 
             time, 
             reservation, 
             meal, 
-            place, 
-            privacy, 
-            newsletter 
+            place,
         }}]);
             
         res.status(200).json(getMinifiedItem(newRecords[0]));
