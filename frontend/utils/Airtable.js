@@ -1,7 +1,7 @@
 const Airtable = require("airtable");
 
 Airtable.configure({
-  apiKey: process.env.AIRTABLE_API_KEY,
+    apiKey: process.env.AIRTABLE_API_KEY,
 });
 
 const base = Airtable.base(process.env.AIRTABLE_BASE_ID);
@@ -18,7 +18,8 @@ const getMinifiedItem = (record) => {
     };
 };
 
-const minifyItems = (records) =>
-  records.map((record) => getMinifiedItem(record));
+const minifyItems = (records) => {
+    records.map((record) => getMinifiedItem(record));
+}
 
 export { table, getMinifiedItem, minifyItems };

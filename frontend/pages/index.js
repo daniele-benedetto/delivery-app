@@ -1,5 +1,4 @@
 import Seo from '../components/seo/Seo';
-import Header from '../components/header/Header';
 import Hero from '../components/hero/Hero';
 
 export default function Home() {
@@ -12,8 +11,6 @@ export default function Home() {
             />
 
             <main className='w-100 p-20'>
-
-                <Header />
 
                 <Hero />
 
