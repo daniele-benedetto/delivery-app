@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { format } from 'date-fns';
 
 import emailjs from '@emailjs/browser';
 
-import Input from './input/Input';
 import Calendar from './calendar/Calendar';
 import Select from './select/Select';
 import Button from './button/Button';
@@ -36,6 +35,7 @@ export default function FormReservation({atReservation, user}) {
 
     const [message, setMessage] = useState('');
     const [available, setAvailable] = useState(false);
+    const [placesNumber, setPlacesNumber] = useState(0);
 
     const router = useRouter();
 
@@ -54,7 +54,7 @@ export default function FormReservation({atReservation, user}) {
         let reservedSeats= 0;
         let placesAvailable= 0;
     
-        if(form.date && form.time && form.place && form.reservation) {
+        if(form.date && form.time && form.place) {
 
             //Verifico la fascia oraria scelta e se è pranzo o cena
             if(
@@ -93,10 +93,13 @@ export default function FormReservation({atReservation, user}) {
             //Se ci sono posti disponibili allora dichiaro vero la disponibilità e setto il messaggio
             if (placesAvailable > 0 && placesAvailable >= form.reservation) {
                 setAvailable(true);
-                setMessage('');
+                setMessage(`Per il giorno ${form.date} alle ${form.time} sono disponibili ${placesAvailable} posti all'${(form.meal == 0) ? 'interno' : 'esterno'}`);
+                setPlacesNumber(placesAvailable);
+                generatePlacesNumberSelect();
             } else {
                 setAvailable(false);
                 setMessage(`Non ci sono posti disponibili per questa giornata`);
+                setPlacesNumber(0);
             }
         }
     
@@ -105,7 +108,6 @@ export default function FormReservation({atReservation, user}) {
             ...formError,
             date: form.date === "",
             place: form.place === "",
-            reservation: form.reservation === "",
         });    
     };
 
@@ -117,7 +119,7 @@ export default function FormReservation({atReservation, user}) {
         let number = [];
 
         //Genero un array contentente il singoli posti disponili
-        while (index<12){
+        while (index < placesNumber){
             index++
             number.push(index);
         }
@@ -133,8 +135,6 @@ export default function FormReservation({atReservation, user}) {
         }
 
     }
-    
-    generatePlacesNumberSelect();
 
     //Pulisco tutti i campi del form
     const reset = (e) => {
@@ -249,6 +249,19 @@ export default function FormReservation({atReservation, user}) {
                 error={formError.place}
                 />
 
+                <Button
+                onClick={checkAvailability}
+                text='Verifica disponibilità'
+                />
+
+                <p>{message}</p>
+
+            </> }
+
+            { available && !form.reservation && <>
+
+                <p>{message}</p>
+
                 <Select
                     id='reservation'
                     label='Per quante persone vuoi prenotare?'
@@ -259,18 +272,11 @@ export default function FormReservation({atReservation, user}) {
                     }}
                     error={formError.reservation}
                 />
-
-                <Button
-                onClick={checkAvailability}
-                text='Verifica disponibilità'
-                />
-
-            </> }
-
-            <p>{message}</p>
-
-            { available && <>
             
+            </> }
+            
+            { available && form.reservation && <>
+                
                 <Button
                     onClick={reset}
                     text='Reset'

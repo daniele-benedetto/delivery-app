@@ -3,12 +3,10 @@ import Seo from '../components/seo/Seo';
 export default function Ordina() {
     return (
         <div className={`container-fluid p-0`}>
-
             <Seo 
                 title='Ordina | RistorApp'
                 description='La tua app per ordinare su RistorApp'
             />
-
             <main className={`container-fluid`}>
                 <div className={`row`}>
                     <section className={`border col-12 vh-100 d-flex flex-wrap justify-content-center align-items-center p-0`}>
@@ -17,8 +15,7 @@ export default function Ordina() {
                         </div>
                     </section>
                 </div>
-            </main>
-            
+            </main>  
         </div>
     );
 }
