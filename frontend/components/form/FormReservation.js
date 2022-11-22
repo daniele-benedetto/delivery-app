@@ -35,7 +35,10 @@ export default function FormReservation({atReservation, user}) {
 
     const [message, setMessage] = useState('');
     const [available, setAvailable] = useState(false);
+    const [step, setStep] = useState(false);
     const [placesNumber, setPlacesNumber] = useState(0);
+    const [placesInsideNumber, setPlacesInsideNumber] = useState(0);
+    const [placesOutsideNumber, setPlacesOutsideNumber] = useState(0)
 
     const router = useRouter();
 
@@ -52,9 +55,14 @@ export default function FormReservation({atReservation, user}) {
 
         //Quando parte una ricerca setto a 0 i posti riservati e i disponibili
         let reservedSeats= 0;
-        let placesAvailable= 0;
-    
-        if(form.date && form.time && form.place) {
+        let reservedSeatsInside=0;
+        let reservedSeatsOutside=0;
+
+        let placesAvailableInside = restaurantOption.placesAvailableInside;
+        let placesAvailableOutside = restaurantOption.placesAvailableOutside;
+        let placesAvailable= restaurantOption.totalPlaces;
+
+        if(form.date && form.time) {
 
             //Verifico la fascia oraria scelta e se è pranzo o cena
             if(
@@ -75,31 +83,33 @@ export default function FormReservation({atReservation, user}) {
             atReservation.map((reservation) => {
                 if(
                     reservation.date == form.date &&
-                    reservation.meal == form.meal &&
-                    reservation.place == form.place
+                    reservation.meal == form.meal
                 ) {
-                    console.log(reservation)
                     reservedSeats = reservedSeats + reservation.reservation;
+                    if(reservation.place == 0) {
+                        reservedSeatsInside = reservedSeatsInside + reservation.reservation;
+                    } else {
+                        reservedSeatsOutside = reservedSeatsOutside + reservation.reservation;
+                    }
                 }
             });
-    
-            //Dichiaro che i posti disponibili sono == ai posti disponibili per la locazione scelta
-            (form.place == 0) 
-            ? placesAvailable = restaurantOption.placesAvailableInside 
-            : placesAvailable = restaurantOption.placesAvailableOutside;
-    
+
             placesAvailable = placesAvailable - reservedSeats;
+            placesAvailableInside = placesAvailableInside - reservedSeatsInside;
+            placesAvailableOutside = placesAvailableOutside - reservedSeatsOutside;
                 
             //Se ci sono posti disponibili allora dichiaro vero la disponibilità e setto il messaggio
-            if (placesAvailable > 0 && placesAvailable >= form.reservation) {
+            if (placesAvailable > 0) {
                 setAvailable(true);
-                setMessage(`Per il giorno ${form.date} alle ${form.time} sono disponibili ${placesAvailable} posti all'${(form.meal == 0) ? 'interno' : 'esterno'}`);
-                setPlacesNumber(placesAvailable);
-                generatePlacesNumberSelect();
+                setMessage(`Sono disponibili ${placesAvailable} --- interni: ${placesAvailableInside} --- esterni ${placesAvailableOutside}`);
+                setPlacesInsideNumber(placesAvailableInside);
+                setPlacesOutsideNumber(placesAvailableOutside);
             } else {
                 setAvailable(false);
                 setMessage(`Non ci sono posti disponibili per questa giornata`);
                 setPlacesNumber(0);
+                setPlacesInsideNumber(0);
+                setPlacesOutsideNumber(0);
             }
         }
     
@@ -107,9 +117,9 @@ export default function FormReservation({atReservation, user}) {
         setFormError({
             ...formError,
             date: form.date === "",
-            place: form.place === "",
         });    
-    };
+
+    };    
 
     //Generazione dinamica del numero di posti disponibili
     const generatePlacesNumberSelect = () => {
@@ -117,6 +127,12 @@ export default function FormReservation({atReservation, user}) {
         let index = 0;
         let i = 0;
         let number = [];
+
+        //if(form.place == 0) {
+            //setPlacesNumber(placesInsideNumber);
+        //} else {
+            //setPlacesNumber(placesOutsideNumber);
+        //}
 
         //Genero un array contentente il singoli posti disponili
         while (index < placesNumber){
@@ -135,6 +151,8 @@ export default function FormReservation({atReservation, user}) {
         }
 
     }
+
+    generatePlacesNumberSelect();
 
     //Pulisco tutti i campi del form
     const reset = (e) => {
@@ -224,43 +242,46 @@ export default function FormReservation({atReservation, user}) {
             }
         }
     };
-    
+
     return (
         <form>
 
-            { !available && <>
+            { !available &&  <>
 
                 <Calendar
-                form={form}
-                setForm={setForm}
-                formError={formError}
-                restaurantOption={restaurantOption}
-                error={formError.date}
-                />
-
-                <Select
-                id='place'
-                label='Scegli il luogo'
-                values={placeData}
-                onChange={(event) => {
-                    const val = event.target.value;
-                    setForm({ ...form, place: val });
-                }}
-                error={formError.place}
+                    form={form}
+                    setForm={setForm}
+                    formError={formError}
+                    restaurantOption={restaurantOption}
+                    error={formError.date}
                 />
 
                 <Button
-                onClick={checkAvailability}
-                text='Verifica disponibilità'
+                    onClick={checkAvailability}
+                    text='Verifica disponibilità'
                 />
-
-                <p>{message}</p>
 
             </> }
 
+            <p>{message}</p>
+
             { available && !form.reservation && <>
 
-                <p>{message}</p>
+                <Button
+                    onClick={reset}
+                    text='Reset'
+                />
+
+                <Select
+                    id='place'
+                    label='Scegli il luogo'
+                    values={placeData}
+                    onChange={(event) => {
+                        const val = event.target.value;
+                        setForm({ ...form, place: val });
+                    }}
+                    error={formError.place}
+                />
 
                 <Select
                     id='reservation'
@@ -276,11 +297,6 @@ export default function FormReservation({atReservation, user}) {
             </> }
             
             { available && form.reservation && <>
-                
-                <Button
-                    onClick={reset}
-                    text='Reset'
-                />
 
                 <div className='my-5'>
                     <h3>Riepilogo</h3>

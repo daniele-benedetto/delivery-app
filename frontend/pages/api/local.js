@@ -1,6 +1,7 @@
 export const restaurantOption = {
     placesAvailableInside: 12, 
     placesAvailableOutside: 8,
+    totalPlaces: 20,
     openTime: {
         lunch: {
             start: '12:30',
