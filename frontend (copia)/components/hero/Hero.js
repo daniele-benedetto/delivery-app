@@ -25,8 +25,8 @@ export default function Hero() {
                     Home delivery and online reservation system<br />for restaurants and cafè
                 </h2>
 
-                <Link className='button-primary' href='./prenota/calendario'>Ordina online</Link>
-                <Link className='button-outline' href='./prenota/calendario'>Prenota un tavolo</Link>
+                <Link className='button-primary' href='./prenota'>Ordina online</Link>
+                <Link className='button-outline' href='./prenota'>Prenota un tavolo</Link>
                 
             </div>
 
