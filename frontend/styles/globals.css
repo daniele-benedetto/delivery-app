@@ -10,6 +10,7 @@
     --color-primary: #EF705C;
 
     --font-big: 32px;
+    --font-middle: 24px;
     --font-normal: 20px;
     --font-small: 16px;
 
@@ -29,14 +30,6 @@ body {
     font-size: var(--font-small);
 }
 
-a {
-    text-decoration: none;
-}
-
-a:hover {
-    color: inherit;
-}
-
 * {
     box-sizing: border-box;
 }
@@ -45,6 +38,10 @@ a:hover {
 
 .font-big {
     font-size: var(--font-big);
+}
+
+.font-middle {
+    font-size: var(--font-middle);
 }
 
 .font-normal {
@@ -86,7 +83,6 @@ a:hover {
 .column-center-center {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     text-align: center;
 }
@@ -109,6 +105,14 @@ a:hover {
     padding: 10px 40px;
     border-radius: 5px;
     margin-bottom: 10px;
+    border: none;
+    text-decoration: none;
+    width: 100%;
+    max-width: 350px;
+}
+
+.button-primary:hover {
+    color: white;
 }
 
 .button-outline {
@@ -117,12 +121,82 @@ a:hover {
     color: var(--black);
 }
 
+.button-outline:hover {
+    color: var(--black);
+}
+
+.button-reset {
+    position: absolute;
+    top: 0;
+    left: 40px;
+}
+
+/* ! Input */
+
+.input-container, .select-container {
+    position: relative;
+    max-width: 350px;
+    margin: 0 auto;
+}
+
+.input-container svg, .select-container svg {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translate(0, -50%);
+}
+
+.input-primary, .select-primary {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 0 5px 20px rgba(0,0,0,.05);
+    color: var(--black);
+    text-align: center;
+}
+
+.input-container .validation, .select-container .validation {
+    position: absolute;
+    left: 0;
+    top: -20px;
+    text-align: right;
+    width: 100%;
+    color: red;
+}
+
 /* ! utils */
+
+.p-10 {
+    padding: 10px;
+}
 
 .p-20 {
     padding: 20px;
 }
 
+.p-40 {
+    padding: 40px;
+}
+
 .mb-20 {
     margin-bottom: 20px;
+}
+
+.mb-40 {
+    margin-bottom: 40px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mt-40 {
+    margin-top: 40px;
+}
+
+.mt-80 {
+    margin-top: 80px;
+}
+
+.pos-rel {
+    position: relative;
 }

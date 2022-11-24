@@ -1,13 +1,20 @@
 import { useRouter } from "next/router";
+import Link from "next/link";
+import Image from "next/image";
+
 import { useUser } from '@auth0/nextjs-auth0';
 
 import { useStateContext } from "../../utils/reservation/Context";
 
-import Seo from '../../components/seo/Seo';
-import Link from "next/link";
-
 import emailjs from '@emailjs/browser';
+
+import Seo from '../../components/seo/Seo';
 import Button from "../../components/form/button/Button";
+import Header from "../../components/header/Header";
+
+import homeImage from '../../assets/images/order-food.svg';
+
+import { BiLeftArrowAlt } from "react-icons/bi";
 
 export default function Riassunto() {
         
@@ -97,47 +104,46 @@ export default function Riassunto() {
 
         return (
 
-            <div className={`container-fluid p-0`}>
+            <div className='column-center-center w-100 h-100'>
             
                 <Seo 
                     title='Prenota riassunto | RistorApp'
                     description='La tua app per ordinare su RistorApp'
                 />
 
-                <button onClick={() => route.push("/api/auth/logout")}>ESCI</button>
+                <Header />
             
-                <main className={`container-fluid`}>
-                    <div className={`row`}>
-                        <section className={`border col-12 vh-100 d-flex flex-wrap justify-content-center align-items-center p-0`}>
-                            <div className={`container border d-flex justify-content-center flex-column`}>
-                                <div>
-                                    <pre>
-                                        <code>{JSON.stringify(form, undefined, 2)}</code>
-                                    </pre>
-                                </div>
+                <main className='w-100 p-20 mt-80 pos-rel'>
 
-                                <Button
-                                    onClick={reset}
-                                    text='Reset'
-                                />
+                    <BiLeftArrowAlt
+                        size={30}
+                        color={'var(--black)'}
+                        className='button-reset'
+                        onClick={reset}
+                    />
+                    <section className='column-center-center'>
+
+                        <Image
+                            width={250}
+                            height={250}
+                            src={homeImage} 
+                            alt='Ordina a casa tua' 
+                        />
+
                                 
-                                <div className='my-5'>
-                                    <h3>Riepilogo</h3>
-                                    <p>Nome: {user.name}</p>
-                                    <p>Email: {user.email}</p>
-                                    <p>Quando: il {form.date} alle {form.time}</p>
-                                    <p>Per: {form.reservation} persone</p>
-                                    <p>Dove: all'{(form.place == 0) ? 'interno' : 'esterno'}</p>
-                                </div>
+                        <div className="mb-20">
+                            <p>Quando: il {form.date}</p>
+                            <p>Alle: {form.time}</p>
+                            <p>Per: {form.reservation} persone</p>
+                            <p>Dove: all'{(form.place == 0) ? 'interno' : 'esterno'}</p>
+                        </div>
 
-                                <Button
-                                    onClick={addReservation}
-                                    text='Conferma'
-                                />
+                        <Button
+                            onClick={addReservation}
+                            text='Conferma'
+                        />
 
-                            </div>
-                        </section>
-                    </div>
+                    </section>
                 </main>
             </div>         
         );

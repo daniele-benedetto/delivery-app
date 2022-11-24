@@ -3,14 +3,12 @@ export default function Button({
   onClick,
 }) {
     return (
-        <div className={`col-12 mt-3`}>
-            <button
-                className={`btn btn-primary`}  
-                onClick={onClick}
-                type='submit'
-            >
-                {text}
-            </button>
-        </div>
+        <button 
+            className='button-primary'
+            onClick={onClick}
+            type='submit'
+        >
+            {text}
+        </button>
     );
 }

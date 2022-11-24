@@ -2,21 +2,25 @@ import { Validation } from "../validation/Validation";
 
 export default function Select({ 
   id, 
-  label, 
   values, 
   onChange,
-  error
+  error,
+  placeholder,
+  Icon
 }) {
     return (
-        <div className={"col-12"}>
-            <label htmlFor={id} className={`form-label`}>{label}</label>
+        <div className='select-container mb-20 w-100'>
+            <Icon
+                size={20}
+                color={'var(--black)'}
+            />
             <select
                 id={id}
                 name={id}
                 onChange={onChange}
-                className={`form-select`}
+                className='select-primary w-100 p-10'
             >
-                <option></option>
+                <option selected disabled>{placeholder}</option>
                 {values.map((val, idx) => {
                     return (
                         <option key={idx} value={val.id}>

@@ -1,14 +1,25 @@
 import { useRouter } from "next/router";
+import Image from "next/image";
+import { useLayoutEffect } from "react";
+import { useStateContext } from "../../utils/reservation/Context";
+
 import { useUser } from '@auth0/nextjs-auth0';
 
-import { useStateContext } from "../../utils/reservation/Context";
+import { placeData } from "../api/local";
 
 import Seo from '../../components/seo/Seo';
 import Link from "next/link";
 import Button from "../../components/form/button/Button";
 import Select from "../../components/form/select/Select";
+import Header from "../../components/header/Header";
 
-import { placeData } from "../api/local";
+import { ToastContainer, toast } from 'react-toastify';
+
+import homeImage from '../../assets/images/order-food.svg';
+
+import { BiLeftArrowAlt } from "react-icons/bi";
+import { BsFillPeopleFill } from 'react-icons/bs';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 export default function Dati() {
         
@@ -28,7 +39,25 @@ export default function Dati() {
 
     let placesSelect = new Object();
     let placesArray = []; 
-    
+
+    const notify = () => {
+        toast.warning(`Per questa giornata ci sono ${placesInsideNumber} posti all'interno e ${placesOutsideNumber} all'esterno`, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
+    };
+
+
+    useLayoutEffect(() => {
+        notify();
+    }, []);
+
     //Generazione dinamica del numero di posti disponibili
     const generatePlacesNumberOption = (value) => {
 
@@ -67,13 +96,14 @@ export default function Dati() {
         return (
             <Select
                 id='reservation'
-                label='Per quante persone vuoi prenotare?'
+                placeholder='Per quante persone?'
                 values={placesArray}
                 onChange={(event) => {
                     const val = event.target.value;
                     setForm({ ...form, reservation: val });
                 }}
                 error={formError.reservation}
+                Icon={BsFillPeopleFill}
             />
         );
     }   
@@ -90,7 +120,7 @@ export default function Dati() {
             ...formError,
             place: form.place === "",
             reservation: form.reservation === "",
-        });    
+        });
 
     };
     
@@ -111,54 +141,78 @@ export default function Dati() {
     }
 
     if(user) {
+
         return (
 
-            <div className={`container-fluid p-0`}>
+            <div className='column-center-center w-100 h-100'>
             
                 <Seo 
                     title='Prenota dati | RistorApp'
                     description='La tua app per ordinare su RistorApp'
                 />
 
-                <button onClick={() => route.push("/api/auth/logout")}>ESCI</button>
+                <Header />
+
+                <ToastContainer
+                    position="top-center"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
             
-                <main className={`container-fluid`}>
-                    <div className={`row`}>
-                        <section className={`border col-12 vh-100 d-flex flex-wrap justify-content-center align-items-center p-0`}>
-                            <div className={`container border d-flex justify-content-center flex-column`}>
-                                <div>
-                                    <pre>
-                                        <code>{JSON.stringify(form, undefined, 2)} Totale: {placesNumber} Dentro: {placesInsideNumber} Fuori: {placesOutsideNumber}</code>
-                                    </pre>
-                                </div>
+                <main className='w-100 p-20 mt-80 pos-rel'>
 
-                                <Button
-                                    onClick={reset}
-                                    text='Reset'
-                                />
+                    <BiLeftArrowAlt
+                        size={30}
+                        color={'var(--black)'}
+                        className='button-reset'
+                        onClick={reset}
+                    />
 
-                                <Select
-                                    id='place'
-                                    label='Scegli il luogo'
-                                    values={placeData}
-                                    onChange={(event) => {
-                                        const val = event.target.value;
-                                        setForm({ ...form, place: val });
-                                        () => generatePlaceSelect;
-                                    }}
-                                    error={formError.place}
-                                />
+                    <section className='column-center-center'>
 
-                                { generatePlaceSelect() }
+                        <Image
+                            width={250}
+                            height={250}
+                            src={homeImage} 
+                            alt='Ordina a casa tua' 
+                        />
 
-                                <Button
-                                    onClick={checkData}
-                                    text='Verifica disponibilità'
-                                />
+                        <h1 className='font-middle font-semibold'>
+                            Servono pochi passaggi con <b className='color-primary font-bold'>RistoApp</b>
+                        </h1>
+                            
+                        <h2 className='font-small mb-20'>
+                            Scegli la posizione e indica quante per quante persone
+                        </h2>
 
-                            </div>
+                        <Select
+                            id='place'
+                            placeholder='Scegli il luogo'
+                            values={placeData}
+                            onChange={(event) => {
+                                const val = event.target.value;
+                                setForm({ ...form, place: val });
+                                () => generatePlaceSelect;
+                            }}
+                            error={formError.place}
+                            Icon={FaMapMarkerAlt}
+                        />
+
+                        { generatePlaceSelect() }
+
+                        <Button
+                            onClick={checkData}
+                            text='Verifica disponibilità'
+                        />
+
                         </section>
-                    </div>
                 </main>
             </div>         
         );

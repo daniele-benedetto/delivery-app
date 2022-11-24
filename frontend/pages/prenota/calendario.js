@@ -1,12 +1,14 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import Image from "next/image";
 
 import { useStateContext } from "../../utils/reservation/Context";
 import { table } from '../../utils/Airtable';
 
 import { format } from 'date-fns';
 import "react-datepicker/dist/react-datepicker.css";
+
+import { ToastContainer, toast } from 'react-toastify';
 
 import { useUser } from '@auth0/nextjs-auth0';
 
@@ -15,6 +17,11 @@ import { restaurantOption } from '../api/local';
 import Seo from '../../components/seo/Seo';
 import Button from "../../components/form/button/Button";
 import Calendar from "../../components/form/calendar/Calendar";
+import Header from "../../components/header/Header";
+import Time from "../../components/form/time/Time";
+
+import homeImage from '../../assets/images/order-food.svg';
+import {BiLeftArrowAlt} from 'react-icons/bi';
 
 export async function getStaticProps() {
 
@@ -41,7 +48,34 @@ export default function Calendario({data}) {
     const route = useRouter(); 
     const { user } = useUser();
 
-    const [message, setMessage] = useState('');
+    const notify = () => {
+        toast.error(`Non ci sono posti disponibili per questa giornata a ${(form.meal == 0) ? 'pranzo' : 'cena'}`, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
+    }
+
+    //Pulisco tutti i campi del form
+    const reset = () => {
+
+        setForm({
+            ...form,
+            date: "",
+            time: "",
+            meal: "", //0 => pranzo, 1 => cena
+            place: "", //0 => interno, 1 => esterno
+            reservation: "",
+        });
+
+        route.push('/');
+        
+    }
 
     const { 
         form,
@@ -114,7 +148,7 @@ export default function Calendario({data}) {
                 setPlacesNumber(0);
                 setPlacesInsideNumber(0);
                 setPlacesOutsideNumber(0);
-                setMessage('Non ci sono posti disponibili per questa giornata');
+                notify();
             }
         } 
 
@@ -122,6 +156,7 @@ export default function Calendario({data}) {
         setFormError({
             ...formError,
             date: form.date === "",
+            time: form.time === ""
         });    
 
     };  
@@ -130,43 +165,79 @@ export default function Calendario({data}) {
 
         return (
 
-            <div className={`container-fluid p-0`}>
+            <div className='column-center-center w-100 h-100'>
             
                 <Seo 
                     title='Prenota calendario | RistorApp'
                     description='La tua app per ordinare su RistorApp'
                 />
 
-                <button onClick={() => route.push("/api/auth/logout")}>ESCI</button>
-            
-                <main className={`container-fluid`}>
-                    <div className={`row`}>
-                        <section className={`border col-12 vh-100 d-flex flex-wrap justify-content-center align-items-center p-0`}>
-                            <div className={`container border d-flex justify-content-center flex-column`}>
-                                <div>
-                                    <pre>
-                                        <code>{JSON.stringify(form, undefined, 2)}</code>
-                                    </pre>
-                                </div>
+                <Header />
 
-                                <Calendar
-                                    form={form}
-                                    setForm={setForm}
-                                    formError={formError}
-                                    restaurantOption={restaurantOption}
-                                    error={formError.date}
-                                />
+                <ToastContainer
+                    position="top-center"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
+                                
+                <main className='w-100 p-20 mt-80 pos-rel'>
+                    
+                    <BiLeftArrowAlt 
+                        size={30}
+                        color={'var(--black)'}
+                        className='button-reset'
+                        onClick={reset}
+                    />
 
-                                {message}
+                    <section className='column-center-center'>
+                        
+                        <Image
+                            width={250}
+                            height={250}
+                            src={homeImage} 
+                            alt='Ordina a casa tua' 
+                        />
 
-                                <Button
-                                    onClick={checkAvailability}
-                                    text='Verifica disponibilità'
-                                />
+                        <div className='column-center-center p-20 w-100'>
 
-                            </div>
-                        </section>
-                    </div>
+                            <h1 className='font-middle font-semibold'>
+                                Prenota il tavolo con <b className='color-primary font-bold'>RistoApp</b>
+                            </h1>
+
+                            <h2 className='font-small mb-20'>
+                                Scegli ora e orario e verifica la disponibilità
+                            </h2>
+
+                            <Calendar
+                                form={form}
+                                setForm={setForm}
+                                formError={formError}
+                                restaurantOption={restaurantOption}
+                                error={formError.date}
+                            />
+
+                            <Time
+                                form={form}
+                                setForm={setForm}
+                                formError={formError}
+                                restaurantOption={restaurantOption}
+                                error={formError.time}
+                            />
+
+                            <Button
+                                onClick={checkAvailability}
+                                text='Verifica disponibilità'
+                            />
+
+                        </div>
+                    </section>
                 </main>
             </div>         
         );
