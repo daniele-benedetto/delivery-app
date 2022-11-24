@@ -1,8 +1,7 @@
 import { useRouter } from "next/router";
-import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useUser } from '@auth0/nextjs-auth0';
+import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
 import { useStateContext } from "../../utils/reservation/Context";
 
@@ -17,7 +16,19 @@ import homeImage from '../../assets/images/order-food.svg';
 
 import { BiLeftArrowAlt } from "react-icons/bi";
 
-export default function Riassunto() {
+export const getServerSideProps = withPageAuthRequired({
+
+    async getServerSideProps(ctx) {
+
+        const session = getSession(ctx.req, ctx.res);
+        const user = session.user.sub;
+      
+        return { props: { user: user } };
+    },
+    
+});
+
+export default function Riassunto({user}) {
         
     const { 
         form,
@@ -25,7 +36,6 @@ export default function Riassunto() {
     } = useStateContext();
 
     const route = useRouter(); 
-    const { user } = useUser();
 
     const [loader, setLoader] = useState(false);
 
@@ -66,7 +76,7 @@ export default function Riassunto() {
                         reservation: parseInt(form.reservation), 
                         meal: form.meal,
                         place: parseInt(form.place),
-                        sid: user.sid,
+                        sub: user.sub,
                     }),
                     headers: { "Content-Type": "application/json" },
                 });
@@ -140,15 +150,16 @@ export default function Riassunto() {
 
                 <Header />
             
-                <main className='w-100 p-20 mt-80 pos-rel'>
+                <main className='w-100 p-20'>
 
-                    <BiLeftArrowAlt
-                        size={30}
-                        color={'var(--black)'}
-                        className='button-reset'
-                        onClick={reset}
-                    />
-                    <section className='column-center-center'>
+                    <section className='column-center-center h-100 pos-rel'>
+
+                        <BiLeftArrowAlt
+                            size={30}
+                            color={'var(--black)'}
+                            className='button-reset'
+                            onClick={reset}
+                        />
 
                         <Image
                             width={250}
@@ -180,10 +191,6 @@ export default function Riassunto() {
                     </section>
                 </main>
             </div>         
-        );
-    } else {
-        return (
-            <Link href='/api/auth/login'>Accedi</Link>
         );
     }
 }

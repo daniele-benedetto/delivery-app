@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -11,7 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { ToastContainer, toast } from 'react-toastify';
 
-import { useUser, logout } from '@auth0/nextjs-auth0';
+import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
 import { restaurantOption } from '../api/local';
 
@@ -25,31 +24,40 @@ import Loader from "../../components/loader/Loader";
 import homeImage from '../../assets/images/order-food.svg';
 import {BiLeftArrowAlt} from 'react-icons/bi';
 
-export async function getStaticProps() {
+export const getServerSideProps = withPageAuthRequired({
 
-    const results = await table.select({
-        view: "ViewGrid",
-    }).all();
-  
-    const data = {
-      props: {
-            data: results.map(result => {
-                return {
-                    id: result.id,
-                    ...result.fields,
-                }
-            })
+    async getServerSideProps(ctx) {
+
+        const session = getSession(ctx.req, ctx.res);
+        const user = session.user.sub;
+
+        const today = format(new Date(), "yyyy-MM-dd");
+    
+        const results = await table.select({
+            view: "ViewGrid",
+            fields: ['date', 'time', 'reservation', 'meal', 'place'],
+            filterByFormula: `{date} >= '${today}'`
+        }).all();
+      
+        const data = {
+          props: {
+                data: results.map(result => {
+                    return {
+                        id: result.id,
+                        ...result.fields,
+                    }
+                })
+            }
         }
-    }
-  
-    return data;
-}
+      
+        return { props: { user: user, data: data }};
+    },
+    
+});
 
-export default function Calendario({data}) {
+export default function Calendario({user, data}) {
 
     const route = useRouter(); 
-    const { user } = useUser();
-
     const [loader, setLoader] = useState(false);
 
     const notify = () => {
@@ -124,7 +132,7 @@ export default function Calendario({data}) {
             //Ciclo tutte le prenotazioni
             //Se sono uguali al giorno, pasto e luogo scelti dall'utente
             //Dichiaro quanti sono i posti già occupati
-            data.map((reservation) => {
+            data.props.data.map((reservation) => {
                 if(
                     reservation.date == form.date &&
                     reservation.meal == form.meal
@@ -181,8 +189,6 @@ export default function Calendario({data}) {
 
                 <Header />
 
-                <button style={{zIndex: 999}} onClick={() => route.push("/api/auth/logout")}>ESCI</button>
-
                 <ToastContainer
                     position="top-center"
                     autoClose={3000}
@@ -196,16 +202,16 @@ export default function Calendario({data}) {
                     theme="light"
                 />
                                 
-                <main className='w-100 p-20 mt-80 pos-rel'>
-                    
-                    <BiLeftArrowAlt 
-                        size={30}
-                        color={'var(--black)'}
-                        className='button-reset'
-                        onClick={reset}
-                    />
+                <main className='w-100 p-20'>
 
-                    <section className='column-center-center'>
+                    <section className='column-center-center h-100 pos-rel'>
+
+                        <BiLeftArrowAlt 
+                            size={30}
+                            color={'var(--black)'}
+                            className='button-reset'
+                            onClick={reset}
+                        />
                         
                         <Image
                             width={250}
@@ -251,9 +257,5 @@ export default function Calendario({data}) {
             </div>         
         );
         
-    } else {
-        return (
-            <Link href='/api/auth/login'>Accedi</Link>
-        );
     }
 }

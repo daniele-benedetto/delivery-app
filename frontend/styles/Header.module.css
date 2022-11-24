@@ -2,4 +2,29 @@
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 99;
+}
+
+.menu {
+    width: 75%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    background-color: white;
+    transform: translateX(100%);
+    transition: all 0.66s cubic-bezier(.215, .61, .355, 1);
+    box-shadow: 0 5px 20px rgba(0,0,0,.1);
+}
+
+.menu>svg {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.menuContainer li {
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    padding: 20px;
 }

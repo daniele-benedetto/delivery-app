@@ -34,6 +34,20 @@ body {
     box-sizing: border-box;
 }
 
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
 /* ! Typography */
 
 .font-big {
@@ -71,7 +85,7 @@ body {
 /* ! Layouts */
 
 .h-100 {
-    min-height: 100vh;
+    min-height: calc(100vh - 40px);
 }
 
 .w-100 {
@@ -85,6 +99,7 @@ body {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    justify-content: center;
 }
 
 /* ! Row */
@@ -138,8 +153,8 @@ body {
 
 .button-reset {
     position: absolute;
-    top: 0;
-    left: 40px;
+    top: 40px;
+    left: 0;
 }
 
 /* ! Input */
@@ -188,6 +203,10 @@ body {
     padding: 40px;
 }
 
+.p-20-40 {
+    padding: 20px 40px;
+}
+
 .mb-0 {
     margin-bottom: 0;
 }
@@ -214,4 +233,10 @@ body {
 
 .pos-rel {
     position: relative;
+}
+
+/* ! Classi aggiunte dinamicamente */
+
+.menu-open {
+    transform: translateX(0)!important;
 }

@@ -1,10 +1,8 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
-import Link from "next/link";
 import { useLayoutEffect, useEffect, useState } from "react";
 import { useStateContext } from "../../utils/reservation/Context";
-
-import { useUser } from '@auth0/nextjs-auth0';
+import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
 import { placeData } from "../api/local";
 
@@ -22,7 +20,19 @@ import { BiLeftArrowAlt } from "react-icons/bi";
 import { BsFillPeopleFill } from 'react-icons/bs';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 
-export default function Dati() {
+export const getServerSideProps = withPageAuthRequired({
+
+    async getServerSideProps(ctx) {
+
+        const session = getSession(ctx.req, ctx.res);
+        const user = session.user.sub;
+      
+        return { props: { user: user } };
+    },
+    
+});
+
+export default function Dati({user}) {
         
     const { 
         form,
@@ -36,7 +46,6 @@ export default function Dati() {
     } = useStateContext();
 
     const route = useRouter(); 
-    const { user } = useUser();
 
     const [loader, setLoader] = useState(false);
 
@@ -178,16 +187,16 @@ export default function Dati() {
                     theme="light"
                 />
             
-                <main className='w-100 p-20 mt-80 pos-rel'>
+                <main className='w-100 p-20'>
 
-                    <BiLeftArrowAlt
-                        size={30}
-                        color={'var(--black)'}
-                        className='button-reset'
-                        onClick={reset}
-                    />
+                    <section className='column-center-center h-100 pos-rel'>
 
-                    <section className='column-center-center'>
+                        <BiLeftArrowAlt
+                            size={30}
+                            color={'var(--black)'}
+                            className='button-reset'
+                            onClick={reset}
+                        />
 
                         <Image
                             width={250}
@@ -227,10 +236,6 @@ export default function Dati() {
                         </section>
                 </main>
             </div>         
-        );
-    } else {
-        return (
-            <Link href='/api/auth/login'>Accedi</Link>
         );
     }
 }

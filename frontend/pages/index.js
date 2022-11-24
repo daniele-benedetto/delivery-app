@@ -24,9 +24,9 @@ export default function Home() {
 
             <Header />
 
-            <main className='w-100 p-20 mt-80'>
+            <main className='w-100 p-20'>
 
-                <section className='column-center-center'>
+                <section className='column-center-center h-100'>
 
                     <Image
                         width={250}
@@ -64,7 +64,6 @@ export default function Home() {
         -Stile del calendario
         -Stile del'orario
         -Stile Option
-        -Stile Loader
         -Stile colore icone
         -Pagina profilo con prenotazione al posto di pagina feedback
         -Creare qr code associato alla prenotazione
