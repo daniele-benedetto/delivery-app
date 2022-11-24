@@ -13,6 +13,7 @@ export const StateContext = ({ children }) => {
         name: "",
         email: "",
         reservation: "",
+        sid: "",
     });  
     
     //Presenza di errori compilazione form

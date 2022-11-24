@@ -1,0 +1,13 @@
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--font-big);
+    font-weight: var(--font-bold);
+    text-align: center;
+    background-color: var(--color-primary);
+    color: var(--white);
+    width: 100%;
+    height: 100vh;
+    z-index: 999;
+}

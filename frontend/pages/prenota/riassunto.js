@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
-
+import { useEffect, useState } from "react";
 import { useUser } from '@auth0/nextjs-auth0';
 
 import { useStateContext } from "../../utils/reservation/Context";
@@ -11,6 +11,7 @@ import emailjs from '@emailjs/browser';
 import Seo from '../../components/seo/Seo';
 import Button from "../../components/form/button/Button";
 import Header from "../../components/header/Header";
+import Loader from "../../components/loader/Loader";
 
 import homeImage from '../../assets/images/order-food.svg';
 
@@ -26,6 +27,21 @@ export default function Riassunto() {
     const route = useRouter(); 
     const { user } = useUser();
 
+    const [loader, setLoader] = useState(false);
+
+    useEffect(() => {
+        if(!form.date || !form.time || !form.reservation || !form.place) {
+            setForm({
+                ...form,
+                date: "",
+                time: "",
+                reservation: "",
+                place: "",
+            });
+            route.push('./calendario');
+        }
+    },[]);
+
     //Verifico che i campi obbligatori del form siano compilati
     //Se lo sono salvo i dati su airtable
     //e invio email all'utente
@@ -38,6 +54,7 @@ export default function Riassunto() {
             form.meal == 0 || 1 &&
             form.place
         ) {
+            setLoader(true);
             try {         
                 const res = await fetch("/api/airtable/createReservation", {
                     method: "POST",
@@ -49,6 +66,7 @@ export default function Riassunto() {
                         reservation: parseInt(form.reservation), 
                         meal: form.meal,
                         place: parseInt(form.place),
+                        sid: user.sid,
                     }),
                     headers: { "Content-Type": "application/json" },
                 });
@@ -70,6 +88,14 @@ export default function Riassunto() {
                     console.log(result.text);
                 }, (error) => {
                     console.log(error.text);
+                });
+
+                setForm({
+                    ...form,
+                    reservation: "",
+                    date: "",
+                    time: "",
+                    place: "",
                 });
 
                 //Reindirizzo alla pagina di conferma
@@ -99,7 +125,6 @@ export default function Riassunto() {
         
     }
 
-
     if(user) {
 
         return (
@@ -110,6 +135,8 @@ export default function Riassunto() {
                     title='Prenota riassunto | RistorApp'
                     description='La tua app per ordinare su RistorApp'
                 />
+
+                { loader && <Loader />}
 
                 <Header />
             
@@ -130,12 +157,19 @@ export default function Riassunto() {
                             alt='Ordina a casa tua' 
                         />
 
-                                
-                        <div className="mb-20">
+                        <h1 className='font-middle font-semibold'>
+                            Verifica i tuoi dati <b className='color-primary font-bold'>RistoApp</b>
+                        </h1>
+                            
+                        <h2 className='font-small'>
+                            Controlla i dati inseriti e conferma la prenotazione
+                        </h2>
+      
+                        <div className="mb-20 p-20 card-summary">
                             <p>Quando: il {form.date}</p>
                             <p>Alle: {form.time}</p>
                             <p>Per: {form.reservation} persone</p>
-                            <p>Dove: all'{(form.place == 0) ? 'interno' : 'esterno'}</p>
+                            <p className="mb-0">Dove: all'{(form.place == 0) ? 'interno' : 'esterno'}</p>
                         </div>
 
                         <Button

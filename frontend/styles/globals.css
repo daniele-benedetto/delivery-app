@@ -95,6 +95,17 @@ body {
     align-items: center;
 }
 
+/* ! Cards */
+
+.card-summary {
+    border-radius: 5px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.1);
+    text-align: left;
+    width: 100%;
+    max-width: 400px;
+    font-style: italic;
+}
+
 /* ! Buttons */
 
 .button-primary {
@@ -175,6 +186,10 @@ body {
 
 .p-40 {
     padding: 40px;
+}
+
+.mb-0 {
+    margin-bottom: 0;
 }
 
 .mb-20 {

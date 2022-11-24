@@ -1,12 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 import Seo from '../components/seo/Seo';
-
-import homeImage from '../assets/images/order-food.svg';
 import Header from "../components/header/Header";
 
+import homeImage from '../assets/images/order-food.svg';
+import Loader from "../components/loader/Loader";
+
 export default function Home() {
+
+    const [loader, setLoader] = useState(false);
+
     return (
         <div className='column-center-center w-100 h-100'>
 
@@ -14,6 +19,8 @@ export default function Home() {
                 title='Home | RistorApp'
                 description='La tua app per ordinare su RistorApp'
             />
+
+            { loader && <Loader /> }
 
             <Header />
 
@@ -38,8 +45,8 @@ export default function Home() {
                             Consegna a domicilio, ordina take away e sistema di prenotazione del tavolo
                         </h2>
 
-                        <Link className='button-primary' href='./prenota/calendario'>Ordina online</Link>
-                        <Link className='button-outline' href='./prenota/calendario'>Prenota un tavolo</Link>
+                        <Link onClick={() => setLoader(true)} className='button-primary' href='./prenota/calendario'>Ordina online</Link>
+                        <Link onClick={() => setLoader(true)} className='button-outline' href='./prenota/calendario'>Prenota un tavolo</Link>
                         
                     </div>
 
@@ -57,12 +64,11 @@ export default function Home() {
         -Stile del calendario
         -Stile del'orario
         -Stile Option
+        -Stile Loader
         -Stile colore icone
-        -Tabella riassuntiva
         -Pagina profilo con prenotazione al posto di pagina feedback
         -Creare qr code associato alla prenotazione
         -Pagina profilo con tutte le prontazioni
-        -Loading
         -Eliminare errori in console
 
     --------------------------------------------------------------------------------------------------- */

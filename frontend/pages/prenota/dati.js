@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { useLayoutEffect } from "react";
+import Link from "next/link";
+import { useLayoutEffect, useEffect, useState } from "react";
 import { useStateContext } from "../../utils/reservation/Context";
 
 import { useUser } from '@auth0/nextjs-auth0';
@@ -8,10 +9,10 @@ import { useUser } from '@auth0/nextjs-auth0';
 import { placeData } from "../api/local";
 
 import Seo from '../../components/seo/Seo';
-import Link from "next/link";
 import Button from "../../components/form/button/Button";
 import Select from "../../components/form/select/Select";
 import Header from "../../components/header/Header";
+import Loader from "../../components/loader/Loader";
 
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -37,11 +38,13 @@ export default function Dati() {
     const route = useRouter(); 
     const { user } = useUser();
 
+    const [loader, setLoader] = useState(false);
+
     let placesSelect = new Object();
     let placesArray = []; 
 
     const notify = () => {
-        toast.warning(`Per questa giornata ci sono ${placesInsideNumber} posti all'interno e ${placesOutsideNumber} all'esterno`, {
+        toast.warning(`Per questa giornata sono disponibili ${placesInsideNumber} posti all'interno e ${placesOutsideNumber} all'esterno`, {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -57,6 +60,12 @@ export default function Dati() {
     useLayoutEffect(() => {
         notify();
     }, []);
+
+    useEffect(() => {
+        if(!form.date || !form.time) {
+            route.push('./calendario');
+        }
+    },[]);
 
     //Generazione dinamica del numero di posti disponibili
     const generatePlacesNumberOption = (value) => {
@@ -112,6 +121,7 @@ export default function Dati() {
     const checkData = () => {
 
         if(form.place && form.reservation) {
+            setLoader(true);
             route.push('./riassunto');
         } 
 
@@ -150,6 +160,8 @@ export default function Dati() {
                     title='Prenota dati | RistorApp'
                     description='La tua app per ordinare su RistorApp'
                 />
+
+                { loader && <Loader />}
 
                 <Header />
 

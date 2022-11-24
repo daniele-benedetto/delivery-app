@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 
 import { useStateContext } from "../../utils/reservation/Context";
 import { table } from '../../utils/Airtable';
@@ -10,7 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { ToastContainer, toast } from 'react-toastify';
 
-import { useUser } from '@auth0/nextjs-auth0';
+import { useUser, logout } from '@auth0/nextjs-auth0';
 
 import { restaurantOption } from '../api/local';
 
@@ -19,6 +20,7 @@ import Button from "../../components/form/button/Button";
 import Calendar from "../../components/form/calendar/Calendar";
 import Header from "../../components/header/Header";
 import Time from "../../components/form/time/Time";
+import Loader from "../../components/loader/Loader";
 
 import homeImage from '../../assets/images/order-food.svg';
 import {BiLeftArrowAlt} from 'react-icons/bi';
@@ -47,6 +49,8 @@ export default function Calendario({data}) {
 
     const route = useRouter(); 
     const { user } = useUser();
+
+    const [loader, setLoader] = useState(false);
 
     const notify = () => {
         toast.error(`Non ci sono posti disponibili per questa giornata a ${(form.meal == 0) ? 'pranzo' : 'cena'}`, {
@@ -138,8 +142,9 @@ export default function Calendario({data}) {
             placesAvailableInside = placesAvailableInside - reservedSeatsInside;
             placesAvailableOutside = placesAvailableOutside - reservedSeatsOutside;
                 
-            //Se ci sono posti disponibili allora dichiaro vero la disponibilità e setto il messaggio
+            //Se ci sono posti disponibili allora dichiaro vero la disponibilità
             if (placesAvailable > 0) {
+                setLoader(true);
                 setPlacesNumber(placesAvailable);
                 setPlacesInsideNumber(placesAvailableInside);
                 setPlacesOutsideNumber(placesAvailableOutside);
@@ -172,7 +177,11 @@ export default function Calendario({data}) {
                     description='La tua app per ordinare su RistorApp'
                 />
 
+                {loader && <Loader /> }
+
                 <Header />
+
+                <button style={{zIndex: 999}} onClick={() => route.push("/api/auth/logout")}>ESCI</button>
 
                 <ToastContainer
                     position="top-center"
