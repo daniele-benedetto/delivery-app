@@ -41,13 +41,11 @@ export default function Prenotazioni({user, data}) {
 
     if(user) {
 
-        console.log(data);
-
         return (
             <div className='column-center-center w-100 h-100'>
             
                 <Seo
-                    title='Prenota calendario | RistorApp'
+                    title='Prenotazioni | RistorApp'
                     description='La tua app per ordinare su RistorApp'
                 />
 

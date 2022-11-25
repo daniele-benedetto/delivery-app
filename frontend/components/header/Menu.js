@@ -13,28 +13,15 @@ export default function Menu({classMenu, setClassMenu}) {
                 <li>
                     <Link href='/chi-siamo'>RistoApp</Link>
                 </li>
-                { !user && <>
-                    <li>
-                        <Link href='/api/auth/login'>Accedi</Link>
-                    </li>
-                    <li>
-                        <Link href='/api/auth/signup'>Registrati</Link>
-                    </li>
-                </> }
-                { user && <>
-                    <li>
-                        <Link href='/user/profilo'>Profilo</Link>
-                    </li>
-                    <li>
-                        <Link href='/user/ordini'>Ordini</Link>
-                    </li>
-                    <li>
-                        <Link href='/user/prenotazioni'>Prenotazioni</Link>
-                    </li>
-                    <li>
-                        <Link href='/api/auth/logout'>Esci</Link>
-                    </li>
-                </> }
+                <li>
+                    <Link href='/user/profilo'>Profilo</Link>
+                </li>
+                <li>
+                    <Link href='/user/ordini'>Ordini</Link>
+                </li>
+                <li>
+                    <Link href='/user/prenotazioni'>Prenotazioni</Link>
+                </li>
             </ul>
             <GrFormClose 
                 size={30}

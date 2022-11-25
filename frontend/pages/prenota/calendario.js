@@ -17,13 +17,13 @@ import { restaurantOption } from '../api/local';
 import Seo from '../../components/seo/Seo';
 import Button from "../../components/form/button/Button";
 import Calendar from "../../components/form/calendar/Calendar";
-import Header from "../../components/header/Header";
 import Time from "../../components/form/time/Time";
 import Loader from "../../components/loader/Loader";
 
-import homeImage from '../../assets/images/order-food.svg';
+import homeImage from '../../assets/images/food-time.svg';
 import {BiLeftArrowAlt} from 'react-icons/bi';
 
+//Verifico l'autenticazione e genero estraggo i dati da AirTable
 export const getServerSideProps = withPageAuthRequired({
 
     async getServerSideProps(ctx) {
@@ -60,6 +60,7 @@ export default function Calendario({user, data}) {
     const route = useRouter(); 
     const [loader, setLoader] = useState(false);
 
+    //Parametri di notifica in caso non ci siano posti disponibili
     const notify = () => {
         toast.error(`Non ci sono posti disponibili per questa giornata a ${(form.meal == 0) ? 'pranzo' : 'cena'}`, {
             position: "top-center",
@@ -73,8 +74,10 @@ export default function Calendario({user, data}) {
         });
     }
 
-    //Pulisco tutti i campi del form
+    //Pulisco tutti i campi del form e rimando in home
     const reset = () => {
+
+        setLoader(true);
 
         setForm({
             ...form,
@@ -187,8 +190,6 @@ export default function Calendario({user, data}) {
 
                 {loader && <Loader /> }
 
-                <Header />
-
                 <ToastContainer
                     position="top-center"
                     autoClose={3000}
@@ -221,14 +222,6 @@ export default function Calendario({user, data}) {
                         />
 
                         <div className='column-center-center p-20 w-100'>
-
-                            <h1 className='font-middle font-semibold'>
-                                Prenota il tavolo con <b className='color-primary font-bold'>RistoApp</b>
-                            </h1>
-
-                            <h2 className='font-small mb-20'>
-                                Scegli ora e orario e verifica la disponibilità
-                            </h2>
 
                             <Calendar
                                 form={form}

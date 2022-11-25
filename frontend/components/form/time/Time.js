@@ -73,7 +73,7 @@ export default function Time({
                 size={20}
                 color={'var(--black)'}
             />
-            <input className='w-100 p-10 input-primary' value={value} onClick={onClick} ref={ref} placeholder='Seleziona un orario'/>
+            <input className='w-100 p-10 input-primary' defaultValue={value} onClick={onClick} ref={ref} placeholder='Seleziona un orario'/>
             { error && <Validation errorText="Seleziona l'orario" /> }
         </div>
     ));

@@ -9,12 +9,11 @@ import { placeData } from "../api/local";
 import Seo from '../../components/seo/Seo';
 import Button from "../../components/form/button/Button";
 import Select from "../../components/form/select/Select";
-import Header from "../../components/header/Header";
 import Loader from "../../components/loader/Loader";
 
 import { ToastContainer, toast } from 'react-toastify';
 
-import homeImage from '../../assets/images/order-food.svg';
+import homeImage from '../../assets/images/food-data.svg';
 
 import { BiLeftArrowAlt } from "react-icons/bi";
 import { BsFillPeopleFill } from 'react-icons/bs';
@@ -114,7 +113,7 @@ export default function Dati({user}) {
         return (
             <Select
                 id='reservation'
-                placeholder='Per quante persone?'
+                placeholder='Per quanti vuoi prenotare?'
                 values={placesArray}
                 onChange={(event) => {
                     const val = event.target.value;
@@ -146,6 +145,8 @@ export default function Dati({user}) {
     //Pulisco tutti i campi del form
     const reset = () => {
 
+        setLoader(true);
+
         setForm({
             ...form,
             date: "",
@@ -171,8 +172,6 @@ export default function Dati({user}) {
                 />
 
                 { loader && <Loader />}
-
-                <Header />
 
                 <ToastContainer
                     position="top-center"
@@ -205,17 +204,9 @@ export default function Dati({user}) {
                             alt='Ordina a casa tua' 
                         />
 
-                        <h1 className='font-middle font-semibold'>
-                            Servono pochi passaggi con <b className='color-primary font-bold'>RistoApp</b>
-                        </h1>
-                            
-                        <h2 className='font-small mb-20'>
-                            Scegli la posizione e indica quante per quante persone
-                        </h2>
-
                         <Select
                             id='place'
-                            placeholder='Scegli il luogo'
+                            placeholder='Dove vorresti mangiare?'
                             values={placeData}
                             onChange={(event) => {
                                 const val = event.target.value;
@@ -229,7 +220,7 @@ export default function Dati({user}) {
                         { generatePlaceSelect() }
 
                         <Button
-                            onClick={checkData}
+                            onClick={() => checkData()}
                             text='Verifica disponibilità'
                         />
 

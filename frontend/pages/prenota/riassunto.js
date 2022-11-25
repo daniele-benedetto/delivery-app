@@ -9,10 +9,9 @@ import emailjs from '@emailjs/browser';
 
 import Seo from '../../components/seo/Seo';
 import Button from "../../components/form/button/Button";
-import Header from "../../components/header/Header";
 import Loader from "../../components/loader/Loader";
 
-import homeImage from '../../assets/images/order-food.svg';
+import homeImage from '../../assets/images/confirm-food.svg';
 
 import { BiLeftArrowAlt } from "react-icons/bi";
 
@@ -122,6 +121,8 @@ export default function Riassunto({user}) {
     //Pulisco tutti i campi del form
     const reset = () => {
 
+        setLoader(true);
+
         setForm({
             ...form,
             date: "",
@@ -147,8 +148,6 @@ export default function Riassunto({user}) {
                 />
 
                 { loader && <Loader />}
-
-                <Header />
             
                 <main className='w-100 p-20'>
 
@@ -168,13 +167,9 @@ export default function Riassunto({user}) {
                             alt='Ordina a casa tua' 
                         />
 
-                        <h1 className='font-middle font-semibold'>
-                            Verifica i tuoi dati <b className='color-primary font-bold'>RistoApp</b>
+                        <h1 className='font-normal font-semibold'>
+                            Verifica e <b className='color-primary font-bold'>Conferma</b>
                         </h1>
-                            
-                        <h2 className='font-small'>
-                            Controlla i dati inseriti e conferma la prenotazione
-                        </h2>
       
                         <div className="mb-20 p-20 card-summary">
                             <p>Quando: il {form.date}</p>
