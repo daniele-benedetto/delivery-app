@@ -1,12 +1,17 @@
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import Link from "next/link";
 import { useState } from "react";
+import Image from "next/image";
 
 import Header from "../../components/header/Header";
 import Loader from "../../components/loader/Loader";
 import Seo from "../../components/seo/Seo";
 
 import { table } from '../../utils/Airtable';
+
+import { BsThreeDots } from 'react-icons/bs';
+
+import homeImage from '../../assets/images/reserved-all.svg';
 
 export const getServerSideProps = withPageAuthRequired({
     async getServerSideProps(ctx) {
@@ -57,14 +62,31 @@ export default function Prenotazioni({user, data}) {
 
                     <section className='column-center-center h-100 pos-rel'>
 
-                        {data.props.data.map((item, idx) => {
-                            return(
-                                <div key={idx}>
-                                    <Link href={`./prenotazioni/${item.id}`}>{item.date} - {item.time}</Link>
-                                </div>
-                            );
-                        })}
+                        <Image
+                            width={250}
+                            height={250}
+                            src={homeImage} 
+                            alt='Ordina a casa tua' 
+                        />
 
+                        <h1 className='font-middle font-semibold'>
+                            Gestisci le tue <b className='color-primary font-bold'>prenotazioni</b>
+                        </h1>
+
+                        <div className="mb-20 p-20 card-summary">
+
+                            {data.props.data.map((item, idx) => {
+                                return(
+                                    <Link key={idx} onClick={() => setLoader(true)} className="card-summary-item card-summary-item-link mt-20 pb-20" href={`./prenotazioni/${item.id}`}>
+                                        <p>{item.date} - {item.time}</p>
+                                        <BsThreeDots 
+                                            size='20'
+                                        />
+                                    </Link>   
+                                );
+                            })}
+
+                        </div>
                     </section>
                 </main>
             </div> 

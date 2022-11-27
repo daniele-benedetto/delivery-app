@@ -4,10 +4,10 @@
 /* ! Var color and font */
 
 :root {
-
-    --white: #ffffff;
+    --white: #FBFAFE;
     --black: #1b1b1b;
     --color-primary: #EF705C;
+    --color-bg: #F3F4F8;
 
     --font-big: 32px;
     --font-middle: 24px;
@@ -50,7 +50,6 @@ a {
 
 a:hover {
     border: none;
-    box-shadow: none;
 }
 
 /* ! Typography */
@@ -122,8 +121,26 @@ a:hover {
     box-shadow: 0 5px 20px rgba(0,0,0,.1);
     text-align: left;
     width: 100%;
-    max-width: 400px;
-    font-style: italic;
+    max-width: 350px;
+}
+
+.card-summary-item {
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-summary-item:last-child {
+    border: none;
+}
+
+.card-summary-item p {
+    margin: 0;
+}
+
+.card-summary-item-link:hover {
+    border-bottom: 1px solid var(--color-primary);
+    color: var(--color-primary);
 }
 
 /* ! Buttons */
@@ -138,8 +155,8 @@ a:hover {
     margin-bottom: 10px;
     border: none;
     text-decoration: none;
-    width: 100%;
-    max-width: 350px;
+    min-width: 350px;
+    box-shadow: 0 10px 20px rgba(0,0,0,.1);
 }
 
 .button-primary:hover {
@@ -150,6 +167,7 @@ a:hover {
     text-decoration: underline;
     font-weight: 600;
     color: var(--black);
+    cursor: pointer;
 }
 
 .button-outline:hover {
@@ -194,6 +212,12 @@ a:hover {
     color: red;
 }
 
+/* ! Calendiario */
+
+.react-datepicker__time-list-item--disabled {
+    display: none;
+}
+
 /* ! utils */
 
 .p-10 {
@@ -210,6 +234,10 @@ a:hover {
 
 .p-20-40 {
     padding: 20px 40px;
+}
+
+.pb-20 {
+    padding-bottom: 20px;
 }
 
 .mb-0 {

@@ -60,30 +60,11 @@ export default function Home() {
     /*  -----------------------------------------------------------------------------------------------
       
         TODO PER INIZIARE TEST SU FLOW PRENOTAZIONI
-        
-        PRENOTA
-        -Stile del calendario
-        -Stile dell'orario
-        -Stile Option
-        -Stile colore icone
-        -Stile del riepilogo
-        -Error page
 
         PROFILO UTENTE
-        -Proteggere tutte le pagine con autenticazione
-        -Cancella prenotazione
-        -Stile tutte prenotazioni
-        -Stile singola prenotazione
         -Pagina profilo (dentro info e pulsante di logout)
 
         AUTENTICAZIONE
-        -Custom page login
-        -custom page registration
-        -Custom page logout
-
-        GENERALE
-        -Loader active in ogni pagina che richiede lavorazione di dati
-        (torna indietro, pagine user, ecc...)
-        -Stile Menù
+        -Tradurre login e registrazione in italiano
         
     --------------------------------------------------------------------------------------------------- */

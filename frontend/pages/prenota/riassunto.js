@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
-import { useStateContext } from "../../utils/reservation/Context";
+import { useStateContext } from "../../utils/Context";
 
 import emailjs from '@emailjs/browser';
 
@@ -166,16 +166,26 @@ export default function Riassunto({user}) {
                             src={homeImage} 
                             alt='Ordina a casa tua' 
                         />
-
-                        <h1 className='font-normal font-semibold'>
-                            Verifica e <b className='color-primary font-bold'>Conferma</b>
-                        </h1>
       
                         <div className="mb-20 p-20 card-summary">
-                            <p>Quando: il {form.date}</p>
-                            <p>Alle: {form.time}</p>
-                            <p>Per: {form.reservation} persone</p>
-                            <p className="mb-0">Dove: all'{(form.place == 0) ? 'interno' : 'esterno'}</p>
+                            
+                            <div className="card-summary-item">
+                                <p>Quando:</p>
+                                <p>{form.date}</p>
+                            </div>
+                            <div className="card-summary-item mt-20">
+                                <p>Alle:</p>
+                                <p>{form.time}</p>
+                            </div>
+                            <div className="card-summary-item mt-20">
+                                <p>Per:</p>
+                                <p>{form.reservation} persone</p>
+                            </div>
+                            <div className="card-summary-item mt-20">
+                                <p>Dove:</p>
+                                <p>all'{(form.place == 0) ? 'interno' : 'esterno'}</p>
+                            </div>
+
                         </div>
 
                         <Button

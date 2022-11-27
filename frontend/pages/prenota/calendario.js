@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-import { useStateContext } from "../../utils/reservation/Context";
+import { useStateContext } from "../../utils/Context";
 import { table } from '../../utils/Airtable';
 
 import { format } from 'date-fns';
@@ -102,23 +102,11 @@ export default function Calendario({user, data}) {
         setPlacesOutsideNumber,
     } = useStateContext();
 
-    //Controlla disponibilità
-    const checkAvailability = () => {
-
-        const today = format(new Date(), "yyyy-MM-dd");
-        let dateSelect  = new Date([today, form.time]);
-
-        //Quando parte una ricerca setto a 0 i posti riservati e i disponibili
-        let reservedSeats= 0;
-        let reservedSeatsInside=0;
-        let reservedSeatsOutside=0;
-
-        let placesAvailableInside = restaurantOption.placesAvailableInside;
-        let placesAvailableOutside = restaurantOption.placesAvailableOutside;
-        let placesAvailable= restaurantOption.totalPlaces;
+    const setMeal = () => {
 
         if(form.date && form.time) {
-
+            const today = format(new Date(), "yyyy-MM-dd");
+            let dateSelect  = new Date([today, form.time]);
             //Verifico la fascia oraria scelta e se è pranzo o cena
             if(
                 format(dateSelect, 'H:mm') >= restaurantOption.openTime.lunch.start && 
@@ -131,6 +119,29 @@ export default function Calendario({user, data}) {
             ) {
                 setForm({ ...form, meal: 1});
             }
+        }
+
+        //Verifica se ci sono errori nella compilazione di questi campi
+        setFormError({
+            ...formError,
+            date: form.date === "",
+            time: form.time === ""
+        }); 
+    }
+
+    //Controlla disponibilità
+    const checkAvailability = () => {
+
+        //Quando parte una ricerca setto a 0 i posti riservati e i disponibili
+        let reservedSeats= 0;
+        let reservedSeatsInside=0;
+        let reservedSeatsOutside=0;
+
+        let placesAvailableInside = restaurantOption.placesAvailableInside;
+        let placesAvailableOutside = restaurantOption.placesAvailableOutside;
+        let placesAvailable= restaurantOption.totalPlaces;
+
+        if(form.date && form.time) {
 
             //Ciclo tutte le prenotazioni
             //Se sono uguali al giorno, pasto e luogo scelti dall'utente
@@ -166,16 +177,12 @@ export default function Calendario({user, data}) {
                 setPlacesOutsideNumber(0);
                 notify();
             }
-        } 
-
-        //Verifica se ci sono errori nella compilazione di questi campi
-        setFormError({
-            ...formError,
-            date: form.date === "",
-            time: form.time === ""
-        });    
-
+        }    
     };  
+
+    useEffect(() => {
+        checkAvailability();
+    },[form.meal]);
 
     if(user) {
 
@@ -221,7 +228,7 @@ export default function Calendario({user, data}) {
                             alt='Ordina a casa tua' 
                         />
 
-                        <div className='column-center-center p-20 w-100'>
+                        <div className='column-center-center p-20 w-100 pos-rel'>
 
                             <Calendar
                                 form={form}
@@ -240,7 +247,9 @@ export default function Calendario({user, data}) {
                             />
 
                             <Button
-                                onClick={checkAvailability}
+                                onClick={() => {
+                                    setMeal();
+                                }}
                                 text='Verifica disponibilità'
                             />
 
@@ -249,6 +258,5 @@ export default function Calendario({user, data}) {
                 </main>
             </div>         
         );
-        
     }
 }

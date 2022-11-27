@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useLayoutEffect, useEffect, useState } from "react";
-import { useStateContext } from "../../utils/reservation/Context";
+import { useStateContext } from "../../utils/Context";
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
 import { placeData } from "../api/local";
@@ -93,10 +93,10 @@ export default function Dati({user}) {
         //Ciclo i singoli posti per generare un array di oggetti
         //L'array di oggetti sarà la variabile che passerò al select
         //per generare le singole opzioni
-        for (i=1; i<=number.length; i++){
+        for (i=0; i<=number.length; i++){
             placesSelect = new Object();
-            placesSelect['id'] = i;
-            placesSelect['time'] = i;
+            placesSelect['id'] = (i == 0) ? '' : i;
+            placesSelect['time'] = (i == 0) ? 'Per quante persone?' : i;
             placesArray.push(placesSelect);
         }
 

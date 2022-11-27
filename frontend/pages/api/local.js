@@ -17,6 +17,10 @@ export const restaurantOption = {
 
 export const placeData = [
     {
+        id: "",
+        time: "Dove vorresti mangiare?",
+    },
+    {
         id: 0,
         time: "Interno",
     },

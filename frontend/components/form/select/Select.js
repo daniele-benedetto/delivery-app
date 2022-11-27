@@ -20,7 +20,6 @@ export default function Select({
                 onChange={onChange}
                 className='select-primary w-100 p-10'
             >
-                <option selected disabled>{placeholder}</option>
                 {values.map((val, idx) => {
                     return (
                         <option key={idx} value={val.id}>
