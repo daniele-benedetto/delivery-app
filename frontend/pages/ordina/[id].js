@@ -1,22 +1,43 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import Seo from '../components/seo/Seo';
-import Loader from "../components/loader/Loader";
+import Seo from '../../components/seo/Seo';
+import Loader from "../../components/loader/Loader";
 
 import {BiLeftArrowAlt} from 'react-icons/bi';
+import { products } from "../../utils/Airtable";
 
-import Link from "next/link";
-
-import { products } from '../utils/Airtable';
-
-export async function getStaticProps() {
+//Genera i path sulla base dei record
+export async function getStaticPaths() {
     const results = await products.select({
+        view: "ViewGrid",
     }).all();
-  
+
+    const paths = results.map(({ id }) => ({
+        params: {
+          id: id
+        },
+    }));
+
+    console.log(paths)
+
+    return {
+        paths,
+        fallback: false,
+    }
+}
+
+//Richiamo il record e genero i campi
+export async function getStaticProps({ params: {id}}) {
+
+    const results = await products.select({
+        view: "ViewGrid",
+        filterByFormula: `{id} = '${id}'`
+    }).all();
+
     const data = {
         props: {
-            data: results.map(result => {
+              data: results.map(result => {
                 return {
                     id: result.id,
                     ...result.fields,
@@ -24,19 +45,18 @@ export async function getStaticProps() {
             })
         }
     }
-  
+    
     return data;
-  }
+}
 
-
-export default function Ordina({data}) {
+export default function Prodotto({ data }) {
 
     const route = useRouter(); 
     const [loader, setLoader] = useState(false);
 
     const reset = () => {
         setLoader(true);
-        route.push('/');    
+        route.push('/ordina');    
     }
 
     return (
@@ -44,8 +64,8 @@ export default function Ordina({data}) {
         <div className='column-center-center w-100 h-100'>
             
             <Seo 
-                title='Ordina online | RistorApp'
-                description='Ordina i tuoi piatti preferiti'
+                title={`${data[0].name} | ristoApp`}
+                description={`Ordina la miglior ${data[0].name} online`}
             />
 
             {loader && <Loader /> }
@@ -63,14 +83,9 @@ export default function Ordina({data}) {
                     />
 
                     <div className='column-center-center p-20 w-100 pos-rel'>
-                        {data.map((item, idx) => {
-                            return(
-                                <div key={idx}>
-                                    <Link onClick={() => setLoader(true)} href={`/ordina/${item.id}`}>{item.name}</Link>
-                                </div>
-                            );
-                        })}
+                        Singolo prodotto
                     </div>
+
                 </section>
             </main>
         </div>         

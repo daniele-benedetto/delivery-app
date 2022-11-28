@@ -7,6 +7,7 @@ Airtable.configure({
 const base = Airtable.base(process.env.AIRTABLE_BASE_ID);
 
 const table = base(process.env.AIRTABLE_TABLE_NAME);
+const products = base(process.env.AIRTABLE_TABLE_PRODUCTS);
 
 const getMinifiedItem = (record) => {
     if (!record.fields.brought) {
@@ -22,4 +23,4 @@ const minifyItems = (records) => {
     records.map((record) => getMinifiedItem(record));
 }
 
-export { table, getMinifiedItem, minifyItems };
+export { table, products, getMinifiedItem, minifyItems };

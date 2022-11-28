@@ -45,7 +45,7 @@ export default function Home() {
                             Consegna a domicilio, ordina take away e sistema di prenotazione del tavolo
                         </h2>
 
-                        <Link onClick={() => setLoader(true)} className='button-primary' href='./prenota/calendario'>Ordina online</Link>
+                        <Link onClick={() => setLoader(true)} className='button-primary' href='./ordina'>Ordina online</Link>
                         <Link onClick={() => setLoader(true)} className='button-outline' href='./prenota/calendario'>Prenota un tavolo</Link>
                         
                     </div>

@@ -174,7 +174,7 @@ export default function Riassunto({user}) {
                             
                             <div className="card-summary-item">
                                 <p>Quando:</p>
-                                <p>{format(new Date(form.date), 'dd/MM/yyyy')}</p>
+                                <p>{form.time ? format(new Date(form.date), 'dd/MM/yyyy') : ''}</p>
                             </div>
                             <div className="card-summary-item mt-20">
                                 <p>Alle:</p>
