@@ -11,6 +11,8 @@ import Seo from '../../components/seo/Seo';
 import Button from "../../components/form/button/Button";
 import Loader from "../../components/loader/Loader";
 
+import { format } from 'date-fns';
+
 import homeImage from '../../assets/images/confirm-food.svg';
 
 import { BiLeftArrowAlt } from "react-icons/bi";
@@ -76,6 +78,7 @@ export default function Riassunto({user}) {
                         meal: form.meal,
                         place: parseInt(form.place),
                         sub: user.sub,
+                        state: 0,
                     }),
                     headers: { "Content-Type": "application/json" },
                 });
@@ -171,7 +174,7 @@ export default function Riassunto({user}) {
                             
                             <div className="card-summary-item">
                                 <p>Quando:</p>
-                                <p>{form.date}</p>
+                                <p>{format(new Date(form.date), 'dd/MM/yyyy')}</p>
                             </div>
                             <div className="card-summary-item mt-20">
                                 <p>Alle:</p>

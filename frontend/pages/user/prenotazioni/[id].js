@@ -10,6 +10,8 @@ import Header from "../../../components/header/Header";
 import Seo from "../../../components/seo/Seo";
 import Loader from "../../../components/loader/Loader";
 
+import { format } from 'date-fns'; 
+
 //Genera i path sulla base dei record
 export async function getStaticPaths() {
     const results = await table.select({
@@ -34,7 +36,7 @@ export async function getStaticProps({ params: {id}}) {
 
     const results = await table.select({
         view: "ViewGrid",
-        fields: ['id', 'date', 'time', 'reservation', 'meal', 'place'],
+        fields: ['id', 'date', 'time', 'reservation', 'meal', 'place', 'state'],
         filterByFormula: `{id} = '${id}'`
     }).all();
 
@@ -74,7 +76,7 @@ export default function Post({ data }) {
             });
             setLoader(true);
             await res.json();
-            route.push("/user/prenotazioni");
+            route.push(`/user/prenotazioni/cancellazione`);
             
         } catch (error) {
             console.error(error);
@@ -105,7 +107,7 @@ export default function Post({ data }) {
                                 <QRCode
                                     size={256}
                                     style={{ height: "auto", maxWidth: "120px", width: "100%" }}
-                                    value={JSON.stringify(item)}
+                                    value={`https://www.localhost:3000/user/prenotazioni/successo/${item.id}`}
                                     viewBox={`0 0 256 256`}
                                 />
     
@@ -115,7 +117,7 @@ export default function Post({ data }) {
                                     
                                     <div className="card-summary-item">
                                         <p>Quando:</p>
-                                        <p>{item.date}</p>
+                                        <p>{format(new Date(item.date), 'dd/MM/yyyy')}</p>
                                     </div>
                                     <div className="card-summary-item mt-20">
                                         <p>Alle:</p>
@@ -135,7 +137,9 @@ export default function Post({ data }) {
                                 <a
                                     className="button-outline"
                                     onClick={() => deleteReservation(item.id)}
-                                >Cancella prenotazione</a>
+                                >
+                                    Cancella prenotazione
+                                </a>
     
                             </section>
                         );                 

@@ -13,16 +13,20 @@ import { BsThreeDots } from 'react-icons/bs';
 
 import homeImage from '../../assets/images/reserved-all.svg';
 
+import { format } from 'date-fns';
+
 export const getServerSideProps = withPageAuthRequired({
     async getServerSideProps(ctx) {
 
         const session = getSession(ctx.req, ctx.res);
         const user = session.user.sub;
+
+        const today = format(new Date(), "yyyy-MM-dd");
     
         const results = await table.select({
             view: "ViewGrid",
-            fields: ['date', 'time', 'reservation', 'meal', 'place', 'sub'],
-            filterByFormula: `{sub} = '${user}'`
+            fields: ['date', 'time', 'reservation', 'meal', 'place', 'sub', 'state'],
+            filterByFormula: `AND({sub} = '${user}', {state} != 1, {date} >= '${today}')`,
         }).all();
       
         const data = {
@@ -78,7 +82,7 @@ export default function Prenotazioni({user, data}) {
                             {data.props.data.map((item, idx) => {
                                 return(
                                     <Link key={idx} onClick={() => setLoader(true)} className="card-summary-item card-summary-item-link mt-20 pb-20" href={`./prenotazioni/${item.id}`}>
-                                        <p>{item.date} - {item.time}</p>
+                                        <p>{format(new Date(item.date), 'dd/MM/yyyy')} - {item.time}</p>
                                         <BsThreeDots 
                                             size='20'
                                         />
