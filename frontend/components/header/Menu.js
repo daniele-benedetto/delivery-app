@@ -1,11 +1,8 @@
 import Link from 'next/link';
 import { GrFormClose } from 'react-icons/gr';
 import styles from '../../styles/Header.module.css';
-import { useUser } from '@auth0/nextjs-auth0';
 
 export default function Menu({classMenu, setClassMenu}) {
-
-    const { user } = useUser();
 
     return (
         <nav className={`${styles.menu} ${classMenu}` }> 

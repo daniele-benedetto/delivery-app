@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import Seo from '../components/seo/Seo';
 import Loader from "../components/loader/Loader";
+import Cart from "../components/cart/Cart";
 
 import {BiLeftArrowAlt} from 'react-icons/bi';
 
@@ -61,6 +62,8 @@ export default function Ordina({data}) {
                         className='button-reset'
                         onClick={reset}
                     />
+
+                    <Cart />
 
                     <div className='column-center-center p-20 w-100 pos-rel'>
                         {data.map((item, idx) => {
