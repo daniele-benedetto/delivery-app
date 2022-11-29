@@ -5,13 +5,12 @@ import { BsFillCartFill } from 'react-icons/bs';
 import { GrFormClose } from 'react-icons/gr';
 
 import styles from '../../styles/Cart.module.css';
+import getStripe from '../../utils/Stripe';
 
 export default function Cart() {
 
     const { 
         cartItems, 
-        showCart,
-        setShowCart, 
         onAdd, 
         totalQty,
         onRemove,
@@ -20,6 +19,16 @@ export default function Cart() {
 
     const [classMenu, setClassMenu] = useState(false);
 
+    const handleCheckout = async () => {
+        const stripe = await getStripe();
+        const response = await fetch('/api/stripe/stripe', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(cartItems),
+        });
+        const data = await response.json();
+        await stripe.redirectToCheckout({sessionId: data.id})
+    }
 
     return (
         <>
@@ -44,7 +53,13 @@ export default function Cart() {
                     size={30}
                     color={'var(--black)'}
                     onClick={() => setClassMenu(!classMenu)}
-                />    
+                />  
+                {cartItems.length >= 1 &&
+                    <div>
+                        <h3>Subtotal: {totalPrice}€</h3>
+                        <button onClick={handleCheckout}>Purchase</button>
+                    </div>
+                }  
             </nav>
         </>      
     );

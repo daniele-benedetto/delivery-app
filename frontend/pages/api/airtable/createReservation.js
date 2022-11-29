@@ -10,8 +10,7 @@ export default async (req, res) => {
     reservation, 
     meal, 
     place,
-    sub,  
-    state
+    sub
    } = req.body;
 
     try {
@@ -24,8 +23,7 @@ export default async (req, res) => {
             reservation, 
             meal, 
             place,
-            sub,
-            state
+            sub
         }}]);
             
         res.status(200).json(getMinifiedItem(newRecords[0]));

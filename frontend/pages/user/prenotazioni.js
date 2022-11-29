@@ -10,6 +10,7 @@ import Seo from "../../components/seo/Seo";
 import { table } from '../../utils/Airtable';
 
 import { BsThreeDots } from 'react-icons/bs';
+import { MdDateRange } from 'react-icons/md';
 
 import homeImage from '../../assets/images/reserved-all.svg';
 
@@ -78,8 +79,8 @@ export default function Prenotazioni({user, data}) {
                         </h1>
 
                         <div className="mb-20 p-20 card-summary">
-
-                            {data.props.data.map((item, idx) => {
+                            
+                            { data.props.data.length > 0 && data.props.data.map((item, idx) => {
                                 return(
                                     <Link key={idx} onClick={() => setLoader(true)} className="card-summary-item card-summary-item-link mt-20 pb-20" href={`./prenotazioni/${item.id}`}>
                                         <p>{format(new Date(item.date), 'dd/MM/yyyy')} - {item.time}</p>
@@ -90,6 +91,14 @@ export default function Prenotazioni({user, data}) {
                                 );
                             })}
 
+                            { data.props.data.length == 0 && <span className="text-center">
+                                <MdDateRange 
+                                    size={60}
+                                    color={'#bbb'}
+                                />
+                                <h3 className="font-bold font-small">Non hai nuove prenotazioni</h3>
+                                <Link className="button-outline" href={'/prenota/calendario'}>Prenota adesso</Link>
+                            </span> }
                         </div>
                     </section>
                 </main>

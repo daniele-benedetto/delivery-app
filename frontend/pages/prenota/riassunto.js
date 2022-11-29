@@ -78,7 +78,6 @@ export default function Riassunto({user}) {
                         meal: form.meal,
                         place: parseInt(form.place),
                         sub: user.sub,
-                        state: 0,
                     }),
                     headers: { "Content-Type": "application/json" },
                 });

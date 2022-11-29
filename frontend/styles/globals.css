@@ -155,12 +155,13 @@ a:hover {
     margin-bottom: 10px;
     border: none;
     text-decoration: none;
-    min-width: 350px;
+    max-width: 350px;
+    width: 100%;
     box-shadow: 0 10px 20px rgba(0,0,0,.1);
 }
 
 .button-primary:hover {
-    color: white;
+    color: var(--white);
 }
 
 .button-outline {
@@ -201,6 +202,7 @@ a:hover {
     box-shadow: 0 5px 20px rgba(0,0,0,.05);
     color: var(--black);
     text-align: center;
+    background-color: var(--white);
 }
 
 .input-container .validation, .select-container .validation {
