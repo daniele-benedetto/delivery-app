@@ -20,14 +20,13 @@ export default async function handler(req,res) {
                 shipping_address_collection: {
                     allowed_countries: ['IT']
                 },
-                shipping_options: [{shipping_rate: 'shr_1LEHNcGM0kMASagv22rCgdpM'}],
+                shipping_options: [{shipping_rate: 'shr_1M9UBzGM0kMASagvEEhsIwv8'}],
                 line_items: req.body.map((item) => {
                     return {
                         price_data: {
-                            currency: 'usd',
+                            currency: 'eur',
                             product_data: {
                                 name: item.name,
-                                //images: [item.image.data.attributes.formats.thumbnail.url],
                             },
                             unit_amount: item.price * 100,
                         },

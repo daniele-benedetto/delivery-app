@@ -58,13 +58,24 @@ export default function Home() {
 
 
     /*  -----------------------------------------------------------------------------------------------
-      
-        TODO PER INIZIARE TEST SU FLOW PRENOTAZIONI
 
         PROFILO UTENTE
         -Pagina profilo (dentro info e pulsante di logout)
+        -Tutte le prenotazioni passate
 
         AUTENTICAZIONE
         -Tradurre login e registrazione in italiano
+        -Modificare aspetto delle form
+
+        ECOMMERCE (NO POST ACQUISTO)
+        -Stile pagina ecommerce
+        -Filtri di categoria (barra in alto)
+        -Stile singolo prodotto
+        -Stile del carrello
+        -Bottone di acquisto
+        -Limite minima spesa
+
+        GENERALI
+        -Aggiungere loader al click del menù
         
     --------------------------------------------------------------------------------------------------- */
