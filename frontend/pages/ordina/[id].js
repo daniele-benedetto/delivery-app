@@ -12,6 +12,8 @@ import { products } from "../../utils/Airtable";
 
 import Cart from "../../components/cart/Cart";
 
+import styles from '../../styles/Order.module.css';
+
 //Genera i path sulla base dei record
 export async function getStaticPaths() {
 
@@ -76,6 +78,9 @@ export default function Prodotto({ data }) {
     }
 
     const product = data[0];
+    const ingredients = product.ingredients.toString().replaceAll(',', ', ');
+
+    console.log(product)
 
     return (
 
@@ -91,8 +96,8 @@ export default function Prodotto({ data }) {
                                 
             <main className='w-100 p-20'>
 
-                <section className='column-center-center h-100 pos-rel'>
-
+                <section className='column-center-top h-100 pos-rel'>
+                    
                     <BiLeftArrowAlt 
                         size={30}
                         color={'var(--black)'}
@@ -102,15 +107,30 @@ export default function Prodotto({ data }) {
 
                     <Cart />
 
-                    <div className='column-center-center p-20 w-100 pos-rel'>
-                        <p>{product.name}</p>
-                        <span>Quantità</span>
-                        <button onClick={decrementQty}><AiFillMinusCircle /></button>
-                        <p>{qty}</p>
-                        <button onClick={incrementQty}><AiFillPlusCircle /></button>
+                    <div className='column-center-center w-100 pos-rel mt-40'>
+                        <img width={'100%'} src={product.image[0].thumbnails.full.url} alt={product.name} />
+                        <div className="mt-20">
+                            <h2 className="font-bold font-middle">{product.name}</h2>
+                            <p>{ingredients}</p>
+                        </div>
+                        <div className={styles.productButton}>
+                            <button className="button-order" onClick={decrementQty}>
+                                <AiFillMinusCircle 
+                                    size={25}
+                                />
+                            </button>
+                            <p className="m-0 p-10 font-bold">{qty}</p>
+                            <button className="button-order" onClick={incrementQty}>
+                                <AiFillPlusCircle 
+                                    size={25}
+                                />
+                            </button>
+                        </div>
                     </div>
 
-                    <button onClick={() => {console.log(product); onAdd(product, qty)}} >Aggiungi al carrello</button>
+                    <button className="button-primary button-primary-product" onClick={() => {onAdd(product, qty)}} >
+                        Aggiungi per {(product.price * qty).toFixed(2)}€
+                    </button>
 
                 </section>
             </main>

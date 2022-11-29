@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
+import Image from "next/image";
 
 import Seo from '../components/seo/Seo';
 import Loader from "../components/loader/Loader";
@@ -10,6 +11,10 @@ import {BiLeftArrowAlt} from 'react-icons/bi';
 import Link from "next/link";
 
 import { products } from '../utils/Airtable';
+
+import homeImage from '../assets/images/food-data.svg';
+
+import styles from '../styles/Order.module.css';
 
 export async function getStaticProps() {
     const results = await products.select({
@@ -65,12 +70,23 @@ export default function Ordina({data}) {
 
                     <Cart />
 
-                    <div className='column-center-center p-20 w-100 pos-rel'>
+                    <Image
+                        width={250}
+                        height={250}
+                        src={homeImage} 
+                        alt='Ordina a casa tua' 
+                    />    
+
+                    <div className='column-center-center w-100 pos-rel'>
                         {data.map((item, idx) => {
                             return(
-                                <div key={idx}>
-                                    <Link onClick={() => setLoader(true)} href={`/ordina/${item.id}`}>{item.name}</Link>
-                                </div>
+                                <Link className={styles.product} onClick={() => setLoader(true)} href={`/ordina/${item.id}`} key={idx}>
+                                    <div>
+                                        <h3>{item.name}</h3>
+                                        <span>{item.price.toFixed(2)}€</span>
+                                    </div>
+                                    <Image width={80} height={50} src={item.image[0].thumbnails.small.url} alt={item.name} />
+                                </Link>
                             );
                         })}
                     </div>

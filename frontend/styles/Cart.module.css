@@ -2,12 +2,22 @@
     position: absolute;
     top: 0;
     right: 0;
+    z-index: 1;
 }
 
 .cartNumber {
     position: absolute;
-    top:-20px;
+    top:-10px;
     right: 20px;
+    background-color: var(--color-primary);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--white);
+    font-size: 12px;
 }
 
 .menu {
