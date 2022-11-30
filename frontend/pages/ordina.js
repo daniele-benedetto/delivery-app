@@ -1,14 +1,18 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useStateContext } from "../utils/Context";
 import Image from "next/image";
+import Link from "next/link";
+
+import { deliveryData } from "./api/local";
 
 import Seo from '../components/seo/Seo';
 import Loader from "../components/loader/Loader";
-import Cart from "../components/cart/Cart";
+import Select from "../components/form/select/Select";
 
-import {BiLeftArrowAlt} from 'react-icons/bi';
-
-import Link from "next/link";
+import { BiLeftArrowAlt } from 'react-icons/bi';
+import { MdOutlineDeliveryDining } from 'react-icons/md';
+import { FaCarSide } from 'react-icons/fa';
 
 import { products } from '../utils/Airtable';
 
@@ -40,8 +44,17 @@ export default function Ordina({data}) {
     const route = useRouter(); 
     const [loader, setLoader] = useState(false);
 
+    const { 
+        cartItems, 
+        totalQty,
+        totalPrice,
+        delivery,
+        setDelivery
+    } = useStateContext();
+
     const reset = () => {
         setLoader(true);
+        setDelivery(0);
         route.push('/');    
     }
 
@@ -68,16 +81,27 @@ export default function Ordina({data}) {
                         onClick={reset}
                     />
 
-                    <Cart />
+                    <Select
+                        id='delivery'
+                        values={deliveryData}
+                        onChange={(event) => {
+                            const val = event.target.value;
+                            setDelivery(val);
+                        }}
+                        className={'select-delivery'}
+                        delivery={delivery}
+                        Icon={delivery == 1 ? MdOutlineDeliveryDining : FaCarSide}
+                    />
 
                     <Image
+                        className="mt-20"
                         width={250}
                         height={250}
                         src={homeImage} 
                         alt='Ordina a casa tua' 
                     />    
 
-                    <div className='column-center-center w-100 pos-rel'>
+                    <div className='column-center-center w-100 pos-rel mb-80'>
                         {data.map((item, idx) => {
                             return(
                                 <Link className={styles.product} onClick={() => setLoader(true)} href={`/ordina/${item.id}`} key={idx}>
@@ -92,6 +116,19 @@ export default function Ordina({data}) {
                     </div>
                 </section>
             </main>
+            {cartItems.length >= 1 &&
+                <button 
+                    className='button-primary button-primary-product'
+                    onClick={() => {
+                        setLoader(true);
+                        route.push('/ordina/carrello');
+                    }}
+                >
+                    <span>{totalQty}</span>
+                    <p className="mb-0 text-center">Visualizza il carrello</p>
+                    <span>{totalPrice.toFixed(2)}€</span>
+                </button> 
+            } 
         </div>         
     );
 }

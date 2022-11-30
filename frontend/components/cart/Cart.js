@@ -15,6 +15,7 @@ export default function Cart() {
         totalQty,
         onRemove,
         totalPrice,
+        delivery
     } = useStateContext();
 
     const [classMenu, setClassMenu] = useState(false);

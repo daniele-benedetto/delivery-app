@@ -29,3 +29,14 @@ export const placeData = [
         time: "Esterno",
     }
 ];
+
+export const deliveryData = [
+    {
+        id: 0,
+        time: "Takeaway"
+    },
+    {
+        id: 1,
+        time: "Delivery"
+    }
+]

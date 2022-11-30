@@ -30,10 +30,11 @@ export const StateContext = ({ children }) => {
     const [placesOutsideNumber, setPlacesOutsideNumber] = useState(0);
 
     const [qty, setQty] = useState(1);
-    const [showCart, setShowCart] = useState(false);
     const [cartItems, setCartItems] = useState([]);
     const [totalQty, setTotalQty] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
+
+    const [delivery, setDelivery] = useState(0);
     
     const incrementQty = () => {
         setQty((prevQty) => prevQty + 1);
@@ -101,11 +102,11 @@ export const StateContext = ({ children }) => {
             setPlacesInsideNumber,
             placesOutsideNumber,
             setPlacesOutsideNumber,
+            delivery,
+            setDelivery,
             qty, 
             incrementQty, 
             decrementQty, 
-            showCart,
-            setShowCart,
             cartItems,
             onAdd,
             onRemove,

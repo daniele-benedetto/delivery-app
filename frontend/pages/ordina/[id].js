@@ -10,8 +10,6 @@ import Loader from "../../components/loader/Loader";
 import {BiLeftArrowAlt} from 'react-icons/bi';
 import { products } from "../../utils/Airtable";
 
-import Cart from "../../components/cart/Cart";
-
 import styles from '../../styles/Order.module.css';
 
 //Genera i path sulla base dei record
@@ -80,8 +78,6 @@ export default function Prodotto({ data }) {
     const product = data[0];
     const ingredients = product.ingredients.toString().replaceAll(',', ', ');
 
-    console.log(product)
-
     return (
 
         <div className='column-center-center w-100 h-100'>
@@ -105,8 +101,6 @@ export default function Prodotto({ data }) {
                         onClick={reset}
                     />
 
-                    <Cart />
-
                     <div className='column-center-center w-100 pos-rel mt-40'>
                         <img width={'100%'} src={product.image[0].thumbnails.full.url} alt={product.name} />
                         <div className="mt-20">
@@ -128,8 +122,13 @@ export default function Prodotto({ data }) {
                         </div>
                     </div>
 
-                    <button className="button-primary button-primary-product" onClick={() => {onAdd(product, qty)}} >
-                        Aggiungi per {(product.price * qty).toFixed(2)}€
+                    <button className="button-primary button-primary-product justify-content-center" 
+                        onClick={() => {
+                            setLoader(true);
+                            onAdd(product, qty);
+                            route.push('/ordina');
+                        }} 
+                    > Aggiungi per {(product.price * qty).toFixed(2)}€
                     </button>
 
                 </section>

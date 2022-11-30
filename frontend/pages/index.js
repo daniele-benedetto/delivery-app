@@ -42,10 +42,10 @@ export default function Home() {
                             I piatti che ami, a <b className='color-primary font-bold'>domicilio</b>.
                         </h1>
 
-                        <Location />
-
-                        <Link onClick={() => setLoader(true)} className='button-primary' href='./ordina'>Ordina online</Link>
-                        <Link onClick={() => setLoader(true)} className='button-outline' href='./prenota/calendario'>Prenota un tavolo</Link>
+                        <Location setLoader={setLoader} />
+                        <Link onClick={() => setLoader(true)} className='button-primary' href='./prenota/calendario'>Prenota un tavolo</Link>
+                        <Link onClick={() => setLoader(true)} className='button-outline' href='./ordina'>Oppure ordina takeaway</Link>
+                        
                     </div>
 
                 </section>
@@ -70,8 +70,6 @@ export default function Home() {
         -Filtri di categoria (barra in alto)
         -Stile singolo prodotto
         -Stile del carrello
-        -Bottone di acquisto
-        -Limite minima spesa
 
         GENERALI
         -Aggiungere loader al click del menù
