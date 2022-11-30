@@ -12,10 +12,10 @@ export default function Calendar({
     form,
     setForm,
     restaurantOption,
-    error
+    error,
+    selectDate,
+    setSelectDate
 }) {
-
-    const [selectDate, setSelectDate] = useState('');
 
     useEffect(() => {
         if(selectDate != '') {

@@ -59,6 +59,8 @@ export default function Calendario({user, data}) {
 
     const route = useRouter(); 
     const [loader, setLoader] = useState(false);
+    const [selectTime, setSelectTime] = useState('');
+    const [selectDate, setSelectDate] = useState('');
 
     //Parametri di notifica in caso non ci siano posti disponibili
     const notify = () => {
@@ -175,6 +177,14 @@ export default function Calendario({user, data}) {
                 setPlacesNumber(0);
                 setPlacesInsideNumber(0);
                 setPlacesOutsideNumber(0);
+                setSelectTime('');
+                setSelectDate('');
+                setForm({ 
+                    ...form, 
+                    date: "",
+                    time: "",
+                    meal: "",
+                });
                 notify();
             }
         }    
@@ -236,6 +246,8 @@ export default function Calendario({user, data}) {
                                 formError={formError}
                                 restaurantOption={restaurantOption}
                                 error={formError.date}
+                                selectDate={selectDate}
+                                setSelectDate={setSelectDate}
                             />
 
                             <Time
@@ -244,6 +256,8 @@ export default function Calendario({user, data}) {
                                 formError={formError}
                                 restaurantOption={restaurantOption}
                                 error={formError.time}
+                                selectTime={selectTime}
+                                setSelectTime={setSelectTime}
                             />
 
                             <Button

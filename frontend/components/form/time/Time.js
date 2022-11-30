@@ -12,10 +12,10 @@ export default function Time({
     form,
     setForm,
     restaurantOption,
-    error
+    error,
+    selectTime,
+    setSelectTime
 }) {
-
-    const [selectTime, setSelectTime] = useState('');
     
     const today = format(new Date(), "yyyy-MM-dd");
 
