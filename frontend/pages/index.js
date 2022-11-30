@@ -4,9 +4,10 @@ import { useState } from "react";
 
 import Seo from '../components/seo/Seo';
 import Header from "../components/header/Header";
+import Loader from "../components/loader/Loader";
+import Location from "../components/location/Location";
 
 import homeImage from '../assets/images/order-food.svg';
-import Loader from "../components/loader/Loader";
 
 export default function Home() {
 
@@ -37,17 +38,14 @@ export default function Home() {
 
                     <div className='column-center-center w-100'>
 
-                        <h1 className='font-big font-semibold'>
-                            I tuoi piatti preferiti<br />con <b className='color-primary font-bold'>RistoApp</b>
+                        <h1 className='font-middle font-semibold mt-20 mb-20'>
+                            I piatti che ami, a <b className='color-primary font-bold'>domicilio</b>.
                         </h1>
 
-                        <h2 className='font-small mb-40'>
-                            Consegna a domicilio, ordina take away e sistema di prenotazione del tavolo
-                        </h2>
+                        <Location />
 
                         <Link onClick={() => setLoader(true)} className='button-primary' href='./ordina'>Ordina online</Link>
                         <Link onClick={() => setLoader(true)} className='button-outline' href='./prenota/calendario'>Prenota un tavolo</Link>
-                        
                     </div>
 
                 </section>

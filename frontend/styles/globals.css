@@ -13,6 +13,7 @@
     --font-middle: 24px;
     --font-normal: 20px;
     --font-small: 16px;
+    --font-min: 12px;
 
     --font-bold: 700;
     --font-semibold: 600;
@@ -70,6 +71,10 @@ a:hover {
 
 .font-small {
     font-size: var(--font-small);
+}
+
+.font-min {
+    font-size: var(--font-min);
 }
 
 .color-primary {
@@ -217,22 +222,45 @@ a:hover {
     position: relative;
     max-width: 350px;
     margin: 0 auto;
+    width: 100%;
 }
 
-.input-container svg, .select-container svg {
+.select-container svg {
     position: absolute;
     top: 50%;
     left: 10px;
     transform: translate(0, -50%);
+    background-color: var(--white);
 }
 
-.input-primary, .select-primary {
+.input-container svg {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translate(0, -50%);
+    background-color: var(--white);
+}
+
+.input-primary {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 0 5px 20px rgba(0,0,0,.05);
+    color: var(--black);
+    text-align: left;
+    background-color: var(--white);
+    width: 100%;
+    padding: 10px;
+}
+
+.select-primary {
     border-radius: 5px;
     border: 1px solid #ddd;
     box-shadow: 0 5px 20px rgba(0,0,0,.05);
     color: var(--black);
     text-align: center;
     background-color: var(--white);
+    width: 100%;
+    padding: 10px;
 }
 
 .input-container .validation, .select-container .validation {
@@ -308,4 +336,16 @@ a:hover {
 
 .menu-open {
     transform: translateX(0)!important;
+}
+
+.location {
+    background-color: var(--white);
+    position: absolute;
+    top: 100%;
+}
+
+.location li {
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
 }
