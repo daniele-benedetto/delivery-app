@@ -11,7 +11,6 @@ export default function Location({setLoader}) {
     const route = useRouter();
 
     const { 
-        delivery,
         setDelivery
     } = useStateContext();
 
@@ -26,7 +25,7 @@ export default function Location({setLoader}) {
     });
 
     const notify = () => {
-        toast.error(`Possiamo consegnare solo nella città di Modena e Milano`, {
+        toast.error(`Possiamo consegnare solo nella città di Modena`, {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -93,7 +92,7 @@ export default function Location({setLoader}) {
             />
 
             <div className="mb-20 mw-350 text-left">
-                <small>Inserisci il tuo indirizzo e verifica se possia effetuare la consegna</small> 
+                <small>Inserisci il tuo indirizzo e verifica se possiamo effettuare la consegna</small> 
                 <div className="input-container">
                     <input
                         className="input-primary"

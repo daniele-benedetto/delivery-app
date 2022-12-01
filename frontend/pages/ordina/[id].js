@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { useStateContext } from "../../utils/Context";
+import { useUser } from "@auth0/nextjs-auth0";
 
 import { AiFillPlusCircle, AiFillMinusCircle} from 'react-icons/ai';
 
@@ -57,6 +58,8 @@ export default function Prodotto({ data }) {
 
     const route = useRouter(); 
     const [loader, setLoader] = useState(false);
+    
+    const { user } = useUser();
 
     const { 
         qty, 
@@ -67,7 +70,11 @@ export default function Prodotto({ data }) {
     } = useStateContext();
 
     useEffect(() => {
-        setQty(1);
+        if(!user) {
+            route.push('/api/auth/login'); 
+        } else {
+            setQty(1);
+        }
     }, []);
 
     const reset = () => {

@@ -65,7 +65,6 @@ export const StateContext = ({ children }) => {
             );
         } else {
             setCartItems([...cartItems, {...product, quantity: quantity}]);
-            console.log(cartItems)
         }
 
     }

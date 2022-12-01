@@ -38,7 +38,7 @@ export default function Home() {
 
                     <div className='column-center-center w-100'>
 
-                        <h1 className='font-middle font-semibold mt-20 mb-20'>
+                        <h1 className='font-middle font-semibold mt-20 mb-20 w-100'>
                             I piatti che ami, a <b className='color-primary font-bold'>domicilio</b>.
                         </h1>
 
@@ -66,10 +66,10 @@ export default function Home() {
         -Modificare aspetto delle form
 
         ECOMMERCE (NO POST ACQUISTO)
-        -Stile pagina ecommerce
-        -Filtri di categoria (barra in alto)
+        -Richiamare i prodotti ciclando tutte le categorie (così da riordinare la query)
+        -Menù di tutte le categorie, al click scroll fino alla categoria
         -Stile singolo prodotto
-        -Stile del carrello
+        -Prodotti aggiuntivi nella pagina prodotto e nel carrello (bevande dolci)
 
         GENERALI
         -Aggiungere loader al click del menù

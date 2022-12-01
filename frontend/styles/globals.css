@@ -81,6 +81,10 @@ a:hover {
     color: var(--color-primary);
 }
 
+.color-grey {
+    color: #ddd;
+}
+
 .font-bold {
     font-weight: var(--font-bold);
 }
@@ -103,6 +107,10 @@ a:hover {
     width: 100%;
 }
 
+.w-50 {
+    width: 50%;
+}
+
 .mw-350 {
     max-width: 350px;
 }
@@ -113,7 +121,6 @@ a:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
     justify-content: center;
 }
 
@@ -177,6 +184,7 @@ a:hover {
     max-width: 350px;
     width: 100%;
     box-shadow: 0 10px 20px rgba(0,0,0,.1);
+    text-align: center;
 }
 
 .button-primary:hover {
@@ -213,7 +221,9 @@ a:hover {
 
 .button-primary-product {
     position: fixed;
-    bottom: 0;
+    left: 15px;
+    bottom: 15px;
+    width: calc(100% - 30px);
     max-width: none;
     margin-bottom: 0;
     border-radius: 0;
@@ -283,10 +293,8 @@ a:hover {
     background-color: transparent;
 }
 
-.select-delivery select::backdrop {
-    border: none;
-    box-shadow: none;
-    background-color: transparent;
+.select-delivery select:focus-visible {
+    outline: none;
 }
 
 .select-delivery svg {
@@ -334,6 +342,10 @@ a:hover {
     margin-bottom: 0;
 }
 
+.mb-10 {
+    margin-bottom: 10px;
+}
+
 .mb-20 {
     margin-bottom: 20px;
 }
@@ -344,6 +356,10 @@ a:hover {
 
 .mb-80 {
     margin-bottom: 80px;
+}
+
+.mt-10 {
+    margin-top: 10px;
 }
 
 .mt-20 {

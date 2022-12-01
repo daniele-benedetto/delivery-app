@@ -32,7 +32,7 @@ export default function Conferma() {
                             alt='Ordina a casa tua' 
                         />
 
-                        <h1 className="font-big font-semibold">Grazie per aver <b className="color-primary">prenotato</b></h1>
+                        <h1 className="font-middle font-semibold w-100">Grazie per aver <b className="color-primary">prenotato</b></h1>
                         <h2 className="font-small mb-40">Ti abbiamo inviato una email con il riepilogo dei dati</h2>
 
                         <Link onClick={() => setLoader(true)} className='button-primary' href='/'>Torna in Home</Link>
