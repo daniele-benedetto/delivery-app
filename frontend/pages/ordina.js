@@ -1,26 +1,17 @@
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { useStateContext } from "../utils/Context";
 import { getSession, withPageAuthRequired } from "@auth0/nextjs-auth0";
 import Image from "next/image";
 import Link from "next/link";
 
-import { deliveryData } from "./api/local";
-
 import Seo from '../components/seo/Seo';
 import Loader from "../components/loader/Loader";
-import Select from "../components/form/select/Select";
 
-import { BiLeftArrowAlt } from 'react-icons/bi';
-import { MdOutlineDeliveryDining } from 'react-icons/md';
-import { FaCarSide } from 'react-icons/fa';
-
-import { products } from '../utils/Airtable';
-
-import homeImage from '../assets/images/food-data.svg';
+import { categories, products } from '../utils/Airtable';
 
 import styles from '../styles/Order.module.css';
 import Cart from "../components/cart/Cart";
+import Nav from "../components/nav/Nav";
 
 //Verifico l'autenticazione e genero estraggo i dati da AirTable
 export const getServerSideProps = withPageAuthRequired({
@@ -30,30 +21,36 @@ export const getServerSideProps = withPageAuthRequired({
         const session = getSession(ctx.req, ctx.res);
         const user = session.user.sub;
     
-        const results = await products.select({
+        const allProducts = await products.select({
         }).all();
+
+        const allCategories = await categories.select(({ 
+        })).all();
       
         const data = {
             props: {
-                data: results.map(result => {
+                products: allProducts.map(result => {
                     return {
                         id: result.id,
                         ...result.fields,
                     }
-                })
+                }),
+                categories: allCategories.map(result => {
+                    return {
+                        id: result.id,
+                        ...result.fields,
+                    }
+                }),
             }
         }
       
-        return { props: { user: user, data: data }};
+        return { props: { user: user, data: data, }};
     },
     
 });
 
-
-
 export default function Ordina({user, data}) {
 
-    const route = useRouter(); 
     const [loader, setLoader] = useState(false);
     const [cart, setCart] = useState(false);
 
@@ -64,12 +61,6 @@ export default function Ordina({user, data}) {
         delivery,
         setDelivery
     } = useStateContext();
-
-    const reset = () => {
-        setLoader(true);
-        setDelivery(0);
-        route.push('/');    
-    }
 
     if(user) {
         return (
@@ -84,41 +75,21 @@ export default function Ordina({user, data}) {
                 {loader && <Loader /> }
     
                                     
-                <main className='w-100 p-20'>
+                <main className='w-100'>
+
+                    <Nav 
+                        delivery={delivery} 
+                        setDelivery={setDelivery} 
+                        setLoader={setLoader}
+                        categories={data.props.categories}
+                    />
     
-                    <section className='column-center-center h-100 pos-rel'>
+                    <section className='column-center-top h-100 pos-rel p-20 mt-80'>
     
-                        <BiLeftArrowAlt 
-                            size={30}
-                            color={'var(--black)'}
-                            className='button-reset'
-                            onClick={reset}
-                        />
-    
-                        <Select
-                            id='delivery'
-                            values={deliveryData}
-                            onChange={(event) => {
-                                const val = event.target.value;
-                                setDelivery(val);
-                            }}
-                            className={'select-delivery'}
-                            delivery={delivery}
-                            Icon={delivery == 1 ? MdOutlineDeliveryDining : FaCarSide}
-                        />
-    
-                        <Image
-                            className="mt-20"
-                            width={250}
-                            height={250}
-                            src={homeImage} 
-                            alt='Ordina a casa tua' 
-                        />    
-    
-                        <div className='column-center-center w-100 pos-rel mb-40'>
-                            {data.props.data.map((item, idx) => {
+                        <div className='column-center-center w-100 pos-rel'>
+                            {data.props.products.map((item, idx) => {
                                 return(
-                                    <Link className={styles.product} onClick={() => setLoader(true)} href={`/ordina/${item.id}`} key={idx}>
+                                    <Link id={item.categoryName} className={styles.product} onClick={() => setLoader(true)} href={`/ordina/${item.id}`} key={idx}>
                                         <div>
                                             <h3>{item.name}</h3>
                                             <span>{item.price.toFixed(2)}€</span>
@@ -128,6 +99,7 @@ export default function Ordina({user, data}) {
                                 );
                             })}
                         </div>
+
                     </section>
     
                     { cartItems.length >= 1 &&

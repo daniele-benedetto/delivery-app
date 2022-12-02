@@ -5,6 +5,7 @@ import usePlacesAutocomplete, { getGeocode } from "use-places-autocomplete";
 import { toast, ToastContainer } from "react-toastify";
 
 import { FiNavigation } from 'react-icons/fi';
+import Link from "next/link";
   
 export default function Location({setLoader}) {
 
@@ -48,7 +49,7 @@ export default function Location({setLoader}) {
         // impostando il secondo parametro su "false"
         setValue(description, false);
         clearSuggestions();
-    
+
         //Richiediamo i dati di geolocalizzazione
         getGeocode({ address: description }).then((results) => {
             if(results[0].address_components[1].long_name == 'Modena') {
@@ -62,17 +63,16 @@ export default function Location({setLoader}) {
 
     };
   
-        //Costruiamo la struttura dei risultati di ricerca
-        const renderSuggestions = () => data.map((suggestion) => {
-            const { place_id, structured_formatting: { main_text, secondary_text },} = suggestion;
+    //Costruiamo la struttura dei risultati di ricerca
+    const renderSuggestions = () => data.map((suggestion) => {
+        const { place_id, structured_formatting: { main_text, secondary_text },} = suggestion;
   
-            return (
-                <li key={place_id} onClick={handleSelect(suggestion)}>
-                    <strong>{main_text}</strong> <small>{secondary_text}</small>
-                </li>
-            );
-
-        });
+        return (
+            <li key={place_id} onClick={handleSelect(suggestion)}>
+                <strong>{main_text}</strong> <small>{secondary_text}</small>
+            </li>
+        );
+    });
   
     return (
         <>

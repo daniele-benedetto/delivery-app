@@ -38,13 +38,13 @@ export default function Home() {
 
                     <div className='column-center-center w-100'>
 
-                        <h1 className='font-middle font-semibold mt-20 mb-20 w-100'>
+                        <h1 className='font-middle font-semibold mt-20 mb-20 w-100 mw-350'>
                             I piatti che ami, a <b className='color-primary font-bold'>domicilio</b>.
                         </h1>
 
                         <Location setLoader={setLoader} />
-                        <Link onClick={() => setLoader(true)} className='button-primary' href='./prenota/calendario'>Prenota un tavolo</Link>
-                        <Link onClick={() => setLoader(true)} className='button-outline' href='./ordina'>Oppure ordina takeaway</Link>
+                        
+                        <Link onClick={() => setLoader(true)} className='button-outline' href='./prenota/calendario'>Oppure prenota un tavolo</Link>
                         
                     </div>
 

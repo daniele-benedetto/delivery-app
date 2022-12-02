@@ -30,7 +30,6 @@ body {
     background-color: var(--white);
     font-size: var(--font-small);
     width: 100%;
-    overflow-x: hidden;
 }
 
 * {
@@ -281,10 +280,12 @@ a:hover {
 }
 
 .select-delivery {
-    position: absolute;
-    right: 0;
-    top: -5px;
-    max-width: 150px;
+    width: auto!important;
+    margin: 0;
+}
+
+.select-delivery svg {
+    transform: translate(-100%, -50%);
 }
 
 .select-delivery select {
@@ -314,6 +315,38 @@ a:hover {
 
 .react-datepicker__time-list-item--disabled {
     display: none;
+}
+
+/* ! Header */
+
+.navigator {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    position: fixed;
+    top:0;
+    left: 0;
+    z-index: 99;
+    background-color: var(--white);
+    padding: 10px 20px
+}
+
+.menu-horizontal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.menu-horizontal li {
+    padding: 0 10px;
+}
+
+.menu-horizontal li a{
+    padding: 10px 20px;
+    background-color: var(--color-primary);
+    color: var(--white);
 }
 
 /* ! utils */
