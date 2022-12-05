@@ -4,7 +4,11 @@ const Context = createContext();
 
 export const StateContext = ({ children }) => {
 
-    //Dati del form
+    /*  -----------------------------------------------------------------------------------------------
+        CONTEXT DI STATI PER PRENOTAZIONE TAVOLI
+    --------------------------------------------------------------------------------------------------- */
+
+    //Dati per registrazione
     const [form, setForm] = useState({
         date: "",
         time: "",
@@ -15,31 +19,63 @@ export const StateContext = ({ children }) => {
         reservation: "",
         sid: "",
     });  
-    
-    //Presenza di errori compilazione form
+
+    //Presenza di errori compilazione form di registrazione
     const [formError, setFormError] = useState({
         date: false,
         place: false,
         name: false,
         email: false,
         reservation: false,
-    });    
-    
+    });   
+
+    //Numero posti disponibili totali
     const [placesNumber, setPlacesNumber] = useState(0);
+
+    //Numero posti disponibili totali all'interno
     const [placesInsideNumber, setPlacesInsideNumber] = useState(0);
+
+    //Numero posti disponibili totali all'esterno
     const [placesOutsideNumber, setPlacesOutsideNumber] = useState(0);
 
+    /*  -----------------------------------------------------------------------------------------------
+        CONTEXT DI STATI PER ORDINE PRODOTTO
+    --------------------------------------------------------------------------------------------------- */
+    
+    //Dati per ordine
+    const [order, setOrder] = useState({
+        name: '',
+        email: '',
+        products: [],
+        address: '', 
+        delivery: '', 
+        date: '', 
+        time: '',
+        total: ''
+    });
+
+    //Quantità singolo prodotto
     const [qty, setQty] = useState(1);
+
+    //Tutti i prodotti
     const [cartItems, setCartItems] = useState([]);
+
+    //Totale numero prodotti
     const [totalQty, setTotalQty] = useState(0);
+
+    //Totale prezzo
     const [totalPrice, setTotalPrice] = useState(0);
 
+    //Tipo di consegna
     const [delivery, setDelivery] = useState(0);
-    
+
+    //Aumenta di 1 il numero del singolo prodotto
     const incrementQty = () => {
         setQty((prevQty) => prevQty + 1);
     }
 
+    //Diminuisce di 1 il numero del singolo prodotto
+    //Non può essere meno di uno
     const decrementQty = () => {
         setQty((prevQty) => {
             if(prevQty - 1 < 1) {
@@ -49,6 +85,8 @@ export const StateContext = ({ children }) => {
         });
     }
 
+    //Aggiungi il prodotto al carrello
+    //Se esiste deve sommare la nuova quantità
     const onAdd = (product, quantity) => {
 
         setTotalQty(prevTotal => prevTotal + quantity);
@@ -66,9 +104,10 @@ export const StateContext = ({ children }) => {
         } else {
             setCartItems([...cartItems, {...product, quantity: quantity}]);
         }
-
     }
 
+    //Rimuove il prodotto dal carrello
+    //Se la quantità è uguale a 1 lo rimuovo definitivamente 
     const onRemove = (product) => {
 
         setTotalQty(prevTotal => prevTotal - 1);
@@ -111,7 +150,9 @@ export const StateContext = ({ children }) => {
             onRemove,
             totalQty,
             totalPrice,
-            setQty
+            setQty,
+            order,
+            setOrder,
         }}>
             {children}
         </Context.Provider>

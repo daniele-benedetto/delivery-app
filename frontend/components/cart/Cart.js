@@ -1,10 +1,12 @@
 import { useStateContext } from '../../utils/Context';
+import { useRouter } from 'next/router';
 
 import { GrCircleAlert, GrFormClose } from 'react-icons/gr';
 import { AiFillMinusCircle,AiFillPlusCircle } from 'react-icons/ai';
 import { TbShoppingCartX } from 'react-icons/tb';
 
 import styles from '../../styles/Cart.module.css';
+
 import getStripe from '../../utils/Stripe';
 
 export default function Cart({setCart, cart}) {
@@ -17,19 +19,24 @@ export default function Cart({setCart, cart}) {
         delivery
     } = useStateContext();
 
+    const route = useRouter();
+
     const handleCheckout = async () => {
 
-        const stripe = await getStripe();
-        const response = await fetch('/api/stripe/stripe', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(cartItems),
-        });
-        
-        const data = await response.json();
-        await stripe.redirectToCheckout({sessionId: data.id})
-
+        try {        
+            const stripe = await getStripe(); 
+            const res = await fetch("/api/stripe/stripe", {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(cartItems),
+            });
+            const data = await res.json();
+            await stripe.redirectToCheckout({sessionId: data.id});
+        } catch (error) {
+            route.push("/ordina/errore");
+        }
     }
+    
 
     return (
         <nav className={`${styles.menu} p-20`}> 

@@ -63,7 +63,7 @@ export default function Successo({ data }) {
 
     const updateReservation = async (id) => {
         try {
-            const res = await fetch("/api/airtable/upDate", {
+            const res = await fetch("/api/airtable/upDateReservation", {
                 method: "PUT",
                 body: JSON.stringify( {id} ),
                 headers: { "Content-Type": "application/json" },

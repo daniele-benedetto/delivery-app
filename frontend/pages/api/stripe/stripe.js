@@ -1,6 +1,5 @@
 import Stripe from 'stripe';
 import { getSession } from '@auth0/nextjs-auth0';
-import { useRouter } from 'next/router';
 
 const stripe = new Stripe(`${process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY}`);
 
@@ -9,7 +8,6 @@ export default async function handler(req,res) {
     const session = getSession(req, res);
     const user = session?.user;
     const stripeId = user['http://localhost:3000/stripe_customer_id'];
-    const route = useRouter();
 
     if(req.method === "POST") {
         try {
@@ -39,13 +37,17 @@ export default async function handler(req,res) {
                         quantity: item.quantity,
                     };
                 }),
+                metadata: {
+                    'delivery': '0',
+                    'date': '2022-01-15',
+                    'time': '12:50',
+                },
                 success_url: `${req.headers.origin}/ordina/conferma?&session_id={CHECKOUT_SESSION_ID}`,
                 cancel_url: `${req.headers.origin}/ordina`,
             });
             res.status(200).json(session);
         } catch (error) {
             res.status(error.statusCode || 500).json(error.message);
-            route.push('/ordina/errore');
         }
     }
 }

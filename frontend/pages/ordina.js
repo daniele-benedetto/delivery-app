@@ -13,20 +13,22 @@ import styles from '../styles/Order.module.css';
 import Cart from "../components/cart/Cart";
 import Nav from "../components/nav/Nav";
 
-//Verifico l'autenticazione e genero estraggo i dati da AirTable
+//Verifico l'autenticazione, genero e estraggo i dati da AirTable
 export const getServerSideProps = withPageAuthRequired({
 
     async getServerSideProps(ctx) {
 
         const session = getSession(ctx.req, ctx.res);
         const user = session.user.sub;
-    
+
+        //Per card singoli prodotti
         const allProducts = await products.select({
             sort: [{
                 field: 'categoryName',
             }]
         }).all();
 
+        //Per menù categorie
         const allCategories = await categories.select(({ 
             sort: [{
                 field: 'category',

@@ -73,5 +73,6 @@ export default function Home() {
 
         GENERALI
         -Aggiungere loader al click del menù
+        -Rimuovere bootstrap
         
     --------------------------------------------------------------------------------------------------- */

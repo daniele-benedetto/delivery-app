@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import formatMoney from "../../utils/FormatMoney";
 
 import Header from "../../components/header/Header";
 import Seo from "../../components/seo/Seo";
@@ -24,9 +25,9 @@ export async function getServerSideProps(params) {
 
 export default function Conferma({order}) {
 
-    console.log(order)
-
     const [ loader, setLoader ] = useState(false);
+
+    console.log(order.line_items.data);
 
     const addOrder = async () => {
 
@@ -36,22 +37,18 @@ export default function Conferma({order}) {
                 body: JSON.stringify({
                     name: order.customer_details.name,
                     email: order.customer_details.email,
-                    products: 'test',
+                    products: '', //CREARE SISTEMA SALVATAGGIO ORDINE
                     address: order.customer_details.address.line1, 
-                    delivery: '1', 
-                    date: '2022-02-14', 
-                    time: '12.30',
-                    total: order.amount_total
+                    delivery: order.metadata.delivery, 
+                    date: order.metadata.date, 
+                    time: order.metadata.time,
+                    total: formatMoney(order.amountTotal)
                 }),
                 headers: { "Content-Type": "application/json" },
             });
-                    
-            const result = await res.json();
-
-            console.log(result)
-        
+                            
         } catch (error) {
-                console.error(error);
+            console.error(error);
         }
     };
 

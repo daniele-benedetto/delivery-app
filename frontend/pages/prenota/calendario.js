@@ -23,7 +23,7 @@ import Loader from "../../components/loader/Loader";
 import homeImage from '../../assets/images/food-time.svg';
 import {BiLeftArrowAlt} from 'react-icons/bi';
 
-//Verifico l'autenticazione e genero estraggo i dati da AirTable
+//Verifico l'autenticazione, genero e estraggo i dati da AirTable
 export const getServerSideProps = withPageAuthRequired({
 
     async getServerSideProps(ctx) {

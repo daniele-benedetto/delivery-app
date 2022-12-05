@@ -5,7 +5,6 @@ Airtable.configure({
 });
 
 const base = Airtable.base(process.env.AIRTABLE_BASE_ID);
-
 const table = base(process.env.AIRTABLE_TABLE_NAME);
 const products = base(process.env.AIRTABLE_TABLE_PRODUCTS);
 const categories = base(process.env.AIRTABLE_TABLE_CATEGORIES);
