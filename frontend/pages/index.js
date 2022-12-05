@@ -66,13 +66,16 @@ export default function Home() {
         -Modificare aspetto delle form
 
         ECOMMERCE (NO POST ACQUISTO)
-        -Richiamare i prodotti ciclando tutte le categorie (così da riordinare la query)
-        -Menù di tutte le categorie, al click scroll fino alla categoria
+        -Menù scelta orario e tipo di consegna
         -Stile singolo prodotto
         -Prodotti aggiuntivi nella pagina prodotto e nel carrello (bevande dolci)
 
+        ECOMMERCE (POST ACQUISTO)
+        TODOOOOO
+        
         GENERALI
         -Aggiungere loader al click del menù
         -Rimuovere bootstrap
+        -REFACTORY
         
     --------------------------------------------------------------------------------------------------- */

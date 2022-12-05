@@ -1,19 +1,13 @@
 import { useRouter } from "next/router";
-import { useStateContext } from "../../utils/Context";
 
 import usePlacesAutocomplete, { getGeocode } from "use-places-autocomplete";
 import { toast, ToastContainer } from "react-toastify";
 
 import { FiNavigation } from 'react-icons/fi';
-import Link from "next/link";
   
 export default function Location({setLoader}) {
 
     const route = useRouter();
-
-    const { 
-        setDelivery
-    } = useStateContext();
 
     const {
         ready,
@@ -54,7 +48,6 @@ export default function Location({setLoader}) {
         getGeocode({ address: description }).then((results) => {
             if(results[0].address_components[1].long_name == 'Modena') {
                 setLoader(true);
-                setDelivery(1);
                 route.push('/ordina');    
             } else {
                 notify();

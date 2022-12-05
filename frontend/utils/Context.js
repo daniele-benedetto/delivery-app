@@ -41,18 +41,6 @@ export const StateContext = ({ children }) => {
     /*  -----------------------------------------------------------------------------------------------
         CONTEXT DI STATI PER ORDINE PRODOTTO
     --------------------------------------------------------------------------------------------------- */
-    
-    //Dati per ordine
-    const [order, setOrder] = useState({
-        name: '',
-        email: '',
-        products: [],
-        address: '', 
-        delivery: '', 
-        date: '', 
-        time: '',
-        total: ''
-    });
 
     //Quantità singolo prodotto
     const [qty, setQty] = useState(1);
@@ -65,9 +53,6 @@ export const StateContext = ({ children }) => {
 
     //Totale prezzo
     const [totalPrice, setTotalPrice] = useState(0);
-
-    //Tipo di consegna
-    const [delivery, setDelivery] = useState(0);
 
     //Aumenta di 1 il numero del singolo prodotto
     const incrementQty = () => {
@@ -140,9 +125,7 @@ export const StateContext = ({ children }) => {
             setPlacesInsideNumber,
             placesOutsideNumber,
             setPlacesOutsideNumber,
-            delivery,
-            setDelivery,
-            qty, 
+            qty,
             incrementQty, 
             decrementQty, 
             cartItems,
@@ -151,8 +134,6 @@ export const StateContext = ({ children }) => {
             totalQty,
             totalPrice,
             setQty,
-            order,
-            setOrder,
         }}>
             {children}
         </Context.Provider>

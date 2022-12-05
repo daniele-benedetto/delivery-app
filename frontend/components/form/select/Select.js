@@ -5,9 +5,7 @@ export default function Select({
   values, 
   onChange,
   error,
-  placeholder,
   Icon,
-  delivery,
   className
 }) {
 
@@ -22,7 +20,6 @@ export default function Select({
                 name={id}
                 onChange={onChange}
                 className='select-primary w-100 p-10'
-                defaultValue={delivery ? delivery : ''}
             >
                 {values.map((val, idx) => {
                     return (

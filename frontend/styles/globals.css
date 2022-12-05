@@ -358,6 +358,15 @@ a:hover {
     color: var(--white);
 }
 
+.menu-delivery {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 50vh;
+    background-color: white;
+    z-index: 99;
+}
+
 /* ! utils */
 
 .p-10 {
@@ -374,6 +383,10 @@ a:hover {
 
 .p-20-40 {
     padding: 20px 40px;
+}
+
+.px-20{
+    padding: 0 20px;
 }
 
 .pb-20 {

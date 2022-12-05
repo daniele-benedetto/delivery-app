@@ -12,6 +12,7 @@ import { categories, products } from '../utils/Airtable';
 import styles from '../styles/Order.module.css';
 import Cart from "../components/cart/Cart";
 import Nav from "../components/nav/Nav";
+import Delivery from "../components/delivery/Delivery";
 
 //Verifico l'autenticazione, genero e estraggo i dati da AirTable
 export const getServerSideProps = withPageAuthRequired({
@@ -60,14 +61,14 @@ export const getServerSideProps = withPageAuthRequired({
 export default function Ordina({user, data}) {
 
     const [loader, setLoader] = useState(false);
+    
+    //Bool apertura/chiusura menù
     const [cart, setCart] = useState(false);
 
     const { 
         cartItems, 
         totalQty,
         totalPrice,
-        delivery,
-        setDelivery
     } = useStateContext();
 
     if(user) {
@@ -86,16 +87,14 @@ export default function Ordina({user, data}) {
                 <main className='w-100'>
 
                     <Nav 
-                        delivery={delivery} 
-                        setDelivery={setDelivery} 
                         setLoader={setLoader}
                         categories={data.props.categories}
                     />
     
                     <section className='column-center-top h-100 pos-rel p-20 mt-80'>
 
-                        <small className="mt-20 text-left w-100 color-primary">Consegna a domicilio in 30 - 45 minuti</small>
-    
+                        <Delivery />
+
                         <div className='column-center-center w-100 pos-rel'>
                             {data.props.products.map((item, idx) => {
                                 return(

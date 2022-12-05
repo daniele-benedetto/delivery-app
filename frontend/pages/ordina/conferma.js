@@ -27,9 +27,16 @@ export default function Conferma({order}) {
 
     const [ loader, setLoader ] = useState(false);
 
-    console.log(order.line_items.data);
-
     const addOrder = async () => {
+
+        let products = [];
+
+        order.line_items.data.map(item => {
+            const product = new Object();
+            product.name = item.description;
+            product.qty = item.quantity;
+            products.push(product)
+        })
 
         try {         
             const res = await fetch("/api/airtable/createOrder", {
@@ -37,7 +44,7 @@ export default function Conferma({order}) {
                 body: JSON.stringify({
                     name: order.customer_details.name,
                     email: order.customer_details.email,
-                    products: '', //CREARE SISTEMA SALVATAGGIO ORDINE
+                    products: JSON.stringify(products),
                     address: order.customer_details.address.line1, 
                     delivery: order.metadata.delivery, 
                     date: order.metadata.date, 

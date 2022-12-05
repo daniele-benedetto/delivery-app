@@ -1,7 +1,8 @@
 import { useStateContext } from '../../utils/Context';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
-import { GrCircleAlert, GrFormClose } from 'react-icons/gr';
+import { GrFormClose } from 'react-icons/gr';
 import { AiFillMinusCircle,AiFillPlusCircle } from 'react-icons/ai';
 import { TbShoppingCartX } from 'react-icons/tb';
 
@@ -16,19 +17,34 @@ export default function Cart({setCart, cart}) {
         onAdd, 
         onRemove,
         totalPrice,
-        delivery
     } = useStateContext();
+
+    //Tipo di consegna (0 => takeaway, 1 => delivery)
+    const [delivery, setDelivery] = useState(0);
+
+    //Data dell'ordine
+    const [date, setDate] = useState('2022-12-12');
+
+    //Orario dell'ordine
+    const [time, setTime] = useState('12:30');
 
     const route = useRouter();
 
     const handleCheckout = async () => {
+
+        const ordine = {
+            delivery: delivery,
+            date: date,
+            time: time,
+            data: cartItems
+        };
 
         try {        
             const stripe = await getStripe(); 
             const res = await fetch("/api/stripe/stripe", {
                 method: "POST",
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(cartItems),
+                body: JSON.stringify(ordine),
             });
             const data = await res.json();
             await stripe.redirectToCheckout({sessionId: data.id});
@@ -82,13 +98,9 @@ export default function Cart({setCart, cart}) {
                 onClick={() => setCart(!cart)}
             />  
                 
-            {cartItems.length >= 1 && delivery == 1 && <>
+            {cartItems.length >= 1 && <>
 
                 <div className={`${styles.total} mt-20`}>
-                    <small>
-                        < GrCircleAlert size={15} className='me-2 mb-1' />
-                        Hai scelto la consegna a domicilio
-                    </small>
                     <div className={`${styles.totalInfo} mt-20`}>
                         <p>Subtotale:</p>
                         <span>{totalPrice.toFixed(2)}€</span>
@@ -109,28 +121,7 @@ export default function Cart({setCart, cart}) {
                     Vai al pagamento
                 </button>
 
-            </> }  
-
-            {cartItems.length >= 1 && delivery == 0 && <>
-
-                <div className={`${styles.total} mt-20`}>
-                    <small>
-                        < GrCircleAlert size={15} className='me-2 mb-1' />
-                        Ritiro previsto alle ore xx:xx
-                    </small>
-                    <div className={`${styles.totalInfo} font-bold mt-20`}>
-                        <p>Totale:</p>
-                        <span>{(totalPrice).toFixed(2)}€</span>
-                    </div>
-                </div>
-                <button 
-                    className='button-primary button-primary-product justify-content-center' 
-                    onClick={handleCheckout}
-                >
-                    Vai al pagamento
-                </button>
-
-            </> }  
+            </> }
 
         </nav>     
     );

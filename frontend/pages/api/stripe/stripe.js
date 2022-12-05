@@ -21,7 +21,7 @@ export default async function handler(req,res) {
                     allowed_countries: ['IT']
                 },
                 shipping_options: [{shipping_rate: 'shr_1M9UBzGM0kMASagvEEhsIwv8'}],
-                line_items: req.body.map((item) => {
+                line_items: req.body.data.map((item) => {
                     return {
                         price_data: {
                             currency: 'eur',
@@ -38,9 +38,9 @@ export default async function handler(req,res) {
                     };
                 }),
                 metadata: {
-                    'delivery': '0',
-                    'date': '2022-01-15',
-                    'time': '12:50',
+                    'delivery': req.body.delivery,
+                    'date': req.body.date,
+                    'time': req.body.time,
                 },
                 success_url: `${req.headers.origin}/ordina/conferma?&session_id={CHECKOUT_SESSION_ID}`,
                 cancel_url: `${req.headers.origin}/ordina`,
