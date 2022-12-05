@@ -18,14 +18,17 @@ export default function Cart({setCart, cart}) {
     } = useStateContext();
 
     const handleCheckout = async () => {
+
         const stripe = await getStripe();
         const response = await fetch('/api/stripe/stripe', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(cartItems),
         });
+        
         const data = await response.json();
         await stripe.redirectToCheckout({sessionId: data.id})
+
     }
 
     return (

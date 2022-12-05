@@ -343,6 +343,15 @@ a:hover {
     padding: 0 10px;
 }
 
+.menu-horizontal::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .menu-horizontal {
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
+  }
+
 .menu-horizontal li a{
     padding: 10px 20px;
     background-color: var(--color-primary);

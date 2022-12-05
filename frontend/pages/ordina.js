@@ -22,9 +22,15 @@ export const getServerSideProps = withPageAuthRequired({
         const user = session.user.sub;
     
         const allProducts = await products.select({
+            sort: [{
+                field: 'categoryName',
+            }]
         }).all();
 
         const allCategories = await categories.select(({ 
+            sort: [{
+                field: 'category',
+            }]
         })).all();
       
         const data = {
@@ -85,14 +91,16 @@ export default function Ordina({user, data}) {
                     />
     
                     <section className='column-center-top h-100 pos-rel p-20 mt-80'>
+
+                        <small className="mt-20 text-left w-100 color-primary">Consegna a domicilio in 30 - 45 minuti</small>
     
                         <div className='column-center-center w-100 pos-rel'>
                             {data.props.products.map((item, idx) => {
                                 return(
-                                    <Link id={item.categoryName} className={styles.product} onClick={() => setLoader(true)} href={`/ordina/${item.id}`} key={idx}>
+                                    <Link id={item.categoryName} className={`${styles.product} text-left p-20`} onClick={() => setLoader(true)} href={`/ordina/${item.id}`} key={idx}>
                                         <div>
-                                            <h3>{item.name}</h3>
-                                            <span>{item.price.toFixed(2)}€</span>
+                                            <h3 className="font-small">{item.name}</h3>
+                                            <span className="font-min">{item.price.toFixed(2)}€</span>
                                         </div>
                                         <Image width={80} height={50} src={item.image[0].thumbnails.small.url} alt={item.name} />
                                     </Link>

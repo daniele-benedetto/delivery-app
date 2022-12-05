@@ -16,8 +16,8 @@ export default function Errore() {
         <div className='column-center-center w-100 h-100'>
 
             <Seo 
-                title='Errore prenotazione | RistorApp'
-                description='...Qualcosa è andato storto, riprovare a prenotare più tardi'
+                title='Errore ordine | RistorApp'
+                description='...Qualcosa è andato storto, riprovare a ordinare più tardi'
             />
 
             <Header />

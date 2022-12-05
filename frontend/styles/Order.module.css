@@ -6,8 +6,6 @@
     display: flex;
     width: 100%;
     justify-content: space-between;
-    text-align: left;
-    padding: 20px;
     border: 1px solid #eee;
     border-left: none;
     border-right: none;
@@ -22,7 +20,6 @@
 }
 
 .product h3 {
-    font-size: var(--font-small);
     margin-bottom: 0;
 }
 
