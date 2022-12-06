@@ -25,6 +25,7 @@ export default function Conferma() {
 
             <main className='w-100 p-20'>
                     <section className='column-center-center h-100 pos-rel'>
+                        
                         <Image
                             width={250}
                             height={250}

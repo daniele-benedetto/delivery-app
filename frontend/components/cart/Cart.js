@@ -10,7 +10,7 @@ import styles from '../../styles/Cart.module.css';
 
 import getStripe from '../../utils/Stripe';
 
-export default function Cart({setCart, cart}) {
+export default function Cart({setCart, cart, delivery}) {
 
     const { 
         cartItems, 
@@ -18,15 +18,6 @@ export default function Cart({setCart, cart}) {
         onRemove,
         totalPrice,
     } = useStateContext();
-
-    //Tipo di consegna (0 => takeaway, 1 => delivery)
-    const [delivery, setDelivery] = useState(0);
-
-    //Data dell'ordine
-    const [date, setDate] = useState('2022-12-12');
-
-    //Orario dell'ordine
-    const [time, setTime] = useState('12:30');
 
     const route = useRouter();
 

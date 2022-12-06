@@ -113,6 +113,18 @@ export const StateContext = ({ children }) => {
         }
     }
 
+    //Tipo di consegna (0 => takeaway, 1 => delivery)
+    const [delivery, setDelivery] = useState(1);
+
+    //Data dell'ordine
+    const [date, setDate] = useState('2022-12-12');
+
+    //Orario dell'ordine
+    const [time, setTime] = useState('12:30');
+
+    //Luogo dell'ordine
+    const [address, setAddress] = useState('');
+
     return (
         <Context.Provider value={{ 
             form,
@@ -134,6 +146,14 @@ export const StateContext = ({ children }) => {
             totalQty,
             totalPrice,
             setQty,
+            delivery,
+            setDelivery,
+            date,
+            setDate,
+            time,
+            setTime,
+            address,
+            setAddress
         }}>
             {children}
         </Context.Provider>

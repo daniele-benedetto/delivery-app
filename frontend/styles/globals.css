@@ -114,6 +114,10 @@ a:hover {
     max-width: 350px;
 }
 
+.mw-250 {
+    max-width: 250px;
+}
+
 /* ! Columns */
 
 .column-center-center {
@@ -230,6 +234,27 @@ a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.button-link {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: none;
+}
+
+.button-active {
+    background-color: var(--color-primary);
+    color: #fff;
+    border: none;
+    border: 2px solid var(--color-primary);
+    min-width: 100px;
+}
+
+.button-not-active {
+    background-color: var(--white);
+    color: var(--black);
+    border: 2px solid var(--color-primary);
+    min-width: 100px;
 }
 
 /* ! Input */
@@ -362,9 +387,15 @@ a:hover {
     position: fixed;
     bottom: 0;
     left: 0;
-    height: 50vh;
+    height: 33vh;
     background-color: white;
     z-index: 99;
+}
+
+.menu-delivery svg {
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
 
 /* ! utils */
@@ -391,6 +422,10 @@ a:hover {
 
 .pb-20 {
     padding-bottom: 20px;
+}
+
+.m-auto {
+    margin: 0 auto;
 }
 
 .mb-0 {

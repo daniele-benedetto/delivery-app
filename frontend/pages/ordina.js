@@ -69,6 +69,12 @@ export default function Ordina({user, data}) {
         cartItems, 
         totalQty,
         totalPrice,
+        delivery,
+        setDelivery,
+        date,
+        setDate,
+        time,
+        setTime
     } = useStateContext();
 
     if(user) {
@@ -93,7 +99,14 @@ export default function Ordina({user, data}) {
     
                     <section className='column-center-top h-100 pos-rel p-20 mt-80'>
 
-                        <Delivery />
+                        <Delivery 
+                            delivery={delivery}
+                            setDelivery={setDelivery}
+                            date={date}
+                            setDate={setDate}
+                            time={time}
+                            setTime={setTime}
+                        />
 
                         <div className='column-center-center w-100 pos-rel'>
                             {data.props.products.map((item, idx) => {

@@ -4,8 +4,13 @@ import usePlacesAutocomplete, { getGeocode } from "use-places-autocomplete";
 import { toast, ToastContainer } from "react-toastify";
 
 import { FiNavigation } from 'react-icons/fi';
+import { useStateContext } from "../../utils/Context";
   
 export default function Location({setLoader}) {
+
+    const {
+        setAddress
+    } = useStateContext();
 
     const route = useRouter();
 
@@ -46,8 +51,9 @@ export default function Location({setLoader}) {
 
         //Richiediamo i dati di geolocalizzazione
         getGeocode({ address: description }).then((results) => {
-            if(results[0].address_components[1].long_name == 'Modena') {
+            if(results[0].address_components[2].long_name == 'Modena') {
                 setLoader(true);
+                setAddress(results[0].address_components[0]);
                 route.push('/ordina');    
             } else {
                 notify();
