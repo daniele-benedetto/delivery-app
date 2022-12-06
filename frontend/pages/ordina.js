@@ -74,7 +74,7 @@ export default function Ordina({user, data}) {
         date,
         setDate,
         time,
-        setTime
+        setTime,
     } = useStateContext();
 
     if(user) {
@@ -106,6 +106,7 @@ export default function Ordina({user, data}) {
                             setDate={setDate}
                             time={time}
                             setTime={setTime}
+                            setLoader={setLoader}
                         />
 
                         <div className='column-center-center w-100 pos-rel'>

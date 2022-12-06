@@ -10,13 +10,16 @@ import styles from '../../styles/Cart.module.css';
 
 import getStripe from '../../utils/Stripe';
 
-export default function Cart({setCart, cart, delivery}) {
+export default function Cart({setCart, cart}) {
 
     const { 
         cartItems, 
         onAdd, 
         onRemove,
         totalPrice,
+        date,
+        time,
+        delivery,
     } = useStateContext();
 
     const route = useRouter();

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { format, addMinutes } from 'date-fns';
 
 const Context = createContext();
 
@@ -117,16 +118,18 @@ export const StateContext = ({ children }) => {
     const [delivery, setDelivery] = useState(1);
 
     //Data dell'ordine
-    const [date, setDate] = useState('2022-12-12');
+    const today = format(new Date(), "yyyy-MM-dd");
+    const [date, setDate] = useState(today);
 
     //Orario dell'ordine
-    const [time, setTime] = useState('12:30');
+    const now = format(addMinutes(new Date(), 45), 'H:mm').toString();
+    const [time, setTime] = useState(now);
 
     //Luogo dell'ordine
     const [address, setAddress] = useState('');
 
     return (
-        <Context.Provider value={{ 
+        <Context.Provider value={{
             form,
             setForm,
             formError,
