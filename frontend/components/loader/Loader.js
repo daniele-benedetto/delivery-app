@@ -1,6 +1,9 @@
-import styles from '../../styles/Loader.module.css';
-import loader from '../../assets/images/loader.svg';
 import Image from 'next/image';
+
+import styles from '../../styles/Loader.module.css';
+
+import loader from '../../assets/images/loader.svg';
+
 import { GrRestaurant } from 'react-icons/gr';
 
 export default function Loader() {

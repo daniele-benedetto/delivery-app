@@ -1,10 +1,11 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { useLayoutEffect, useEffect, useState } from "react";
-import { useStateContext } from "../../utils/Context";
-import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
-import { placeData } from "../api/local";
+import { useLayoutEffect, useEffect, useState } from "react";
+
+import { useStateContext } from "../../utils/Context";
+
+import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
 
 import Seo from '../../components/seo/Seo';
 import Button from "../../components/form/button/Button";
@@ -13,12 +14,15 @@ import Loader from "../../components/loader/Loader";
 
 import { ToastContainer, toast } from 'react-toastify';
 
-import homeImage from '../../assets/images/food-data.svg';
+import image from '../../assets/images/food-data.svg';
 
 import { BiLeftArrowAlt } from "react-icons/bi";
 import { BsFillPeopleFill } from 'react-icons/bs';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 
+import { placeData } from "../api/local";
+
+//Verifico l'autenticazione
 export const getServerSideProps = withPageAuthRequired({
 
     async getServerSideProps(ctx) {
@@ -64,11 +68,12 @@ export default function Dati({user}) {
         });
     };
 
-
+    //Al caricamento della pagina notifico le disponibilità
     useLayoutEffect(() => {
         notify();
     }, []);
 
+    //Se non sono settati rimanda indietro
     useEffect(() => {
         if(!form.date || !form.time) {
             route.push('./calendario');
@@ -82,18 +87,18 @@ export default function Dati({user}) {
 
         let index = 0;
         let i = 0;
-        let number = [];
+        let numbers = [];
 
         //Genero un array contentente il singoli posti disponili
         while (index < placesNumber){
             index++
-            number.push(index);
+            numbers.push(index);
         }
         
         //Ciclo i singoli posti per generare un array di oggetti
         //L'array di oggetti sarà la variabile che passerò al select
         //per generare le singole opzioni
-        for (i=0; i<=number.length; i++){
+        for (i=0; i<=numbers.length; i++){
             placesSelect = new Object();
             placesSelect['id'] = (i == 0) ? '' : i;
             placesSelect['time'] = (i == 0) ? 'Per quante persone?' : i;
@@ -102,6 +107,7 @@ export default function Dati({user}) {
 
     }
 
+    //Al cambio del posto genero le opzioni del numero di persone
     const generatePlaceSelect = () => {
         if(form.place == '0') {
             generatePlacesNumberOption(placesInsideNumber);    
@@ -167,8 +173,8 @@ export default function Dati({user}) {
             <div className='column-center-center w-100 h-100'>
             
                 <Seo 
-                    title='Prenota dati | RistorApp'
-                    description='La tua app per ordinare su RistorApp'
+                    title='Dove e quanti | RistorApp'
+                    description='Scegli dove vuoi mangiare e dicci in quanti sarete'
                 />
 
                 { loader && <Loader />}
@@ -200,8 +206,8 @@ export default function Dati({user}) {
                         <Image
                             width={250}
                             height={250}
-                            src={homeImage} 
-                            alt='Ordina a casa tua' 
+                            src={image} 
+                            alt='Inserisci dove e quanti' 
                         />
 
                         <Select
@@ -224,7 +230,7 @@ export default function Dati({user}) {
                             text='Verifica disponibilità'
                         />
 
-                        </section>
+                    </section>
                 </main>
             </div>         
         );

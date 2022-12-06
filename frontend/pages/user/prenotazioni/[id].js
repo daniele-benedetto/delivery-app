@@ -4,7 +4,7 @@ import { useUser } from "@auth0/nextjs-auth0";
 
 import QRCode from "react-qr-code";
 
-import { table } from "../../../utils/Airtable";
+import { reservations } from "../../../utils/Airtable";
 
 import Header from "../../../components/header/Header";
 import Seo from "../../../components/seo/Seo";
@@ -14,7 +14,7 @@ import { format } from 'date-fns';
 
 //Genera i path sulla base dei record
 export async function getStaticPaths() {
-    const results = await table.select({
+    const results = await reservations.select({
         view: "ViewGrid",
         fields: ['date', 'time', 'reservation', 'meal', 'place', 'sub'],
     }).all();
@@ -34,7 +34,7 @@ export async function getStaticPaths() {
 //Richiamo il record e genero i campi
 export async function getStaticProps({ params: {id}}) {
 
-    const results = await table.select({
+    const results = await reservations.select({
         view: "ViewGrid",
         fields: ['id', 'date', 'time', 'reservation', 'meal', 'place', 'state'],
         filterByFormula: `{id} = '${id}'`

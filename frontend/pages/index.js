@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+
 import { useState } from "react";
 
 import Seo from '../components/seo/Seo';
@@ -7,7 +8,7 @@ import Header from "../components/header/Header";
 import Loader from "../components/loader/Loader";
 import Location from "../components/location/Location";
 
-import homeImage from '../assets/images/order-food.svg';
+import image from '../assets/images/order-food.svg';
 
 export default function Home() {
 
@@ -18,7 +19,7 @@ export default function Home() {
 
             <Seo 
                 title='Home | RistorApp'
-                description='La tua app per ordinare su RistorApp'
+                description='Ordina e pronta online su RistoApp'
             />
 
             { loader && <Loader /> }
@@ -32,7 +33,7 @@ export default function Home() {
                     <Image
                         width={250}
                         height={250}
-                        src={homeImage} 
+                        src={image} 
                         alt='Ordina a casa tua' 
                     />
 

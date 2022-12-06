@@ -6,7 +6,7 @@ import Header from "../../components/header/Header";
 import Seo from "../../components/seo/Seo";
 import Loader from "../../components/loader/Loader";
 
-import homeImage from '../../assets/images/error-food.svg';
+import image from '../../assets/images/error-food.svg';
 
 export default function Errore() {
 
@@ -30,8 +30,8 @@ export default function Errore() {
                         <Image
                             width={300}
                             height={300}
-                            src={homeImage} 
-                            alt='Ordina a casa tua' 
+                            src={image} 
+                            alt='Ops, qualcosa è andato storto' 
                         />
 
                         <h1 className="font-big font-semibold">...Qualcosa è andato <b className="color-primary">storto</b></h1>

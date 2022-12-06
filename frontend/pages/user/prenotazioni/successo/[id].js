@@ -7,13 +7,13 @@ import Header from "../../../../components/header/Header";
 import Seo from "../../../../components/seo/Seo";
 import Loader from "../../../../components/loader/Loader";
 
-import { table } from "../../../../utils/Airtable";
+import { reservations } from "../../../../utils/Airtable";
 
 import homeImage from '../../../../assets/images/thanks-food.svg';
 
 //Genera i path sulla base dei record
 export async function getStaticPaths() {
-    const results = await table.select({
+    const results = await reservations.select({
         view: "ViewGrid",
         fields: ['date', 'time', 'reservation', 'meal', 'place', 'sub'],
     }).all();
@@ -33,7 +33,7 @@ export async function getStaticPaths() {
 //Richiamo il record e genero i campi
 export async function getStaticProps({ params: {id}}) {
 
-    const results = await table.select({
+    const results = await reservations.select({
         view: "ViewGrid",
         fields: ['id', 'date', 'time', 'reservation', 'meal', 'place'],
         filterByFormula: `{id} = '${id}'`

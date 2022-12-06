@@ -29,3 +29,14 @@ export const placeData = [
         time: "Esterno",
     }
 ];
+
+export const daySelect = [
+    {
+        id: 0,
+        time: 'Oggi',
+    },
+    {
+        id: 1,
+        time: "Domani",
+    }
+];

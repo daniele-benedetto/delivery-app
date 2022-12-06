@@ -1,10 +1,11 @@
-import { table, getMinifiedItem } from "../../../utils/Airtable";
+import { reservations, getMinifiedItem } from "../../../utils/Airtable";
 
 export default async (req, res) => {
-    //Aggiorno lo stato della prenotazione a 1
+    //Aggiorno lo stato della prenotazione
+    //1 => scannerizzazione avvenuta
     const { id } = req.body;
     try {
-        const updatedRecords = await table.update([{ 
+        const updatedRecords = await reservations.update([{ 
             "id": id,
             "fields": {
                 "state": "1"

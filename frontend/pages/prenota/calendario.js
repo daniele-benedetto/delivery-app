@@ -1,12 +1,12 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
+
 import { useState, useEffect } from "react";
 
 import { useStateContext } from "../../utils/Context";
-import { table } from '../../utils/Airtable';
+import { reservations } from '../../utils/Airtable';
 
 import { format } from 'date-fns';
-import "react-datepicker/dist/react-datepicker.css";
 
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -20,7 +20,8 @@ import Calendar from "../../components/form/calendar/Calendar";
 import Time from "../../components/form/time/Time";
 import Loader from "../../components/loader/Loader";
 
-import homeImage from '../../assets/images/food-time.svg';
+import image from '../../assets/images/food-time.svg';
+
 import {BiLeftArrowAlt} from 'react-icons/bi';
 
 //Verifico l'autenticazione, genero e estraggo i dati da AirTable
@@ -33,7 +34,7 @@ export const getServerSideProps = withPageAuthRequired({
 
         const today = format(new Date(), "yyyy-MM-dd");
     
-        const results = await table.select({
+        const results = await reservations.select({
             view: "ViewGrid",
             fields: ['date', 'time', 'reservation', 'meal', 'place'],
             filterByFormula: `{date} >= '${today}'`
@@ -201,8 +202,8 @@ export default function Calendario({user, data}) {
             <div className='column-center-center w-100 h-100'>
             
                 <Seo 
-                    title='Prenota calendario | RistorApp'
-                    description='La tua app per ordinare su RistorApp'
+                    title='Calendario | RistorApp'
+                    description="Prenota selezionando data e orario"
                 />
 
                 {loader && <Loader /> }
@@ -234,8 +235,8 @@ export default function Calendario({user, data}) {
                         <Image
                             width={250}
                             height={250}
-                            src={homeImage} 
-                            alt='Ordina a casa tua' 
+                            src={image} 
+                            alt='Scegli data e ora' 
                         />
 
                         <div className='column-center-center p-20 w-100 pos-rel'>

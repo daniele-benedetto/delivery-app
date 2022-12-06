@@ -390,6 +390,7 @@ a:hover {
     height: 33vh;
     background-color: white;
     z-index: 99;
+    box-shadow: 0 5px 20px rgba(0,0,0,.1);
 }
 
 .menu-delivery svg {

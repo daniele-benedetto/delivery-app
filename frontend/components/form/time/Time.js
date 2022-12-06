@@ -1,21 +1,13 @@
-import { useEffect, useState, forwardRef } from 'react';
+import { useEffect, forwardRef } from 'react';
 
 import DatePicker from 'react-datepicker';
 import {  setHours, setMinutes, format, addMinutes } from 'date-fns';
-import "react-datepicker/dist/react-datepicker.css";
 
 import { Validation } from '../validation/Validation';
 
 import {BsFillClockFill} from 'react-icons/bs';
 
-export default function Time({
-    form,
-    setForm,
-    restaurantOption,
-    error,
-    selectTime,
-    setSelectTime
-}) {
+export default function Time({ form, setForm, restaurantOption, error, selectTime, setSelectTime }) {
     
     const today = format(new Date(), "yyyy-MM-dd");
 
@@ -27,6 +19,7 @@ export default function Time({
 
     let slots = [];
 
+    //Al cambio di stato se time non è selezionato setta il form
     useEffect(() => {
         if(selectTime != '') {
             setForm({ 
@@ -69,18 +62,13 @@ export default function Time({
 
     const CustomInput = forwardRef(({ onClick, value }, ref) => (
         <div className="input-container mb-20">
-            <BsFillClockFill 
-                size={20}
-                color={'var(--black)'}
-            />
+            <BsFillClockFill size={20} color={'var(--black)'} />
             <input className='w-100 p-10 input-primary' defaultValue={value} onClick={onClick} ref={ref} placeholder='Seleziona un orario'/>
             { error && <Validation errorText="Seleziona l'orario" /> }
         </div>
     ));
 
     return (
-        <>
-
             <DatePicker
                 selected={selectTime}
                 onChange={(date) => setSelectTime(date)}
@@ -92,7 +80,5 @@ export default function Time({
                 dateFormat="H:mm"
                 customInput={<CustomInput />}
             />
-
-        </>
     );
 }

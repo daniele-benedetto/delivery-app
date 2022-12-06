@@ -1,23 +1,79 @@
-import { useEffect, useState } from "react";
+import { forwardRef, useState } from "react";
 import { GrCircleAlert, GrFormClose } from "react-icons/gr";
+import { daySelect, restaurantOption } from "../../pages/api/local";
 import { useStateContext } from "../../utils/Context";
+
+import Select from "../form/select/Select";
 import Location from "../location/Location";
+
+import DatePicker from 'react-datepicker';
+import {  setHours, setMinutes, format, addMinutes } from 'date-fns';
 
 export default function Delivery({delivery, setDelivery, setLoader}) {
 
     const {
         address,
         date,
-        time
+        time,
+        setDate,
+        setTime,
     } = useStateContext();
 
     const [menu, setMenu] = useState(false);
     const [addressMenu, setAddressMenu] = useState(false);
     const [dateMenu, setDateMenu] = useState(false);
+    const [test, setTest] = useState('')
+
+    const today = format(new Date(), "yyyy-MM-dd");
+
+    let slots = [];
+
+    let startLunch  = new Date([today, restaurantOption.openTime.lunch.start]);
+    let finishLunch  = new Date([today, restaurantOption.openTime.lunch.finish]);
+
+    let startDinner  = new Date([today, restaurantOption.openTime.dinner.start]);
+    let finishDinner  = new Date([today, restaurantOption.openTime.dinner.finish]);
 
     const changeDelivery = (value) => {
         setDelivery(value);
     }
+
+    //Genero gli orari sulla base dei dati del ristorante
+    const generateTimetables = () => {
+
+        let timetables = [];
+
+        //Ciclo orario di inizio e fine per generare le date
+        //Salvo i valori all'interno di un array
+        while (startLunch<=finishLunch){
+            slots.push(startLunch);
+            startLunch = addMinutes(startLunch, 30);
+        }
+    
+        while (startDinner<=finishDinner){
+            slots.push(startDinner);
+            startDinner = addMinutes(startDinner, 30);
+        }
+
+        //Ciclo il nuovo array e ottengo un array
+        //di funzioni che generano gli slot del calendario
+        for (let i = 0; i < slots.length; i++) {
+
+            let hour = parseInt(format(slots[i], 'H'));
+            let minute = parseInt(format(slots[i], 'mm'));
+
+            timetables.push(setHours(setMinutes(new Date(), minute), hour));
+        }
+
+        return timetables;
+
+    }
+
+    const CustomInput = forwardRef(({ onClick, value }, ref) => (
+        <div className="input-container mb-20">
+            <input className='w-100 p-10 input-primary' defaultValue={value} onClick={onClick} ref={ref} placeholder='Seleziona un orario'/>
+        </div>
+    ));
 
     return(
         <>
@@ -51,25 +107,54 @@ export default function Delivery({delivery, setDelivery, setLoader}) {
                     <button onClick={() => setDateMenu(!dateMenu)} className="button-link">Cambia</button>
                 </div>
 
-                { addressMenu && <div className="menu-delivery w-100 p-20">
+            </div> }
 
-                    <GrFormClose
-                        size={30}
-                        color={'var(--black)'}
-                        onClick={() => setAddressMenu(!addressMenu)}
-                    />
-                    <Location setLoader={setLoader} setAddressMenu={setAddressMenu} />
-                </div> }
+            { addressMenu && <div className="menu-delivery w-100 p-20">
 
-                { dateMenu && <div className="menu-delivery w-100 p-20">
+                <GrFormClose
+                    size={30}
+                    color={'var(--black)'}
+                    onClick={() => setAddressMenu(!addressMenu)}
+                />
 
-                    <GrFormClose
-                        size={30}
-                        color={'var(--black)'}
-                        onClick={() => setDateMenu(!dateMenu)}
-                    />
-                    date
-                </div> }
+                <Location setLoader={setLoader} setAddressMenu={setAddressMenu} />
+
+            </div> }
+
+            { dateMenu && <div className="menu-delivery w-100 p-20">
+
+                <GrFormClose
+                    size={30}
+                    color={'var(--black)'}
+                    onClick={() => setDateMenu(!dateMenu)}
+                />
+
+                <Select
+                    id='reservation'
+                    placeholder='Per quanti vuoi prenotare?'
+                    values={daySelect}
+                    onChange={(event) => {
+                        const today = format(new Date(), "yyyy-MM-dd");
+                        const val = event.target.value;
+                        val == 0 ? setDate(today) : 
+                        setDate( format(addDays(new Date(today), 1) ,'yyyy-MM-dd'));
+                    }}
+                />    
+
+                <DatePicker
+                    selected={test}
+                    onChange={(date) => {
+                        setTime(format(date, 'H:mm'))
+                        setTest(date)
+                    }}
+                    includeTimes={generateTimetables()}
+                    showTimeSelect
+                    showTimeSelectOnly
+                    timeIntervals={30}
+                    timeCaption="Time"
+                    dateFormat="H:mm"
+                    customInput={<CustomInput />}
+                />
 
             </div> }
         </>

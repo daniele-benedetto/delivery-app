@@ -7,7 +7,7 @@ import Header from "../../components/header/Header";
 import Loader from "../../components/loader/Loader";
 import Seo from "../../components/seo/Seo";
 
-import { table } from '../../utils/Airtable';
+import { reservations } from '../../utils/Airtable';
 
 import { BsThreeDots } from 'react-icons/bs';
 import { MdDateRange } from 'react-icons/md';
@@ -24,7 +24,7 @@ export const getServerSideProps = withPageAuthRequired({
 
         const today = format(new Date(), "yyyy-MM-dd");
     
-        const results = await table.select({
+        const results = await reservations.select({
             view: "ViewGrid",
             fields: ['date', 'time', 'reservation', 'meal', 'place', 'sub', 'state'],
             filterByFormula: `AND({sub} = '${user}', {state} != 1, {date} >= '${today}')`,

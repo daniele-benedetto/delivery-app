@@ -1,5 +1,7 @@
 import Link from "next/link";
+
 import { useState } from "react";
+
 import styles from '../../styles/Header.module.css';
 
 import Menu from "./Menu";
@@ -10,6 +12,7 @@ import { GrRestaurant } from 'react-icons/gr';
 export default function Header() {
 
     const [classMenu, setClassMenu] = useState(false);
+    
     return (
         <header className={`${styles.header} w-100 row-between-center p-20 font-semibold`}>
             

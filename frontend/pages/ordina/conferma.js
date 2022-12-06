@@ -8,6 +8,7 @@ import Seo from "../../components/seo/Seo";
 import Loader from "../../components/loader/Loader";
 
 import homeImage from '../../assets/images/food-confirm.svg';
+import { orders } from "../../utils/Airtable";
 
 const stripe = require("stripe")(
     `${process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY}`
@@ -49,8 +50,9 @@ export default function Conferma({order}) {
                     delivery: order.metadata.delivery, 
                     date: order.metadata.date, 
                     time: order.metadata.time,
-                    total: formatMoney(order.amountTotal)
+                    total: formatMoney(order.amount_total)
                 }),
+                prova: orders,
                 headers: { "Content-Type": "application/json" },
             });
                             

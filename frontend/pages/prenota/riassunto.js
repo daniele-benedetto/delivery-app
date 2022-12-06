@@ -1,19 +1,19 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
+
 import { useEffect, useState } from "react";
+
 import { withPageAuthRequired, getSession } from "@auth0/nextjs-auth0";
+import emailjs from '@emailjs/browser';
+import { format } from 'date-fns';
 
 import { useStateContext } from "../../utils/Context";
-
-import emailjs from '@emailjs/browser';
 
 import Seo from '../../components/seo/Seo';
 import Button from "../../components/form/button/Button";
 import Loader from "../../components/loader/Loader";
 
-import { format } from 'date-fns';
-
-import homeImage from '../../assets/images/confirm-food.svg';
+import image from '../../assets/images/confirm-food.svg';
 
 import { BiLeftArrowAlt } from "react-icons/bi";
 
@@ -40,6 +40,7 @@ export default function Riassunto({user}) {
 
     const [loader, setLoader] = useState(false);
 
+    //Se i dati non sono settati correttamente rimanda indietro
     useEffect(() => {
         if(!form.date || !form.time || !form.reservation || !form.place) {
             setForm({
@@ -84,6 +85,7 @@ export default function Riassunto({user}) {
                     
                 const result = await res.json();
 
+                //Parametri di invio email
                 const emailjsParams = {
                     name: user.name,
                     email: user.email,
@@ -94,6 +96,7 @@ export default function Riassunto({user}) {
                 }
 
                 //Invio email di feedback
+                //emailjs.send(`${process.env.EMAILJS_SERVICE_ID}`, `${process.env.EMAILJS_TEMPLATE_ID}`, emailjsParams, 'xxpN9Yk8U7hQRY0uZ')
                 emailjs.send('service_rpt99vg', 'template_9ves2kg', emailjsParams, 'xxpN9Yk8U7hQRY0uZ')
                 .then((result) => {
                     console.log(result.text);
@@ -145,8 +148,8 @@ export default function Riassunto({user}) {
             <div className='column-center-center w-100 h-100'>
             
                 <Seo 
-                    title='Prenota riassunto | RistorApp'
-                    description='La tua app per ordinare su RistorApp'
+                    title='Riassunto | RistorApp'
+                    description='Verifica che i dati della tua prenotazione siano corretti e conferma'
                 />
 
                 { loader && <Loader />}
@@ -165,7 +168,7 @@ export default function Riassunto({user}) {
                         <Image
                             width={250}
                             height={250}
-                            src={homeImage} 
+                            src={image} 
                             alt='Ordina a casa tua' 
                         />
       

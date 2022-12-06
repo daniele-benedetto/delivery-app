@@ -1,5 +1,7 @@
 import Link from 'next/link';
+
 import { GrFormClose } from 'react-icons/gr';
+
 import styles from '../../styles/Header.module.css';
 
 export default function Menu({classMenu, setClassMenu}) {
@@ -20,11 +22,13 @@ export default function Menu({classMenu, setClassMenu}) {
                     <Link href='/user/prenotazioni'>Prenotazioni</Link>
                 </li>
             </ul>
+
             <GrFormClose 
                 size={30}
                 color={'var(--black)'}
                 onClick={() => setClassMenu(!classMenu)}
-            />    
+            />  
+              
         </nav>
     );
 }

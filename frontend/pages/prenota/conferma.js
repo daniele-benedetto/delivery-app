@@ -1,16 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
+
 import { useState } from "react";
 
 import Header from "../../components/header/Header";
 import Seo from "../../components/seo/Seo";
 import Loader from "../../components/loader/Loader";
 
-import homeImage from '../../assets/images/food-confirm.svg';
+import image from '../../assets/images/food-confirm.svg';
 
 export default function Conferma() {
 
     const [ loader, setLoader ] = useState(false);
+
     return (
         <div className='column-center-center w-100 h-100'>
 
@@ -29,8 +31,8 @@ export default function Conferma() {
                         <Image
                             width={250}
                             height={250}
-                            src={homeImage} 
-                            alt='Ordina a casa tua' 
+                            src={image} 
+                            alt='Prenotazione confermata' 
                         />
 
                         <h1 className="font-middle font-semibold w-100">Grazie per aver <b className="color-primary">prenotato</b></h1>
