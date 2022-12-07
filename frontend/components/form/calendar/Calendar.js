@@ -7,7 +7,7 @@ import { Validation } from '../validation/Validation';
 
 import { BsCalendarDateFill } from 'react-icons/bs';
 
-export default function Calendar({form, setForm, restaurantOption, error, selectDate, setSelectDate}) {
+export default function Calendar({form, setForm, restaurantOption, error, selectDate, setSelectDate, setSelectTime}) {
 
     //Al cambio di valore setto la data selezionata
     useEffect(() => {
@@ -15,7 +15,9 @@ export default function Calendar({form, setForm, restaurantOption, error, select
             setForm({ 
                 ...form, 
                 date: format(selectDate, 'yyyy-MM-dd'),
+                time: '',
             });
+            setSelectTime('');
         }
     }, [selectDate]);
 

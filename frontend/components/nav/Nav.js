@@ -2,8 +2,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { BiLeftArrowAlt } from "react-icons/bi";
+import Delivery from "../delivery/Delivery";
 
-export default function Nav({ setLoader, categories }) {
+export default function Nav({ setLoader, categories, delivery, setDelivery, date, setDate, time, setTime }) {
 
     const route = useRouter(); 
 
@@ -31,6 +32,16 @@ export default function Nav({ setLoader, categories }) {
                     );                  
                 })}
             </ul>
+
+            <Delivery
+                delivery={delivery}
+                setDelivery={setDelivery}
+                date={date}
+                setDate={setDate}
+                time={time}
+                setTime={setTime}
+                setLoader={setLoader}
+            />
 
         </header>
     );

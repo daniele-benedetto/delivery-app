@@ -12,7 +12,6 @@ import { categories, products } from '../utils/Airtable';
 import styles from '../styles/Order.module.css';
 import Cart from "../components/cart/Cart";
 import Nav from "../components/nav/Nav";
-import Delivery from "../components/delivery/Delivery";
 
 //Verifico l'autenticazione, genero e estraggo i dati da AirTable
 export const getServerSideProps = withPageAuthRequired({
@@ -95,19 +94,15 @@ export default function Ordina({user, data}) {
                     <Nav 
                         setLoader={setLoader}
                         categories={data.props.categories}
+                        delivery={delivery}
+                        setDelivery={setDelivery}
+                        date={date}
+                        setDate={setDate}
+                        time={time}
+                        setTime={setTime}
                     />
     
-                    <section className='column-center-top h-100 pos-rel p-20 mt-80'>
-
-                        <Delivery 
-                            delivery={delivery}
-                            setDelivery={setDelivery}
-                            date={date}
-                            setDate={setDate}
-                            time={time}
-                            setTime={setTime}
-                            setLoader={setLoader}
-                        />
+                    <section className='column-center-top pos-rel p-20 mt-120'>
 
                         <div className='column-center-center w-100 pos-rel'>
                             {data.props.products.map((item, idx) => {
@@ -133,7 +128,7 @@ export default function Ordina({user, data}) {
                             }}
                         >
                             <span>{totalQty}</span>
-                            <p className="mb-0 text-center">Visualizza il carrello</p>
+                            <p className="mb-0 mt-0 text-center">Visualizza il carrello</p>
                             <span>{totalPrice.toFixed(2)}€</span>
                         </button> 
                     } 

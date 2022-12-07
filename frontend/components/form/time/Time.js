@@ -7,7 +7,7 @@ import { Validation } from '../validation/Validation';
 
 import {BsFillClockFill} from 'react-icons/bs';
 
-export default function Time({ form, setForm, restaurantOption, error, selectTime, setSelectTime }) {
+export default function Time({ form, setForm, selectDate, restaurantOption, error, selectTime, setSelectTime }) {
     
     const today = format(new Date(), "yyyy-MM-dd");
 
@@ -53,7 +53,14 @@ export default function Time({ form, setForm, restaurantOption, error, selectTim
             let hour = parseInt(format(slots[i], 'H'));
             let minute = parseInt(format(slots[i], 'mm'));
 
-            timetables.push(setHours(setMinutes(new Date(), minute), hour));
+            let time = setHours(setMinutes(new Date(), minute), hour);
+            const now = new Date();
+
+            timetables.push(time);
+            
+            if( selectDate != '' && time < now && format(selectDate, 'yyyy-MM-dd') == format(now, 'yyyy-MM-dd')) {
+                timetables.shift();
+            }
         }
 
         return timetables;

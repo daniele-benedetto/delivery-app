@@ -249,6 +249,7 @@ export default function Calendario({user, data}) {
                                 error={formError.date}
                                 selectDate={selectDate}
                                 setSelectDate={setSelectDate}
+                                setSelectTime={setSelectTime}
                             />
 
                             <Time
@@ -259,6 +260,7 @@ export default function Calendario({user, data}) {
                                 error={formError.time}
                                 selectTime={selectTime}
                                 setSelectTime={setSelectTime}
+                                selectDate={selectDate}
                             />
 
                             <Button

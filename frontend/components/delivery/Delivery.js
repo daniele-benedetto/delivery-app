@@ -7,7 +7,7 @@ import Select from "../form/select/Select";
 import Location from "../location/Location";
 
 import DatePicker from 'react-datepicker';
-import {  setHours, setMinutes, format, addMinutes } from 'date-fns';
+import {  setHours, setMinutes, format, addMinutes, addDays } from 'date-fns';
 
 export default function Delivery({delivery, setDelivery, setLoader}) {
 
@@ -22,7 +22,7 @@ export default function Delivery({delivery, setDelivery, setLoader}) {
     const [menu, setMenu] = useState(false);
     const [addressMenu, setAddressMenu] = useState(false);
     const [dateMenu, setDateMenu] = useState(false);
-    const [test, setTest] = useState('')
+    const [data, setData] = useState('')
 
     const today = format(new Date(), "yyyy-MM-dd");
 
@@ -58,11 +58,19 @@ export default function Delivery({delivery, setDelivery, setLoader}) {
         //Ciclo il nuovo array e ottengo un array
         //di funzioni che generano gli slot del calendario
         for (let i = 0; i < slots.length; i++) {
-
+    
             let hour = parseInt(format(slots[i], 'H'));
             let minute = parseInt(format(slots[i], 'mm'));
-
-            timetables.push(setHours(setMinutes(new Date(), minute), hour));
+    
+            let time = setHours(setMinutes(new Date(), minute), hour);
+            const now = new Date();
+    
+            timetables.push(time);
+                
+            if( time < now && date == format(now, 'yyyy-MM-dd')) {
+                timetables.shift();
+            }
+                
         }
 
         return timetables;
@@ -130,22 +138,23 @@ export default function Delivery({delivery, setDelivery, setLoader}) {
                 />
 
                 <Select
-                    id='reservation'
-                    placeholder='Per quanti vuoi prenotare?'
+                    id='day'
+                    className='mt-40'
                     values={daySelect}
                     onChange={(event) => {
                         const today = format(new Date(), "yyyy-MM-dd");
                         const val = event.target.value;
-                        val == 0 ? setDate(today) : 
-                        setDate( format(addDays(new Date(today), 1) ,'yyyy-MM-dd'));
+                        val == 0 
+                        ? setDate(today) 
+                        : setDate( format(addDays(new Date(today), 1) ,'yyyy-MM-dd'));
                     }}
                 />    
 
                 <DatePicker
-                    selected={test}
+                    selected={data}
                     onChange={(date) => {
                         setTime(format(date, 'H:mm'))
-                        setTest(date)
+                        setData(date)
                     }}
                     includeTimes={generateTimetables()}
                     showTimeSelect
